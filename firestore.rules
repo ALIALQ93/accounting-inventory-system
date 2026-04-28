@@ -17,7 +17,7 @@ service cloud.firestore {
     }
     
     function isAdmin() {
-      return isAuthenticated() && (getRole() == 'super_admin' || getRole() == 'manager');
+      return isAuthenticated() && getRole() in ['super_admin', 'manager'];
     }
     
     function isSuperAdmin() {
@@ -31,23 +31,23 @@ service cloud.firestore {
       allow read: if request.auth != null;
       allow create: if request.auth != null;
       allow update: if false;
-      allow delete: if request.auth != null;
+      allow delete: if isAdmin();
     }
-    
+
     // Vouchers collection - MUST BE EXPLICIT
     match /vouchers/{voucherId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null;
       allow update: if request.auth != null;
-      allow delete: if request.auth != null;
+      allow delete: if isAdmin();
     }
-    
+
     // Chart of Accounts collection - MUST BE EXPLICIT
     match /chartOfAccounts/{accountId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null;
       allow update: if request.auth != null;
-      allow delete: if request.auth != null;
+      allow delete: if isAdmin();
     }
     
     // Cashflow collection for navbar stats
