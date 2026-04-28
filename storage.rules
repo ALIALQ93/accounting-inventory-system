@@ -1,0 +1,101 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper Functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isValidImageSize() {
+      // Max 5MB for images
+      return request.resource.size < 5 * 1024 * 1024;
+    }
+    
+    function isValidImageType() {
+      return request.resource.contentType.matches('image/.*');
+    }
+    
+    function isValidPdfSize() {
+      // Max 10MB for PDFs
+      return request.resource.size < 10 * 1024 * 1024;
+    }
+    
+    function isValidPdfType() {
+      return request.resource.contentType == 'application/pdf';
+    }
+    
+    // Product Images
+    match /products/{productId}/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && 
+                      isValidImageSize() && 
+                      isValidImageType();
+      allow delete: if isSignedIn();
+    }
+    
+    // User Profile Pictures
+    match /users/{userId}/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && 
+                      request.auth.uid == userId &&
+                      isValidImageSize() && 
+                      isValidImageType();
+      allow delete: if isSignedIn() && request.auth.uid == userId;
+    }
+    
+    // Company Logo
+    match /company/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && 
+                      isValidImageSize() && 
+                      isValidImageType();
+      allow delete: if isSignedIn();
+    }
+    
+    // Invoice Attachments
+    match /invoices/{invoiceId}/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && (
+        (isValidImageSize() && isValidImageType()) ||
+        (isValidPdfSize() && isValidPdfType())
+      );
+      allow delete: if isSignedIn();
+    }
+    
+    // Voucher Attachments
+    match /vouchers/{voucherId}/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && (
+        (isValidImageSize() && isValidImageType()) ||
+        (isValidPdfSize() && isValidPdfType())
+      );
+      allow delete: if isSignedIn();
+    }
+    
+    // Reports Storage
+    match /reports/{reportId}/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && isValidPdfSize();
+      allow delete: if isSignedIn();
+    }
+    
+    // Documents Storage
+    match /documents/{docType}/{docId}/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+    
+    // Temporary Uploads
+    match /temp/{userId}/{fileName} {
+      allow read: if isSignedIn() && request.auth.uid == userId;
+      allow write: if isSignedIn() && 
+                      request.auth.uid == userId &&
+                      isValidImageSize();
+      allow delete: if isSignedIn() && request.auth.uid == userId;
+    }
+  }
+}
+
+

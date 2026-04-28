@@ -1,0 +1,65 @@
+# Firebase
+.firebase/
+.firebaserc
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build
+dist/
+build/
+*.log
+
+# Backup files
+*-backup.*
+*-temp.*
+*.bak
+*.tmp
+
+# Test files
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Documentation drafts
+*-draft.md
+*-old.md
+
+# Ali-Alqadre specific files (keep original versions)
+*-Ali-Alqadre.*
+
+# Cache
+.cache/
+*.cache
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Misc
+*.zip
+*.rar
+*.tar.gz
+
+

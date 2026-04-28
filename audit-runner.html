@@ -1,0 +1,2858 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 أداة التدقيق قبل النشر | Pre-Release Audit Tool</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .audit-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+        .audit-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        .audit-header h1 {
+            color: #667eea;
+            font-weight: bold;
+        }
+        .audit-section {
+            margin-bottom: 30px;
+        }
+        .audit-section h3 {
+            color: #764ba2;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .btn-audit {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        .btn-audit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .results-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .result-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-right: 4px solid;
+        }
+        .result-passed {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        .result-failed {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        .result-warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+        .result-info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 150px;
+            margin: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .stat-card h4 {
+            font-size: 36px;
+            margin: 0;
+        }
+        .stat-card p {
+            margin: 5px 0 0 0;
+            color: #6c757d;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        .checklist-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .checklist-item:hover {
+            background: #e9ecef;
+        }
+        .checklist-item input[type="checkbox"] {
+            margin-left: 10px;
+        }
+        .checklist-item.checked {
+            background: #d4edda;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <div class="audit-container">
+        <div class="audit-header">
+            <h1><i class="fas fa-shield-alt"></i> أداة التدقيق الشامل قبل النشر</h1>
+            <p class="text-muted">Pre-Release Comprehensive Audit Tool</p>
+        </div>
+
+        <div class="audit-section">
+            <h3><i class="fas fa-tasks"></i> عمليات التدقيق السريعة | Quick Audit Operations</h3>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-primary btn-audit" onclick="runCompleteAudit()">
+                        <i class="fas fa-check-circle"></i> تشغيل التدقيق الكامل
+                        <br><small>Run Complete Audit</small>
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-success btn-audit" onclick="runSecurityCheck()">
+                        <i class="fas fa-shield-alt"></i> فحص الأمان السريع
+                        <br><small>Quick Security Check</small>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <button class="btn btn-info btn-audit" onclick="checkDataIntegrity()">
+                        <i class="fas fa-database"></i> فحص تكامل البيانات
+                        <br><small>Data Integrity Check</small>
+                    </button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-warning btn-audit" onclick="checkConfiguration()">
+                        <i class="fas fa-cog"></i> فحص الإعدادات
+                        <br><small>Configuration Check</small>
+                    </button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-secondary btn-audit" onclick="checkCodeQuality()">
+                        <i class="fas fa-code"></i> فحص جودة الكود
+                        <br><small>Code Quality Check</small>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="audit-section">
+            <h3><i class="fas fa-tools"></i> إصلاح قاعدة البيانات | Database Repair Tools</h3>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-success btn-audit" onclick="recalculateAllProductStocks()">
+                        <i class="fas fa-sync-alt"></i> إعادة حساب أرصدة جميع المنتجات
+                        <br><small>Recalculate All Product Stocks</small>
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-primary btn-audit" onclick="fixInventoryMovements()">
+                        <i class="fas fa-boxes"></i> إصلاح حركات المخزون
+                        <br><small>Fix Inventory Movements</small>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="audit-section">
+            <h3><i class="fas fa-file-invoice"></i> تدقيق الفواتير والسندات والقيود | Invoices, Vouchers & Entries Audit</h3>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <button class="btn btn-info btn-audit" onclick="auditInvoicesAndVouchers()">
+                        <i class="fas fa-search"></i> فحص الفواتير والسندات بدون قيود
+                        <br><small>Scan for missing entries</small>
+                    </button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-warning btn-audit" onclick="auditGeneralEntries()">
+                        <i class="fas fa-chart-bar"></i> تحليل القيود المحاسبية
+                        <br><small>Analyze general entries</small>
+                    </button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-success btn-audit" onclick="auditEntryBalance()">
+                        <i class="fas fa-balance-scale"></i> فحص توازن القيود
+                        <br><small>Check entry balance</small>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <button class="btn btn-primary btn-audit" onclick="repostMissingEntries()">
+                        <i class="fas fa-redo"></i> إعادة ترحيل القيود المفقودة
+                        <br><small>Re-post missing entries</small>
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-danger btn-audit" onclick="fixDuplicateEntries()">
+                        <i class="fas fa-exclamation-triangle"></i> إصلاح القيود المتعددة
+                        <br><small>Fix duplicate entries</small>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="audit-section">
+            <h3><i class="fas fa-warehouse"></i> تدقيق المخزون | Inventory Audit</h3>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <button class="btn btn-info btn-audit" onclick="auditInventoryBalance()">
+                        <i class="fas fa-calculator"></i> فحص أرصدة المخزون
+                        <br><small>Check inventory balances</small>
+                    </button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-warning btn-audit" onclick="auditInventoryMovements()">
+                        <i class="fas fa-exchange-alt"></i> فحص حركات المخزون
+                        <br><small>Check inventory movements</small>
+                    </button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-success btn-audit" onclick="auditNegativeStock()">
+                        <i class="fas fa-exclamation-circle"></i> فحص الأرصدة السالبة
+                        <br><small>Check negative stocks</small>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <button class="btn btn-primary btn-audit" onclick="generateMissingInventoryMovements()">
+                        <i class="fas fa-plus-circle"></i> توليد حركات المخزون المفقودة
+                        <br><small>Generate missing inventory movements</small>
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-danger btn-audit" onclick="fixInventoryMovementsAndStock()">
+                        <i class="fas fa-wrench"></i> إصلاح حركات المخزون والأرصدة
+                        <br><small>Fix movements and stock</small>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="audit-section">
+            <h3><i class="fas fa-dollar-sign"></i> إعادة حساب التكلفة والأرصدة | Recalculate Cost & Stock</h3>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-primary btn-audit" onclick="recalculateAllStockBalances()">
+                        <i class="fas fa-sync-alt"></i> إعادة حساب جميع أرصدة المخزون
+                        <br><small>Recalculate all stock balances</small>
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-success btn-audit" onclick="recalculateAllCosts()">
+                        <i class="fas fa-calculator"></i> إعادة حساب جميع التكاليف
+                        <br><small>Recalculate all costs</small>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <button class="btn btn-info btn-audit" onclick="recalculateInventoryValue()">
+                        <i class="fas fa-chart-line"></i> إعادة حساب قيمة المخزون
+                        <br><small>Recalculate inventory value</small>
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-warning btn-audit" onclick="fixCostDiscrepancies()">
+                        <i class="fas fa-wrench"></i> إصلاح اختلافات التكلفة
+                        <br><small>Fix cost discrepancies</small>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="audit-section">
+            <h3><i class="fas fa-clipboard-check"></i> قائمة المراجعة اليدوية | Manual Checklist</h3>
+            <div id="manual-checklist">
+                <div class="checklist-item">
+                    <input type="checkbox" id="check1" onchange="toggleChecklist(this)">
+                    <label for="check1">فحص قواعد Firestore</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check2" onchange="toggleChecklist(this)">
+                    <label for="check2">فحص تسجيل الدخول والخروج</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check3" onchange="toggleChecklist(this)">
+                    <label for="check3">فحص الصلاحيات والأدوار</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check4" onchange="toggleChecklist(this)">
+                    <label for="check4">فحص المفاتيح المكشوفة في الكود</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check5" onchange="toggleChecklist(this)">
+                    <label for="check5">اختبار المبيعات والمشتريات</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check6" onchange="toggleChecklist(this)">
+                    <label for="check6">اختبار المرتجعات</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check7" onchange="toggleChecklist(this)">
+                    <label for="check7">فحص التقارير</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check8" onchange="toggleChecklist(this)">
+                    <label for="check8">فحص التوازن المحاسبي</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-container" id="results-container" style="display: none;">
+            <div class="stats" id="stats">
+                <!-- Stats will be populated here -->
+            </div>
+            <div id="results-content">
+                <!-- Results will be populated here -->
+            </div>
+        </div>
+
+        <div class="loading" id="loading" style="display: none;">
+            <i class="fas fa-spinner fa-spin fa-3x text-primary"></i>
+            <p class="mt-3">جاري التدقيق... | Auditing in progress...</p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (if needed) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <!-- SweetAlert2 for notifications -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Load config if available -->
+    <script src="js/config.js"></script>
+    
+    <!-- Initialize Firebase -->
+    <script>
+        // Initialize Firebase if config is available and not already initialized
+        if (typeof firebaseConfig !== 'undefined') {
+            try {
+                // Check if Firebase is already initialized
+                if (firebase.apps.length === 0) {
+                    firebase.initializeApp(firebaseConfig);
+                    console.log('✅ Firebase initialized in audit runner');
+                } else {
+                    console.log('✅ Firebase already initialized, using existing instance');
+                }
+                
+                // Get db and auth references
+                const db = firebase.firestore();
+                const auth = firebase.auth();
+            } catch (error) {
+                // If initialization fails, try to get existing app
+                if (error.code === 'app/duplicate-app') {
+                    console.log('✅ Firebase already initialized in another script, using existing instance');
+                    const db = firebase.firestore();
+                    const auth = firebase.auth();
+                } else {
+                    console.error('❌ Error initializing Firebase:', error);
+                }
+            }
+        }
+    </script>
+    
+    <!-- Load database module -->
+    <script src="js/database.js"></script>
+    
+    <!-- Load audit script -->
+    <script src="js/utils/pre-release-audit.js"></script>
+    
+    <!-- Load modules for repost audit -->
+    <script src="js/modules/accounts.js"></script>
+    <script src="js/modules/suppliers.js"></script>
+    <script src="js/modules/customers.js"></script>
+    <script src="js/modules/cost-centers.js"></script>
+    <script src="js/modules/currencies.js"></script>
+    <script src="js/modules/products.js"></script>
+    <script src="js/modules/purchases.js"></script>
+    <script src="js/modules/sales.js"></script>
+    <script src="js/modules/purchase-returns.js"></script>
+    <script src="js/modules/sales-returns.js"></script>
+    <script src="js/modules/vouchers.js"></script>
+    
+    <!-- Load repost entries audit module -->
+    <script src="js/modules/repost-entries-audit.js"></script>
+    
+    <!-- Load costing methods -->
+    <script src="js/costing-methods.js"></script>
+    
+    <!-- Load inventory module -->
+    <script src="js/modules/inventory.js"></script>
+    
+    <!-- Helper functions for audit runner -->
+    <script>
+        // Helper functions that may be missing
+        if (typeof showError === 'undefined') {
+            function showError(message) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ!',
+                    text: message,
+                    confirmButtonText: 'حسناً',
+                    confirmButtonColor: '#e74c3c'
+                });
+            }
+        }
+        
+        if (typeof showSuccess === 'undefined') {
+            function showSuccess(message, timer = 2000) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'نجح!',
+                    text: message,
+                    confirmButtonText: 'حسناً',
+                    confirmButtonColor: '#27ae60',
+                    timer: timer
+                });
+            }
+        }
+        
+        // Format number helper
+        if (typeof formatNumber === 'undefined') {
+            function formatNumber(num) {
+                if (num === null || num === undefined) return '0';
+                return parseFloat(num).toLocaleString('ar-EG', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+        }
+        
+        // Format currency helper
+        if (typeof formatCurrency === 'undefined') {
+            function formatCurrency(amount, currency = 'IQD') {
+                if (amount === null || amount === undefined) return '0 ' + currency;
+                return parseFloat(amount).toLocaleString('ar-EG', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }) + ' ' + currency;
+            }
+        }
+    </script>
+
+    <script>
+        let auditor = null;
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results-container').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('results-container').style.display = 'block';
+        }
+
+        async function runCompleteAudit() {
+            showLoading();
+            try {
+                if (!auditor) {
+                    auditor = new PreReleaseAuditor();
+                }
+                const report = await auditor.runCompleteAudit();
+                displayResults(report);
+            } catch (error) {
+                console.error('Error running audit:', error);
+                alert('حدث خطأ في التدقيق: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function runSecurityCheck() {
+            showLoading();
+            try {
+                if (!auditor) {
+                    auditor = new PreReleaseAuditor();
+                }
+                const checks = await auditor.quickSecurityCheck();
+                displaySecurityResults(checks);
+            } catch (error) {
+                console.error('Error running security check:', error);
+                alert('حدث خطأ في فحص الأمان: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function checkDataIntegrity() {
+            showLoading();
+            try {
+                if (!auditor) {
+                    auditor = new PreReleaseAuditor();
+                }
+                await auditor.auditDataIntegrity();
+                const report = auditor.generateReport();
+                displayResults(report);
+            } catch (error) {
+                console.error('Error checking data integrity:', error);
+                alert('حدث خطأ في فحص تكامل البيانات: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function checkConfiguration() {
+            showLoading();
+            try {
+                if (!auditor) {
+                    auditor = new PreReleaseAuditor();
+                }
+                await auditor.auditConfiguration();
+                const report = auditor.generateReport();
+                displayResults(report);
+            } catch (error) {
+                console.error('Error checking configuration:', error);
+                alert('حدث خطأ في فحص الإعدادات: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function checkCodeQuality() {
+            showLoading();
+            try {
+                if (!auditor) {
+                    auditor = new PreReleaseAuditor();
+                }
+                await auditor.auditCodeQuality();
+                const report = auditor.generateReport();
+                displayResults(report);
+            } catch (error) {
+                console.error('Error checking code quality:', error);
+                alert('حدث خطأ في فحص جودة الكود: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function displayResults(report) {
+            const statsDiv = document.getElementById('stats');
+            const resultsDiv = document.getElementById('results-content');
+
+            // Check if report is valid
+            if (!report || typeof report !== 'object') {
+                console.error('Invalid report:', report);
+                resultsDiv.innerHTML = '<div class="result-item result-failed">خطأ: لم يتم إنشاء التقرير بشكل صحيح</div>';
+                return;
+            }
+
+            // Ensure report has required properties
+            const safeReport = {
+                passed: report.passed || 0,
+                failed: report.failed || 0,
+                warnings: report.warnings || 0,
+                info: report.info || 0,
+                results: report.results || {
+                    passed: [],
+                    failed: [],
+                    warnings: [],
+                    info: []
+                }
+            };
+
+            // Display stats
+            statsDiv.innerHTML = `
+                <div class="stat-card">
+                    <h4 class="text-success">${safeReport.passed}</h4>
+                    <p>نجح | Passed</p>
+                </div>
+                <div class="stat-card">
+                    <h4 class="text-danger">${safeReport.failed}</h4>
+                    <p>فشل | Failed</p>
+                </div>
+                <div class="stat-card">
+                    <h4 class="text-warning">${safeReport.warnings}</h4>
+                    <p>تحذيرات | Warnings</p>
+                </div>
+                <div class="stat-card">
+                    <h4 class="text-info">${safeReport.info}</h4>
+                    <p>معلومات | Info</p>
+                </div>
+            `;
+
+            // Display results
+            let html = '';
+
+            if (safeReport.results.failed && safeReport.results.failed.length > 0) {
+                html += '<h4 class="text-danger">❌ المشاكل الحرجة | Critical Issues:</h4>';
+                safeReport.results.failed.forEach(item => {
+                    html += `<div class="result-item result-failed">
+                        <strong>[${item.category || 'Unknown'}]</strong> ${item.message || 'No message'}
+                    </div>`;
+                });
+            }
+
+            if (safeReport.results.warnings && safeReport.results.warnings.length > 0) {
+                html += '<h4 class="text-warning mt-4">⚠️ التحذيرات | Warnings:</h4>';
+                safeReport.results.warnings.forEach(item => {
+                    html += `<div class="result-item result-warning">
+                        <strong>[${item.category || 'Unknown'}]</strong> ${item.message || 'No message'}
+                    </div>`;
+                });
+            }
+
+            if (safeReport.results.info && safeReport.results.info.length > 0) {
+                html += '<h4 class="text-info mt-4">ℹ️ معلومات | Info:</h4>';
+                safeReport.results.info.forEach(item => {
+                    html += `<div class="result-item result-info">
+                        <strong>[${item.category || 'Unknown'}]</strong> ${item.message || 'No message'}
+                    </div>`;
+                });
+            }
+
+            if (safeReport.results.passed && safeReport.results.passed.length > 0) {
+                html += '<h4 class="text-success mt-4">✅ تم بنجاح | Passed:</h4>';
+                safeReport.results.passed.slice(0, 20).forEach(item => {
+                    html += `<div class="result-item result-passed">
+                        <strong>[${item.category || 'Unknown'}]</strong> ${item.message || 'No message'}
+                    </div>`;
+                });
+                if (safeReport.results.passed.length > 20) {
+                    html += `<p class="text-muted">... و ${safeReport.results.passed.length - 20} عنصر آخر</p>`;
+                }
+            }
+
+            resultsDiv.innerHTML = html;
+        }
+
+        function displaySecurityResults(checks) {
+            const statsDiv = document.getElementById('stats');
+            const resultsDiv = document.getElementById('results-content');
+
+            const passed = checks.filter(c => c.passed).length;
+            const failed = checks.filter(c => !c.passed).length;
+
+            statsDiv.innerHTML = `
+                <div class="stat-card">
+                    <h4 class="text-success">${passed}</h4>
+                    <p>نجح | Passed</p>
+                </div>
+                <div class="stat-card">
+                    <h4 class="text-danger">${failed}</h4>
+                    <p>فشل | Failed</p>
+                </div>
+            `;
+
+            let html = '<h4>نتائج فحص الأمان | Security Check Results:</h4>';
+            checks.forEach(check => {
+                const className = check.passed ? 'result-passed' : 'result-failed';
+                const icon = check.passed ? '✅' : '❌';
+                html += `<div class="result-item ${className}">
+                    ${icon} <strong>${check.name}</strong>: ${check.message}
+                </div>`;
+            });
+
+            resultsDiv.innerHTML = html;
+        }
+
+        function toggleChecklist(checkbox) {
+            const item = checkbox.closest('.checklist-item');
+            if (checkbox.checked) {
+                item.classList.add('checked');
+            } else {
+                item.classList.remove('checked');
+            }
+        }
+
+        /**
+         * إعادة حساب أرصدة جميع المنتجات من inventoryMovements
+         * Recalculate all product stocks from inventoryMovements
+         */
+        async function recalculateAllProductStocks() {
+            // Check if Collections is available
+            if (typeof Collections === 'undefined') {
+                alert('خطأ: وحدة قاعدة البيانات غير محمّلة. تأكد من تحميل js/database.js');
+                return;
+            }
+
+            // Check if db is available
+            if (typeof db === 'undefined') {
+                alert('خطأ: قاعدة البيانات غير متاحة. تأكد من تهيئة Firebase.');
+                return;
+            }
+
+            const confirmed = confirm('هل تريد إعادة حساب أرصدة جميع المنتجات من حركات المخزون؟\n\nهذه العملية قد تستغرق بعض الوقت.\n\nDo you want to recalculate all product stocks from inventory movements?\n\nThis operation may take some time.');
+            if (!confirmed) return;
+
+            showLoading();
+            const resultsDiv = document.getElementById('results-content');
+            const statsDiv = document.getElementById('stats');
+            
+            try {
+                resultsDiv.innerHTML = '<div class="result-item result-info"><i class="fas fa-spinner fa-spin"></i> جاري جلب المنتجات...</div>';
+                
+                // Get all products (without limit to get all products)
+                const products = await Collections.getProducts({ limit: 10000 });
+                const totalProducts = products.length;
+                
+                if (totalProducts === 0) {
+                    resultsDiv.innerHTML = '<div class="result-item result-warning">لا توجد منتجات في قاعدة البيانات</div>';
+                    hideLoading();
+                    return;
+                }
+
+                resultsDiv.innerHTML = `<div class="result-item result-info">تم العثور على ${totalProducts} منتج. جاري إعادة الحساب...</div>`;
+                
+                let successCount = 0;
+                let errorCount = 0;
+                let fixedCount = 0;
+                const errors = [];
+                const fixed = [];
+
+                // Process products in batches to avoid overwhelming the system
+                const batchSize = 10;
+                for (let i = 0; i < products.length; i += batchSize) {
+                    const batch = products.slice(i, i + batchSize);
+                    const batchPromises = batch.map(async (product) => {
+                        try {
+                            // Get current stock
+                            const currentStock = product.currentStock || 0;
+                            
+                            // Recalculate stock
+                            const updatedWarehouseStock = await Collections.recalculateProductWarehouseStock(product.id);
+                            
+                            // Calculate new total stock
+                            const newTotalStock = Object.values(updatedWarehouseStock).reduce((sum, stock) => sum + (stock || 0), 0);
+                            
+                            // Check if stock was fixed
+                            const stockDifference = Math.abs(currentStock - newTotalStock);
+                            if (stockDifference > 0.01) {
+                                fixedCount++;
+                                fixed.push({
+                                    productId: product.id,
+                                    productName: product.name,
+                                    oldStock: currentStock,
+                                    newStock: newTotalStock,
+                                    difference: stockDifference
+                                });
+                            }
+                            
+                            successCount++;
+                            return { success: true, product };
+                        } catch (error) {
+                            errorCount++;
+                            errors.push({
+                                productId: product.id,
+                                productName: product.name,
+                                error: error.message
+                            });
+                            return { success: false, product, error };
+                        }
+                    });
+
+                    await Promise.all(batchPromises);
+                    
+                    // Update progress
+                    const progress = Math.min(100, Math.round(((i + batch.length) / totalProducts) * 100));
+                    resultsDiv.innerHTML = `
+                        <div class="result-item result-info">
+                            <i class="fas fa-spinner fa-spin"></i> جاري المعالجة... ${i + batch.length} / ${totalProducts} (${progress}%)
+                        </div>
+                    `;
+                }
+
+                // Display results
+                statsDiv.innerHTML = `
+                    <div class="stat-card">
+                        <h4 class="text-success">${successCount}</h4>
+                        <p>نجح | Success</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-warning">${fixedCount}</h4>
+                        <p>تم إصلاحه | Fixed</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-danger">${errorCount}</h4>
+                        <p>أخطاء | Errors</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-info">${totalProducts}</h4>
+                        <p>إجمالي | Total</p>
+                    </div>
+                `;
+
+                let html = '<h4 class="text-success">✅ تم إعادة حساب الأرصدة بنجاح</h4>';
+                
+                if (fixed.length > 0) {
+                    html += `<h5 class="text-warning mt-3">📊 المنتجات التي تم إصلاح أرصدتها (${fixed.length}):</h5>`;
+                    fixed.slice(0, 50).forEach(item => {
+                        html += `<div class="result-item result-warning">
+                            <strong>${item.productName}</strong> (${item.productId})<br>
+                            الرصيد القديم: ${item.oldStock.toFixed(2)} → الرصيد الجديد: ${item.newStock.toFixed(2)} 
+                            (الفرق: ${item.difference.toFixed(2)})
+                        </div>`;
+                    });
+                    if (fixed.length > 50) {
+                        html += `<p class="text-muted">... و ${fixed.length - 50} منتج آخر تم إصلاحه</p>`;
+                    }
+                }
+
+                if (errors.length > 0) {
+                    html += `<h5 class="text-danger mt-3">❌ الأخطاء (${errors.length}):</h5>`;
+                    errors.forEach(item => {
+                        html += `<div class="result-item result-failed">
+                            <strong>${item.productName}</strong> (${item.productId}): ${item.error}
+                        </div>`;
+                    });
+                }
+
+                if (fixed.length === 0 && errors.length === 0) {
+                    html += '<div class="result-item result-passed">جميع الأرصدة صحيحة ولا تحتاج إلى إصلاح</div>';
+                }
+
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error recalculating product stocks:', error);
+                resultsDiv.innerHTML = `<div class="result-item result-failed">
+                    <strong>خطأ:</strong> ${error.message}
+                </div>`;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * إصلاح حركات المخزون المفقودة أو غير الصحيحة
+         * Fix missing or incorrect inventory movements
+         */
+        async function fixInventoryMovements() {
+            // Check if db is available
+            if (typeof db === 'undefined') {
+                alert('خطأ: قاعدة البيانات غير متاحة. تأكد من تهيئة Firebase.');
+                return;
+            }
+
+            const confirmed = confirm('هل تريد فحص وإصلاح حركات المخزون؟\n\nسيتم فحص:\n- حركات المخزون المفقودة\n- حركات المخزون غير الصحيحة\n\nDo you want to check and fix inventory movements?\n\nWill check:\n- Missing inventory movements\n- Incorrect inventory movements');
+            if (!confirmed) return;
+
+            showLoading();
+            const resultsDiv = document.getElementById('results-content');
+            const statsDiv = document.getElementById('stats');
+            
+            try {
+                resultsDiv.innerHTML = '<div class="result-item result-info"><i class="fas fa-spinner fa-spin"></i> جاري فحص حركات المخزون...</div>';
+                
+                // Get all purchases with status completed
+                const purchasesSnapshot = await db.collection('purchases')
+                    .where('status', '==', 'completed')
+                    .get();
+                
+                let missingMovements = 0;
+                let fixedMovements = 0;
+                const issues = [];
+
+                purchasesSnapshot.forEach(async (purchaseDoc) => {
+                    const purchase = purchaseDoc.data();
+                    const purchaseId = purchaseDoc.id;
+                    
+                    // Check if inventory movements exist for this purchase
+                    const movementsSnapshot = await db.collection('inventoryMovements')
+                        .where('sourceType', '==', 'purchase')
+                        .where('sourceId', '==', purchaseId)
+                        .get();
+                    
+                    if (movementsSnapshot.empty && purchase.items && purchase.items.length > 0) {
+                        missingMovements++;
+                        issues.push({
+                            type: 'missing',
+                            purchaseId: purchaseId,
+                            invoiceNo: purchase.invoiceNo || 'N/A',
+                            itemsCount: purchase.items.length
+                        });
+                    }
+                });
+
+                // Wait for all checks to complete
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                statsDiv.innerHTML = `
+                    <div class="stat-card">
+                        <h4 class="text-warning">${missingMovements}</h4>
+                        <p>حركات مفقودة | Missing</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-success">${fixedMovements}</h4>
+                        <p>تم إصلاحها | Fixed</p>
+                    </div>
+                `;
+
+                let html = '<h4 class="text-info">📋 نتائج فحص حركات المخزون</h4>';
+                
+                if (issues.length > 0) {
+                    html += `<h5 class="text-warning mt-3">⚠️ فواتير المشتريات بدون حركات مخزون (${issues.length}):</h5>`;
+                    issues.slice(0, 20).forEach(issue => {
+                        html += `<div class="result-item result-warning">
+                            <strong>فاتورة #${issue.invoiceNo}</strong> (${issue.purchaseId})<br>
+                            عدد الأصناف: ${issue.itemsCount}
+                        </div>`;
+                    });
+                    if (issues.length > 20) {
+                        html += `<p class="text-muted">... و ${issues.length - 20} فاتورة أخرى</p>`;
+                    }
+                    
+                    html += `<div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>ملاحظة:</strong> هذه الفواتير قد تكون قديمة أو تم حفظها قبل تفعيل نظام حركات المخزون.
+                        يمكنك إعادة حساب أرصدة المنتجات لإصلاح هذه المشكلة.
+                    </div>`;
+                } else {
+                    html += '<div class="result-item result-passed">✅ جميع فواتير المشتريات لها حركات مخزون صحيحة</div>';
+                }
+
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error fixing inventory movements:', error);
+                resultsDiv.innerHTML = `<div class="result-item result-failed">
+                    <strong>خطأ:</strong> ${error.message}
+                </div>`;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Audit invoices and vouchers for missing entries
+         */
+        async function auditInvoicesAndVouchers() {
+            showLoading();
+            try {
+                if (typeof RepostAuditModule === 'undefined') {
+                    throw new Error('RepostAuditModule not loaded');
+                }
+                
+                await RepostAuditModule.init();
+                await RepostAuditModule.scanMissingEntries();
+                
+                // Display results
+                const stats = {
+                    total: RepostAuditModule.filteredItems.length,
+                    noEntry: RepostAuditModule.filteredItems.filter(i => i.entryStatus?.status === 'no_entry').length,
+                    hasEntry: RepostAuditModule.filteredItems.filter(i => i.entryStatus?.status === 'has_entry').length,
+                    multiple: RepostAuditModule.filteredItems.filter(i => i.entryStatus?.status === 'multiple').length
+                };
+                
+                displayAuditResults({
+                    title: 'نتائج فحص الفواتير والسندات',
+                    stats: stats,
+                    items: RepostAuditModule.filteredItems
+                });
+                
+            } catch (error) {
+                console.error('Error auditing invoices:', error);
+                showError('حدث خطأ في فحص الفواتير: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Audit general entries
+         */
+        async function auditGeneralEntries() {
+            showLoading();
+            try {
+                if (typeof RepostAuditModule === 'undefined') {
+                    throw new Error('RepostAuditModule not loaded');
+                }
+                
+                await RepostAuditModule.analyzeAllEntries();
+                
+            } catch (error) {
+                console.error('Error auditing entries:', error);
+                showError('حدث خطأ في تحليل القيود: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Audit entry balance
+         */
+        async function auditEntryBalance() {
+            showLoading();
+            const resultsDiv = document.getElementById('results-content');
+            const statsDiv = document.getElementById('stats');
+            
+            try {
+                resultsDiv.innerHTML = '<div class="result-item result-info"><i class="fas fa-spinner fa-spin"></i> جاري فحص توازن القيود...</div>';
+                
+                const entriesSnapshot = await db.collection('generalEntries').get();
+                const entries = entriesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                let balanced = 0;
+                let unbalanced = 0;
+                const unbalancedEntries = [];
+                
+                for (const entry of entries) {
+                    const totalDebit = (entry.entries || []).reduce((sum, e) => sum + (parseFloat(e.debit) || 0), 0);
+                    const totalCredit = (entry.entries || []).reduce((sum, e) => sum + (parseFloat(e.credit) || 0), 0);
+                    const difference = Math.abs(totalDebit - totalCredit);
+                    
+                    if (difference > 0.01) {
+                        unbalanced++;
+                        unbalancedEntries.push({
+                            id: entry.id,
+                            reference: entry.reference || 'N/A',
+                            description: entry.description || 'N/A',
+                            debit: totalDebit,
+                            credit: totalCredit,
+                            difference: difference
+                        });
+                    } else {
+                        balanced++;
+                    }
+                }
+                
+                statsDiv.innerHTML = `
+                    <div class="stat-card">
+                        <h4 class="text-success">${balanced}</h4>
+                        <p>متوازنة | Balanced</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-danger">${unbalanced}</h4>
+                        <p>غير متوازنة | Unbalanced</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-info">${entries.length}</h4>
+                        <p>إجمالي | Total</p>
+                    </div>
+                `;
+                
+                let html = '<h4 class="text-info">📊 نتائج فحص توازن القيود</h4>';
+                
+                if (unbalancedEntries.length > 0) {
+                    html += `<h5 class="text-danger mt-3">❌ القيود غير المتوازنة (${unbalancedEntries.length}):</h5>`;
+                    unbalancedEntries.slice(0, 50).forEach(entry => {
+                        html += `<div class="result-item result-failed">
+                            <strong>${entry.reference}</strong> - ${entry.description}<br>
+                            مدين: ${entry.debit.toFixed(2)} | دائن: ${entry.credit.toFixed(2)} | الفرق: ${entry.difference.toFixed(2)}
+                        </div>`;
+                    });
+                    if (unbalancedEntries.length > 50) {
+                        html += `<p class="text-muted">... و ${unbalancedEntries.length - 50} قيد آخر</p>`;
+                    }
+                } else {
+                    html += '<div class="result-item result-passed">✅ جميع القيود متوازنة</div>';
+                }
+                
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error auditing entry balance:', error);
+                resultsDiv.innerHTML = `<div class="result-item result-failed">
+                    <strong>خطأ:</strong> ${error.message}
+                </div>`;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Repost missing entries
+         */
+        async function repostMissingEntries() {
+            try {
+                if (typeof RepostAuditModule === 'undefined') {
+                    throw new Error('RepostAuditModule not loaded');
+                }
+                
+                await RepostAuditModule.init();
+                await RepostAuditModule.scanMissingEntries();
+                await RepostAuditModule.repostAllMissing();
+                
+            } catch (error) {
+                console.error('Error reposting entries:', error);
+                showError('حدث خطأ في إعادة ترحيل القيود: ' + error.message);
+            }
+        }
+
+        /**
+         * Fix duplicate entries
+         */
+        async function fixDuplicateEntries() {
+            showLoading();
+            const resultsDiv = document.getElementById('results-content');
+            const statsDiv = document.getElementById('stats');
+            
+            try {
+                resultsDiv.innerHTML = '<div class="result-item result-info"><i class="fas fa-spinner fa-spin"></i> جاري البحث عن القيود المتعددة...</div>';
+                
+                // Get all entries grouped by source
+                const entriesSnapshot = await db.collection('generalEntries').get();
+                const allEntries = entriesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                // Group by source
+                const entriesBySource = {};
+                for (const entry of allEntries) {
+                    const key = `${entry.type}_${entry.sourceId}`;
+                    if (!entriesBySource[key]) {
+                        entriesBySource[key] = [];
+                    }
+                    entriesBySource[key].push(entry);
+                }
+                
+                // Find duplicates
+                const duplicates = [];
+                for (const [key, entries] of Object.entries(entriesBySource)) {
+                    if (entries.length > 1) {
+                        const [type, sourceId] = key.split('_');
+                        duplicates.push({
+                            type,
+                            sourceId,
+                            count: entries.length,
+                            entries: entries.sort((a, b) => {
+                                // Sort by date, keep newest
+                                const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date);
+                                const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date);
+                                return dateB - dateA;
+                            })
+                        });
+                    }
+                }
+                
+                if (duplicates.length === 0) {
+                    resultsDiv.innerHTML = '<div class="result-item result-passed">✅ لا توجد قيود متعددة</div>';
+                    hideLoading();
+                    return;
+                }
+                
+                const result = await Swal.fire({
+                    title: 'تأكيد',
+                    text: `تم العثور على ${duplicates.length} مصدر بقيد متعدد. هل تريد حذف القيود القديمة والاحتفاظ بالأحدث فقط؟`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'نعم، احذف القديمة',
+                    cancelButtonText: 'إلغاء'
+                });
+                
+                if (!result.isConfirmed) {
+                    hideLoading();
+                    return;
+                }
+                
+                let deleted = 0;
+                let errors = 0;
+                
+                for (const duplicate of duplicates) {
+                    // Keep the first (newest) entry, delete the rest
+                    for (let i = 1; i < duplicate.entries.length; i++) {
+                        try {
+                            await db.collection('generalEntries').doc(duplicate.entries[i].id).delete();
+                            deleted++;
+                        } catch (error) {
+                            console.error(`Error deleting entry ${duplicate.entries[i].id}:`, error);
+                            errors++;
+                        }
+                    }
+                }
+                
+                statsDiv.innerHTML = `
+                    <div class="stat-card">
+                        <h4 class="text-warning">${duplicates.length}</h4>
+                        <p>مصادر متعددة | Duplicate Sources</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-success">${deleted}</h4>
+                        <p>تم الحذف | Deleted</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-danger">${errors}</h4>
+                        <p>أخطاء | Errors</p>
+                    </div>
+                `;
+                
+                let html = `<h4 class="text-success">✅ تم إصلاح القيود المتعددة</h4>`;
+                html += `<p>تم حذف ${deleted} قيد قديم والاحتفاظ بالأحدث فقط</p>`;
+                
+                if (errors > 0) {
+                    html += `<div class="result-item result-warning">حدثت ${errors} أخطاء أثناء الحذف</div>`;
+                }
+                
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error fixing duplicates:', error);
+                resultsDiv.innerHTML = `<div class="result-item result-failed">
+                    <strong>خطأ:</strong> ${error.message}
+                </div>`;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Audit inventory balance
+         */
+        async function auditInventoryBalance() {
+            showLoading();
+            const resultsDiv = document.getElementById('results-content');
+            const statsDiv = document.getElementById('stats');
+            
+            try {
+                resultsDiv.innerHTML = '<div class="result-item result-info"><i class="fas fa-spinner fa-spin"></i> جاري فحص أرصدة المخزون...</div>';
+                
+                if (typeof Collections === 'undefined') {
+                    throw new Error('Collections module not loaded');
+                }
+                
+                const products = await Collections.getProducts({ limit: 10000 });
+                const warehouses = await Collections.getWarehouses();
+                
+                let issues = 0;
+                const problems = [];
+                
+                for (const product of products) {
+                    const calculatedStock = await Collections.recalculateProductWarehouseStock(product.id);
+                    const totalCalculated = Object.values(calculatedStock).reduce((sum, s) => sum + (s || 0), 0);
+                    const currentStock = product.currentStock || 0;
+                    const difference = Math.abs(currentStock - totalCalculated);
+                    
+                    if (difference > 0.01) {
+                        issues++;
+                        problems.push({
+                            productId: product.id,
+                            productName: product.name,
+                            currentStock,
+                            calculatedStock: totalCalculated,
+                            difference
+                        });
+                    }
+                }
+                
+                statsDiv.innerHTML = `
+                    <div class="stat-card">
+                        <h4 class="text-success">${products.length - issues}</h4>
+                        <p>صحيحة | Correct</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-warning">${issues}</h4>
+                        <p>تحتاج إصلاح | Need Fix</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-info">${products.length}</h4>
+                        <p>إجمالي | Total</p>
+                    </div>
+                `;
+                
+                let html = '<h4 class="text-info">📊 نتائج فحص أرصدة المخزون</h4>';
+                
+                if (problems.length > 0) {
+                    html += `<h5 class="text-warning mt-3">⚠️ المنتجات التي تحتاج إصلاح (${problems.length}):</h5>`;
+                    problems.slice(0, 50).forEach(item => {
+                        html += `<div class="result-item result-warning">
+                            <strong>${item.productName}</strong><br>
+                            الرصيد الحالي: ${item.currentStock.toFixed(2)} | المحسوب: ${item.calculatedStock.toFixed(2)} | الفرق: ${item.difference.toFixed(2)}
+                        </div>`;
+                    });
+                    if (problems.length > 50) {
+                        html += `<p class="text-muted">... و ${problems.length - 50} منتج آخر</p>`;
+                    }
+                } else {
+                    html += '<div class="result-item result-passed">✅ جميع الأرصدة صحيحة</div>';
+                }
+                
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error auditing inventory:', error);
+                resultsDiv.innerHTML = `<div class="result-item result-failed">
+                    <strong>خطأ:</strong> ${error.message}
+                </div>`;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Audit inventory movements
+         */
+        async function auditInventoryMovements() {
+            showLoading();
+            const resultsDiv = document.getElementById('results-content');
+            const statsDiv = document.getElementById('stats');
+            
+            try {
+                resultsDiv.innerHTML = '<div class="result-item result-info"><i class="fas fa-spinner fa-spin"></i> جاري فحص حركات المخزون...</div>';
+                
+                if (typeof Collections === 'undefined') {
+                    throw new Error('Collections module not loaded');
+                }
+                
+                // Check purchases
+                const purchasesSnapshot = await db.collection('purchases')
+                    .where('status', '==', 'completed')
+                    .get();
+                
+                let missingMovements = 0;
+                const missing = [];
+                
+                for (const doc of purchasesSnapshot.docs) {
+                    const purchase = doc.data();
+                    if (!purchase.items || purchase.items.length === 0) continue;
+                    
+                    const movements = await db.collection('inventoryMovements')
+                        .where('sourceType', '==', 'purchase')
+                        .where('sourceId', '==', doc.id)
+                        .get();
+                    
+                    if (movements.empty) {
+                        missingMovements++;
+                        missing.push({
+                            type: 'purchase',
+                            id: doc.id,
+                            data: purchase,
+                            invoiceNo: purchase.invoiceNo || 'N/A',
+                            itemsCount: purchase.items.length,
+                            date: purchase.date
+                        });
+                    }
+                }
+                
+                // Check sales
+                const salesSnapshot = await db.collection('sales')
+                    .where('status', '==', 'completed')
+                    .get();
+                
+                for (const doc of salesSnapshot.docs) {
+                    const sale = doc.data();
+                    if (!sale.items || sale.items.length === 0) continue;
+                    
+                    const movements = await db.collection('inventoryMovements')
+                        .where('sourceType', '==', 'sale')
+                        .where('sourceId', '==', doc.id)
+                        .get();
+                    
+                    if (movements.empty) {
+                        missingMovements++;
+                        missing.push({
+                            type: 'sale',
+                            id: doc.id,
+                            data: sale,
+                            invoiceNo: sale.invoiceNo || 'N/A',
+                            itemsCount: sale.items.length,
+                            date: sale.date
+                        });
+                    }
+                }
+                
+                // Check purchase returns
+                const purchaseReturnsSnapshot = await db.collection('purchaseReturns')
+                    .where('status', '==', 'completed')
+                    .get();
+                
+                for (const doc of purchaseReturnsSnapshot.docs) {
+                    const return_ = doc.data();
+                    if (!return_.items || return_.items.length === 0) continue;
+                    
+                    const movements = await db.collection('inventoryMovements')
+                        .where('sourceType', '==', 'purchase_return')
+                        .where('sourceId', '==', doc.id)
+                        .get();
+                    
+                    if (movements.empty) {
+                        missingMovements++;
+                        missing.push({
+                            type: 'purchase_return',
+                            id: doc.id,
+                            data: return_,
+                            invoiceNo: return_.invoiceNo || 'N/A',
+                            itemsCount: return_.items.length,
+                            date: return_.date
+                        });
+                    }
+                }
+                
+                // Check sale returns
+                const saleReturnsSnapshot = await db.collection('saleReturns')
+                    .where('status', '==', 'completed')
+                    .get();
+                
+                for (const doc of saleReturnsSnapshot.docs) {
+                    const return_ = doc.data();
+                    if (!return_.items || return_.items.length === 0) continue;
+                    
+                    const movements = await db.collection('inventoryMovements')
+                        .where('sourceType', '==', 'sale_return')
+                        .where('sourceId', '==', doc.id)
+                        .get();
+                    
+                    if (movements.empty) {
+                        missingMovements++;
+                        missing.push({
+                            type: 'sale_return',
+                            id: doc.id,
+                            data: return_,
+                            invoiceNo: return_.invoiceNo || 'N/A',
+                            itemsCount: return_.items.length,
+                            date: return_.date
+                        });
+                    }
+                }
+                
+                statsDiv.innerHTML = `
+                    <div class="stat-card">
+                        <h4 class="text-warning">${missingMovements}</h4>
+                        <p>حركات مفقودة | Missing</p>
+                    </div>
+                `;
+                
+                let html = '<h4 class="text-info">📋 نتائج فحص حركات المخزون</h4>';
+                
+                if (missing.length > 0) {
+                    html += `<h5 class="text-warning mt-3">⚠️ الفواتير بدون حركات مخزون (${missing.length}):</h5>`;
+                    missing.slice(0, 50).forEach(item => {
+                        const typeLabel = item.type === 'purchase' ? 'شراء' : 
+                                         item.type === 'sale' ? 'مبيعات' :
+                                         item.type === 'purchase_return' ? 'مرتجع شراء' : 'مرتجع مبيعات';
+                        html += `<div class="result-item result-warning">
+                            <strong>${typeLabel} #${item.invoiceNo}</strong><br>
+                            عدد الأصناف: ${item.itemsCount} | التاريخ: ${item.date ? (item.date.toDate ? item.date.toDate().toLocaleDateString('ar-EG') : new Date(item.date).toLocaleDateString('ar-EG')) : 'N/A'}
+                        </div>`;
+                    });
+                    if (missing.length > 50) {
+                        html += `<p class="text-muted">... و ${missing.length - 50} فاتورة أخرى</p>`;
+                    }
+                    
+                    html += `<div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>ملاحظة:</strong> يمكنك استخدام "توليد حركات المخزون المفقودة" لإنشاء الحركات تلقائياً.
+                    </div>`;
+                } else {
+                    html += '<div class="result-item result-passed">✅ جميع الفواتير لها حركات مخزون</div>';
+                }
+                
+                resultsDiv.innerHTML = html;
+                
+                // Store missing items for later use
+                window.missingInventoryMovements = missing;
+                
+            } catch (error) {
+                console.error('Error auditing movements:', error);
+                resultsDiv.innerHTML = `<div class="result-item result-failed">
+                    <strong>خطأ:</strong> ${error.message}
+                </div>`;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Generate missing inventory movements for invoices
+         */
+        async function generateMissingInventoryMovements() {
+            // First, run audit to find missing movements
+            await auditInventoryMovements();
+            
+            const missing = window.missingInventoryMovements || [];
+            
+            if (missing.length === 0) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'معلومات',
+                    text: 'لا توجد فواتير بدون حركات مخزون'
+                });
+                return;
+            }
+            
+            const result = await Swal.fire({
+                title: 'تأكيد',
+                text: `هل تريد توليد حركات المخزون لـ ${missing.length} فاتورة؟`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، توليد',
+                cancelButtonText: 'إلغاء'
+            });
+            
+            if (!result.isConfirmed) return;
+            
+            showLoading();
+            const resultsDiv = document.getElementById('results-content');
+            const statsDiv = document.getElementById('stats');
+            
+            try {
+                if (typeof Collections === 'undefined') {
+                    throw new Error('Collections module not loaded');
+                }
+                
+                resultsDiv.innerHTML = '<div class="result-item result-info"><i class="fas fa-spinner fa-spin"></i> جاري توليد حركات المخزون...</div>';
+                
+                let successCount = 0;
+                let errorCount = 0;
+                const errors = [];
+                const created = [];
+                
+                // Process in batches
+                const batchSize = 5;
+                for (let i = 0; i < missing.length; i += batchSize) {
+                    const batch = missing.slice(i, i + batchSize);
+                    
+                    for (const item of batch) {
+                        try {
+                            const invoiceData = item.data;
+                            const invoiceId = item.id;
+                            const invoiceType = item.type;
+                            
+                            // Generate movements based on type
+                            if (invoiceType === 'purchase') {
+                                await generatePurchaseMovements(invoiceId, invoiceData);
+                            } else if (invoiceType === 'sale') {
+                                await generateSaleMovements(invoiceId, invoiceData);
+                            } else if (invoiceType === 'purchase_return') {
+                                await generatePurchaseReturnMovements(invoiceId, invoiceData);
+                            } else if (invoiceType === 'sale_return') {
+                                await generateSaleReturnMovements(invoiceId, invoiceData);
+                            }
+                            
+                            successCount++;
+                            created.push({
+                                type: invoiceType,
+                                invoiceNo: item.invoiceNo,
+                                itemsCount: item.itemsCount
+                            });
+                            
+                        } catch (error) {
+                            errorCount++;
+                            errors.push({
+                                type: item.type,
+                                invoiceNo: item.invoiceNo,
+                                error: error.message
+                            });
+                            console.error(`Error generating movements for ${item.type} ${item.invoiceNo}:`, error);
+                        }
+                    }
+                    
+                    // Update progress
+                    const progress = Math.min(100, Math.round(((i + batch.length) / missing.length) * 100));
+                    resultsDiv.innerHTML = `
+                        <div class="result-item result-info">
+                            <i class="fas fa-spinner fa-spin"></i> جاري المعالجة... ${i + batch.length} / ${missing.length} (${progress}%)
+                        </div>
+                    `;
+                }
+                
+                statsDiv.innerHTML = `
+                    <div class="stat-card">
+                        <h4 class="text-success">${successCount}</h4>
+                        <p>نجح | Success</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-danger">${errorCount}</h4>
+                        <p>أخطاء | Errors</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-info">${missing.length}</h4>
+                        <p>إجمالي | Total</p>
+                    </div>
+                `;
+                
+                let html = '<h4 class="text-success">✅ تم توليد حركات المخزون</h4>';
+                
+                if (created.length > 0) {
+                    html += `<h5 class="text-success mt-3">✅ تم إنشاء الحركات (${created.length}):</h5>`;
+                    created.slice(0, 30).forEach(item => {
+                        const typeLabel = item.type === 'purchase' ? 'شراء' : 
+                                         item.type === 'sale' ? 'مبيعات' :
+                                         item.type === 'purchase_return' ? 'مرتجع شراء' : 'مرتجع مبيعات';
+                        html += `<div class="result-item result-passed">
+                            <strong>${typeLabel} #${item.invoiceNo}</strong> - ${item.itemsCount} صنف
+                        </div>`;
+                    });
+                    if (created.length > 30) {
+                        html += `<p class="text-muted">... و ${created.length - 30} فاتورة أخرى</p>`;
+                    }
+                }
+                
+                if (errors.length > 0) {
+                    html += `<h5 class="text-danger mt-3">❌ الأخطاء (${errors.length}):</h5>`;
+                    errors.forEach(item => {
+                        html += `<div class="result-item result-failed">
+                            <strong>${item.invoiceNo}</strong>: ${item.error}
+                        </div>`;
+                    });
+                }
+                
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error generating movements:', error);
+                resultsDiv.innerHTML = `<div class="result-item result-failed">
+                    <strong>خطأ:</strong> ${error.message}
+                </div>`;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Generate inventory movements for purchase
+         */
+        async function generatePurchaseMovements(purchaseId, purchaseData) {
+            if (!purchaseData.items || purchaseData.items.length === 0) return;
+            
+            const warehouseId = purchaseData.warehouseId || 'default';
+            const warehouse = await Collections.getWarehouse(warehouseId);
+            const warehouseName = warehouse?.name || 'المستودع الافتراضي';
+            
+            for (const item of purchaseData.items) {
+                // Get product
+                const product = await Collections.getProduct(item.productId);
+                if (!product) {
+                    console.warn(`⚠️ Product ${item.productId} not found, skipping`);
+                    continue;
+                }
+                
+                // Convert quantity to main unit
+                let quantityInMainUnit = item.quantity || 0;
+                if (item.unitId && item.unitId !== product.unitId) {
+                    const subUnit = product.subUnits?.find(su => su.unitId === item.unitId);
+                    const conversionFactor = parseFloat(subUnit?.conversionValue || subUnit?.conversionFactor) || 0;
+                    if (subUnit && conversionFactor > 0) {
+                        const conversionType = subUnit.conversionType || 'multiply';
+                        if (conversionType === 'multiply') {
+                            quantityInMainUnit = item.quantity * conversionFactor;
+                        } else if (conversionType === 'divide') {
+                            quantityInMainUnit = item.quantity / conversionFactor;
+                        }
+                    }
+                }
+                
+                // Calculate previousQuantity from movements before this invoice date
+                // This is important for historical invoices
+                const invoiceDate = purchaseData.date ? 
+                    (purchaseData.date.toDate ? purchaseData.date.toDate() : new Date(purchaseData.date)) : 
+                    new Date();
+                
+                let previousQuantity = 0;
+                try {
+                    // Get all movements for this product in this warehouse before invoice date
+                    const movementsSnapshot = await db.collection('inventoryMovements')
+                        .where('productId', '==', item.productId)
+                        .where('warehouseId', '==', warehouseId)
+                        .get();
+                    
+                    // Calculate stock from movements before invoice date
+                    movementsSnapshot.forEach(movementDoc => {
+                        const movement = movementDoc.data();
+                        const movementDate = movement.date ? 
+                            (movement.date.toDate ? movement.date.toDate() : new Date(movement.date)) : 
+                            new Date();
+                        
+                        if (movementDate < invoiceDate) {
+                            const qty = movement.quantityInMainUnit || movement.quantity || 0;
+                            if (movement.type === 'in' || movement.type === 'adjustment') {
+                                previousQuantity += qty;
+                            } else if (movement.type === 'out') {
+                                previousQuantity -= qty;
+                            }
+                        }
+                    });
+                    
+                    previousQuantity = Math.max(0, previousQuantity);
+                } catch (error) {
+                    console.warn(`⚠️ Error calculating previousQuantity, using current stock:`, error);
+                    // Fallback: use current stock minus this quantity
+                    const currentStock = await Collections.getProductWarehouseStock(item.productId);
+                    const stockInWarehouse = currentStock?.[warehouseId] || 0;
+                    previousQuantity = Math.max(0, stockInWarehouse - quantityInMainUnit);
+                }
+                
+                const newQuantity = previousQuantity + quantityInMainUnit;
+                
+                // Calculate net price
+                let netPrice = item.netPrice;
+                if (!netPrice && item.unitPrice) {
+                    const quantity = item.quantity || 1;
+                    const discountPerUnit = (item.discountAmount || 0) / quantity;
+                    const additionPerUnit = (item.additionAmount || 0) / quantity;
+                    netPrice = item.unitPrice - discountPerUnit + additionPerUnit;
+                    netPrice = Math.max(0, netPrice);
+                }
+                const costPrice = netPrice || item.unitPrice || 0;
+                
+                // Create movement record
+                const movementRecord = {
+                    type: 'in',
+                    productId: item.productId,
+                    productName: product.name,
+                    warehouseId: warehouseId,
+                    warehouseName: warehouseName,
+                    toWarehouseId: null,
+                    toWarehouseName: null,
+                    unitId: item.unitId || product.unitId,
+                    quantity: quantityInMainUnit,
+                    quantityInMainUnit: quantityInMainUnit,
+                    expiryDate: item.expiryDate || null,
+                    serialNumber: item.serialNumber || null,
+                    unitPrice: costPrice,
+                    totalCost: costPrice * quantityInMainUnit,
+                    previousQuantity: previousQuantity,
+                    newQuantity: newQuantity,
+                    reference: purchaseData.invoiceNo || `فاتورة شراء ${purchaseId}`,
+                    notes: `فاتورة شراء - ${purchaseData.supplierName || ''}`,
+                    date: purchaseData.date ? (purchaseData.date.toDate ? purchaseData.date.toDate() : new Date(purchaseData.date)) : new Date(),
+                    userId: auth.currentUser?.uid || 'system',
+                    createdAt: new Date(),
+                    sourceType: 'purchase',
+                    sourceId: purchaseId
+                };
+                
+                await db.collection('inventoryMovements').add(movementRecord);
+            }
+        }
+
+        /**
+         * Generate inventory movements for sale
+         */
+        async function generateSaleMovements(saleId, saleData) {
+            if (!saleData.items || saleData.items.length === 0) return;
+            
+            const warehouseId = saleData.warehouseId || 'default';
+            const warehouse = await Collections.getWarehouse(warehouseId);
+            const warehouseName = warehouse?.name || 'المستودع الافتراضي';
+            
+            for (const item of saleData.items) {
+                // Get product
+                const product = await Collections.getProduct(item.productId);
+                if (!product) {
+                    console.warn(`⚠️ Product ${item.productId} not found, skipping`);
+                    continue;
+                }
+                
+                // Convert quantity to main unit
+                let quantityInMainUnit = item.quantity || 0;
+                if (item.unitId && item.unitId !== product.unitId) {
+                    const subUnit = product.subUnits?.find(su => su.unitId === item.unitId);
+                    const conversionFactor = parseFloat(subUnit?.conversionValue || subUnit?.conversionFactor) || 0;
+                    if (subUnit && conversionFactor > 0) {
+                        const conversionType = subUnit.conversionType || 'multiply';
+                        if (conversionType === 'multiply') {
+                            quantityInMainUnit = item.quantity * conversionFactor;
+                        } else if (conversionType === 'divide') {
+                            quantityInMainUnit = item.quantity / conversionFactor;
+                        }
+                    }
+                }
+                
+                // Calculate previousQuantity from movements before this invoice date
+                const invoiceDate = saleData.date ? 
+                    (saleData.date.toDate ? saleData.date.toDate() : new Date(saleData.date)) : 
+                    new Date();
+                
+                let previousQuantity = 0;
+                try {
+                    // Get all movements for this product in this warehouse before invoice date
+                    const movementsSnapshot = await db.collection('inventoryMovements')
+                        .where('productId', '==', item.productId)
+                        .where('warehouseId', '==', warehouseId)
+                        .get();
+                    
+                    // Calculate stock from movements before invoice date
+                    movementsSnapshot.forEach(movementDoc => {
+                        const movement = movementDoc.data();
+                        const movementDate = movement.date ? 
+                            (movement.date.toDate ? movement.date.toDate() : new Date(movement.date)) : 
+                            new Date();
+                        
+                        if (movementDate < invoiceDate) {
+                            const qty = movement.quantityInMainUnit || movement.quantity || 0;
+                            if (movement.type === 'in' || movement.type === 'adjustment') {
+                                previousQuantity += qty;
+                            } else if (movement.type === 'out') {
+                                previousQuantity -= qty;
+                            }
+                        }
+                    });
+                    
+                    previousQuantity = Math.max(0, previousQuantity);
+                } catch (error) {
+                    console.warn(`⚠️ Error calculating previousQuantity, using current stock:`, error);
+                    // Fallback: use current stock plus this quantity
+                    const currentStock = await Collections.getProductWarehouseStock(item.productId);
+                    const stockInWarehouse = currentStock?.[warehouseId] || 0;
+                    previousQuantity = stockInWarehouse + quantityInMainUnit;
+                }
+                
+                const newQuantity = Math.max(0, previousQuantity - quantityInMainUnit);
+                
+                // Create movement record
+                const movementRecord = {
+                    type: 'out',
+                    productId: item.productId,
+                    productName: product.name,
+                    warehouseId: warehouseId,
+                    warehouseName: warehouseName,
+                    toWarehouseId: null,
+                    toWarehouseName: null,
+                    unitId: item.unitId || product.unitId,
+                    quantity: -quantityInMainUnit,
+                    quantityInMainUnit: quantityInMainUnit,
+                    expiryDate: item.expiryDate || null,
+                    serialNumber: item.serialNumber || null,
+                    unitPrice: item.unitPrice || 0,
+                    totalCost: (item.unitPrice || 0) * quantityInMainUnit,
+                    previousQuantity: previousQuantity,
+                    newQuantity: newQuantity,
+                    reference: saleData.invoiceNo || `فاتورة مبيعات ${saleId}`,
+                    notes: `فاتورة مبيعات - ${saleData.customerName || ''}`,
+                    date: saleData.date ? (saleData.date.toDate ? saleData.date.toDate() : new Date(saleData.date)) : new Date(),
+                    userId: auth.currentUser?.uid || 'system',
+                    createdAt: new Date(),
+                    sourceType: 'sale',
+                    sourceId: saleId
+                };
+                
+                await db.collection('inventoryMovements').add(movementRecord);
+            }
+        }
+
+        /**
+         * Generate inventory movements for purchase return
+         */
+        async function generatePurchaseReturnMovements(returnId, returnData) {
+            if (!returnData.items || returnData.items.length === 0) return;
+            
+            const warehouseId = returnData.warehouseId || 'default';
+            const warehouse = await Collections.getWarehouse(warehouseId);
+            const warehouseName = warehouse?.name || 'المستودع الافتراضي';
+            
+            for (const item of returnData.items) {
+                // Get product
+                const product = await Collections.getProduct(item.productId);
+                if (!product) {
+                    console.warn(`⚠️ Product ${item.productId} not found, skipping`);
+                    continue;
+                }
+                
+                // Convert quantity to main unit
+                let quantityInMainUnit = item.quantity || 0;
+                if (item.unitId && item.unitId !== product.unitId) {
+                    const subUnit = product.subUnits?.find(su => su.unitId === item.unitId);
+                    const conversionFactor = parseFloat(subUnit?.conversionValue || subUnit?.conversionFactor) || 0;
+                    if (subUnit && conversionFactor > 0) {
+                        const conversionType = subUnit.conversionType || 'multiply';
+                        if (conversionType === 'multiply') {
+                            quantityInMainUnit = item.quantity * conversionFactor;
+                        } else if (conversionType === 'divide') {
+                            quantityInMainUnit = item.quantity / conversionFactor;
+                        }
+                    }
+                }
+                
+                // Calculate previousQuantity from movements before this invoice date
+                const invoiceDate = saleData.date ? 
+                    (saleData.date.toDate ? saleData.date.toDate() : new Date(saleData.date)) : 
+                    new Date();
+                
+                let previousQuantity = 0;
+                try {
+                    // Get all movements for this product in this warehouse before invoice date
+                    const movementsSnapshot = await db.collection('inventoryMovements')
+                        .where('productId', '==', item.productId)
+                        .where('warehouseId', '==', warehouseId)
+                        .get();
+                    
+                    // Calculate stock from movements before invoice date
+                    movementsSnapshot.forEach(movementDoc => {
+                        const movement = movementDoc.data();
+                        const movementDate = movement.date ? 
+                            (movement.date.toDate ? movement.date.toDate() : new Date(movement.date)) : 
+                            new Date();
+                        
+                        if (movementDate < invoiceDate) {
+                            const qty = movement.quantityInMainUnit || movement.quantity || 0;
+                            if (movement.type === 'in' || movement.type === 'adjustment') {
+                                previousQuantity += qty;
+                            } else if (movement.type === 'out') {
+                                previousQuantity -= qty;
+                            }
+                        }
+                    });
+                    
+                    previousQuantity = Math.max(0, previousQuantity);
+                } catch (error) {
+                    console.warn(`⚠️ Error calculating previousQuantity, using current stock:`, error);
+                    // Fallback: use current stock plus this quantity
+                    const currentStock = await Collections.getProductWarehouseStock(item.productId);
+                    const stockInWarehouse = currentStock?.[warehouseId] || 0;
+                    previousQuantity = stockInWarehouse + quantityInMainUnit;
+                }
+                
+                const newQuantity = Math.max(0, previousQuantity - quantityInMainUnit);
+                
+                // Create movement record
+                const movementRecord = {
+                    type: 'out',
+                    productId: item.productId,
+                    productName: item.productName || product.name,
+                    warehouseId: warehouseId,
+                    warehouseName: warehouseName,
+                    toWarehouseId: null,
+                    toWarehouseName: null,
+                    unitId: item.unitId || product.unitId,
+                    quantity: -quantityInMainUnit,
+                    quantityInMainUnit: quantityInMainUnit,
+                    expiryDate: item.expiryDate || null,
+                    serialNumber: item.serialNumber || null,
+                    unitPrice: item.unitPrice || 0,
+                    totalCost: (item.unitPrice || 0) * quantityInMainUnit,
+                    previousQuantity: previousQuantity,
+                    newQuantity: newQuantity,
+                    reference: returnData.invoiceNo || `مرتجع شراء ${returnId}`,
+                    notes: `مرتجع شراء - ${returnData.supplierName || ''}`,
+                    date: returnData.date ? (returnData.date.toDate ? returnData.date.toDate() : new Date(returnData.date)) : new Date(),
+                    userId: auth.currentUser?.uid || 'system',
+                    createdAt: new Date(),
+                    sourceType: 'purchase_return',
+                    sourceId: returnId
+                };
+                
+                await db.collection('inventoryMovements').add(movementRecord);
+            }
+        }
+
+        /**
+         * Generate inventory movements for sale return
+         */
+        async function generateSaleReturnMovements(returnId, returnData) {
+            if (!returnData.items || returnData.items.length === 0) return;
+            
+            const warehouseId = returnData.warehouseId || 'default';
+            const warehouse = await Collections.getWarehouse(warehouseId);
+            const warehouseName = warehouse?.name || 'المستودع الافتراضي';
+            
+            for (const item of returnData.items) {
+                // Get product
+                const product = await Collections.getProduct(item.productId);
+                if (!product) {
+                    console.warn(`⚠️ Product ${item.productId} not found, skipping`);
+                    continue;
+                }
+                
+                // Convert quantity to main unit
+                let quantityInMainUnit = item.quantity || 0;
+                if (item.unitId && item.unitId !== product.unitId) {
+                    const subUnit = product.subUnits?.find(su => su.unitId === item.unitId);
+                    const conversionFactor = parseFloat(subUnit?.conversionValue || subUnit?.conversionFactor) || 0;
+                    if (subUnit && conversionFactor > 0) {
+                        const conversionType = subUnit.conversionType || 'multiply';
+                        if (conversionType === 'multiply') {
+                            quantityInMainUnit = item.quantity * conversionFactor;
+                        } else if (conversionType === 'divide') {
+                            quantityInMainUnit = item.quantity / conversionFactor;
+                        }
+                    }
+                }
+                
+                // Get current stock
+                const currentStock = await Collections.getProductWarehouseStock(item.productId);
+                const stockInWarehouse = currentStock?.[warehouseId] || 0;
+                const previousQuantity = stockInWarehouse;
+                const newQuantity = previousQuantity + quantityInMainUnit;
+                
+                // Create movement record
+                const movementRecord = {
+                    type: 'in',
+                    productId: item.productId,
+                    productName: item.productName || product.name,
+                    warehouseId: warehouseId,
+                    warehouseName: warehouseName,
+                    toWarehouseId: null,
+                    toWarehouseName: null,
+                    unitId: item.unitId || product.unitId,
+                    quantity: quantityInMainUnit,
+                    quantityInMainUnit: quantityInMainUnit,
+                    expiryDate: item.expiryDate || null,
+                    serialNumber: item.serialNumber || null,
+                    unitPrice: item.unitPrice || 0,
+                    totalCost: (item.unitPrice || 0) * quantityInMainUnit,
+                    previousQuantity: previousQuantity,
+                    newQuantity: newQuantity,
+                    reference: returnData.invoiceNo || `مرتجع مبيعات ${returnId}`,
+                    notes: `مرتجع مبيعات - ${returnData.customerName || ''}`,
+                    date: returnData.date ? (returnData.date.toDate ? returnData.date.toDate() : new Date(returnData.date)) : new Date(),
+                    userId: auth.currentUser?.uid || 'system',
+                    createdAt: new Date(),
+                    sourceType: 'sale_return',
+                    sourceId: returnId
+                };
+                
+                await db.collection('inventoryMovements').add(movementRecord);
+            }
+        }
+
+        /**
+         * Fix inventory movements and recalculate stock
+         */
+        async function fixInventoryMovementsAndStock() {
+            const result = await Swal.fire({
+                title: 'تأكيد',
+                text: 'سيتم:\n1. توليد حركات المخزون المفقودة\n2. إعادة حساب جميع الأرصدة\n\nهل تريد المتابعة؟',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، إصلاح',
+                cancelButtonText: 'إلغاء'
+            });
+            
+            if (!result.isConfirmed) return;
+            
+            showLoading();
+            
+            try {
+                // Step 1: Generate missing movements
+                await generateMissingInventoryMovements();
+                
+                // Step 2: Recalculate all stock balances
+                await recalculateAllStockBalances();
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'اكتمل',
+                    text: 'تم إصلاح حركات المخزون والأرصدة بنجاح'
+                });
+                
+            } catch (error) {
+                console.error('Error fixing inventory:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ',
+                    text: 'حدث خطأ أثناء الإصلاح: ' + error.message
+                });
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Recalculate all stock balances from inventory movements
+         */
+        async function recalculateAllStockBalances() {
+            const confirmed = confirm('هل تريد إعادة حساب جميع أرصدة المخزون من حركات المخزون؟\n\nهذه العملية قد تستغرق بعض الوقت.\n\nDo you want to recalculate all stock balances from inventory movements?\n\nThis operation may take some time.');
+            if (!confirmed) return;
+
+            showLoading();
+            const resultsDiv = document.getElementById('results-content');
+            const statsDiv = document.getElementById('stats');
+            
+            try {
+                resultsDiv.innerHTML = '<div class="result-item result-info"><i class="fas fa-spinner fa-spin"></i> جاري جلب المنتجات...</div>';
+                
+                if (typeof Collections === 'undefined') {
+                    throw new Error('Collections module not loaded');
+                }
+                
+                const products = await Collections.getProducts({ limit: 10000 });
+                const totalProducts = products.length;
+                
+                if (totalProducts === 0) {
+                    resultsDiv.innerHTML = '<div class="result-item result-warning">لا توجد منتجات في قاعدة البيانات</div>';
+                    hideLoading();
+                    return;
+                }
+
+                resultsDiv.innerHTML = `<div class="result-item result-info">تم العثور على ${totalProducts} منتج. جاري إعادة الحساب...</div>`;
+                
+                let successCount = 0;
+                let errorCount = 0;
+                let fixedCount = 0;
+                const errors = [];
+                const fixed = [];
+
+                // Process products in batches
+                const batchSize = 10;
+                for (let i = 0; i < products.length; i += batchSize) {
+                    const batch = products.slice(i, i + batchSize);
+                    const batchPromises = batch.map(async (product) => {
+                        try {
+                            // Get current stock
+                            const currentStock = product.currentStock || 0;
+                            const currentWarehouseStock = product.warehouseStock || {};
+                            
+                            // Recalculate stock from movements
+                            const updatedWarehouseStock = await Collections.recalculateProductWarehouseStock(product.id);
+                            
+                            // Calculate new total stock
+                            const newTotalStock = Object.values(updatedWarehouseStock).reduce((sum, stock) => sum + (stock || 0), 0);
+                            
+                            // Check if stock was fixed
+                            const stockDifference = Math.abs(currentStock - newTotalStock);
+                            if (stockDifference > 0.01) {
+                                fixedCount++;
+                                fixed.push({
+                                    productId: product.id,
+                                    productName: product.name,
+                                    oldStock: currentStock,
+                                    newStock: newTotalStock,
+                                    difference: stockDifference,
+                                    warehouseStock: updatedWarehouseStock
+                                });
+                                
+                                // Update product with new stock
+                                await db.collection('products').doc(product.id).update({
+                                    currentStock: newTotalStock,
+                                    warehouseStock: updatedWarehouseStock,
+                                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                                });
+                            }
+                            
+                            successCount++;
+                            return { success: true, product };
+                        } catch (error) {
+                            errorCount++;
+                            errors.push({
+                                productId: product.id,
+                                productName: product.name,
+                                error: error.message
+                            });
+                            return { success: false, product, error };
+                        }
+                    });
+
+                    await Promise.all(batchPromises);
+                    
+                    // Update progress
+                    const progress = Math.min(100, Math.round(((i + batch.length) / totalProducts) * 100));
+                    resultsDiv.innerHTML = `
+                        <div class="result-item result-info">
+                            <i class="fas fa-spinner fa-spin"></i> جاري المعالجة... ${i + batch.length} / ${totalProducts} (${progress}%)
+                        </div>
+                    `;
+                }
+
+                // Display results
+                statsDiv.innerHTML = `
+                    <div class="stat-card">
+                        <h4 class="text-success">${successCount}</h4>
+                        <p>نجح | Success</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-warning">${fixedCount}</h4>
+                        <p>تم إصلاحه | Fixed</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-danger">${errorCount}</h4>
+                        <p>أخطاء | Errors</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-info">${totalProducts}</h4>
+                        <p>إجمالي | Total</p>
+                    </div>
+                `;
+
+                let html = '<h4 class="text-success">✅ تم إعادة حساب الأرصدة بنجاح</h4>';
+                
+                if (fixed.length > 0) {
+                    html += `<h5 class="text-warning mt-3">📊 المنتجات التي تم إصلاح أرصدتها (${fixed.length}):</h5>`;
+                    fixed.slice(0, 50).forEach(item => {
+                        html += `<div class="result-item result-warning">
+                            <strong>${item.productName}</strong> (${item.productId})<br>
+                            الرصيد القديم: ${item.oldStock.toFixed(2)} → الرصيد الجديد: ${item.newStock.toFixed(2)} 
+                            (الفرق: ${item.difference.toFixed(2)})
+                        </div>`;
+                    });
+                    if (fixed.length > 50) {
+                        html += `<p class="text-muted">... و ${fixed.length - 50} منتج آخر تم إصلاحه</p>`;
+                    }
+                }
+
+                if (errors.length > 0) {
+                    html += `<h5 class="text-danger mt-3">❌ الأخطاء (${errors.length}):</h5>`;
+                    errors.forEach(item => {
+                        html += `<div class="result-item result-failed">
+                            <strong>${item.productName}</strong> (${item.productId}): ${item.error}
+                        </div>`;
+                    });
+                }
+
+                if (fixed.length === 0 && errors.length === 0) {
+                    html += '<div class="result-item result-passed">جميع الأرصدة صحيحة ولا تحتاج إلى إصلاح</div>';
+                }
+
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error recalculating stock balances:', error);
+                resultsDiv.innerHTML = `<div class="result-item result-failed">
+                    <strong>خطأ:</strong> ${error.message}
+                </div>`;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Recalculate all product costs
+         */
+        async function recalculateAllCosts() {
+            const confirmed = confirm('هل تريد إعادة حساب جميع التكاليف للمنتجات؟\n\nسيتم استخدام طريقة حساب التكلفة المحددة في الإعدادات (FIFO/LIFO/Weighted Average).\n\nهذه العملية قد تستغرق بعض الوقت.\n\nDo you want to recalculate all product costs?\n\nWill use the costing method set in settings (FIFO/LIFO/Weighted Average).\n\nThis operation may take some time.');
+            if (!confirmed) return;
+
+            showLoading();
+            const resultsDiv = document.getElementById('results-content');
+            const statsDiv = document.getElementById('stats');
+            
+            try {
+                resultsDiv.innerHTML = '<div class="result-item result-info"><i class="fas fa-spinner fa-spin"></i> جاري جلب المنتجات...</div>';
+                
+                if (typeof Collections === 'undefined') {
+                    throw new Error('Collections module not loaded');
+                }
+                
+                if (typeof CostingMethods === 'undefined') {
+                    throw new Error('CostingMethods module not loaded');
+                }
+                
+                const products = await Collections.getProducts({ limit: 10000 });
+                const totalProducts = products.length;
+                
+                if (totalProducts === 0) {
+                    resultsDiv.innerHTML = '<div class="result-item result-warning">لا توجد منتجات في قاعدة البيانات</div>';
+                    hideLoading();
+                    return;
+                }
+
+                // Get costing method and settings
+                const settings = await CostingMethods.getInventorySettings();
+                const costingMethod = settings.costingMethod || 'fifo';
+                const purchasesAffectCost = settings.purchasesAffectCost !== false; // Default true
+                const purchaseReturnsAffectCost = settings.purchaseReturnsAffectCost !== false; // Default true
+                const adjustmentsAffectCost = settings.adjustmentsAffectCost || false;
+                const transfersAffectCost = settings.transfersAffectCost || false;
+                
+                resultsDiv.innerHTML = `
+                    <div class="result-item result-info">
+                        تم العثور على ${totalProducts} منتج.<br>
+                        طريقة الحساب: <strong>${costingMethod.toUpperCase()}</strong><br>
+                        المشتريات تؤثر على التكلفة: ${purchasesAffectCost ? 'نعم' : 'لا'}<br>
+                        مرتجعات الشراء تؤثر على التكلفة: ${purchaseReturnsAffectCost ? 'نعم' : 'لا'}<br>
+                        جاري إعادة الحساب...
+                    </div>
+                `;
+                
+                let successCount = 0;
+                let errorCount = 0;
+                let updatedCount = 0;
+                let skippedCount = 0;
+                const errors = [];
+                const updated = [];
+                const skipped = [];
+
+                // Process products in batches
+                const batchSize = 5; // Smaller batch for cost calculation
+                for (let i = 0; i < products.length; i += batchSize) {
+                    const batch = products.slice(i, i + batchSize);
+                    const batchPromises = batch.map(async (product) => {
+                        try {
+                            // Skip if product has no stock
+                            const currentStock = product.currentStock || 0;
+                            if (currentStock <= 0) {
+                                skippedCount++;
+                                skipped.push({
+                                    productId: product.id,
+                                    productName: product.name,
+                                    reason: 'لا يوجد رصيد'
+                                });
+                                return { success: true, product, skipped: true };
+                            }
+                            
+                            // Get current cost
+                            const currentCost = product.averageCost || product.purchasePrice || 0;
+                            
+                            // Calculate new cost using costing method
+                            // Note: CostingMethods uses purchases/purchaseReturns directly
+                            // and respects settings internally
+                            const costResult = await CostingMethods.calculateProductCost(
+                                product.id,
+                                null, // warehouseId - null means all warehouses
+                                0, // quantity - 0 means get average cost
+                                null, // expiryDate
+                                null  // serialNumber
+                            );
+                            
+                            const newCost = costResult.averageCost || 0;
+                            
+                            // If no cost calculated and no current cost, skip
+                            if (newCost === 0 && currentCost === 0) {
+                                skippedCount++;
+                                skipped.push({
+                                    productId: product.id,
+                                    productName: product.name,
+                                    reason: 'لا توجد تكلفة محسوبة'
+                                });
+                                return { success: true, product, skipped: true };
+                            }
+                            
+                            // Check if cost changed (with tolerance)
+                            const costDifference = Math.abs(currentCost - newCost);
+                            const tolerance = Math.max(0.01, currentCost * 0.001); // 0.1% or 0.01 minimum
+                            
+                            if (costDifference > tolerance) {
+                                updatedCount++;
+                                updated.push({
+                                    productId: product.id,
+                                    productName: product.name,
+                                    oldCost: currentCost,
+                                    newCost: newCost,
+                                    difference: costDifference,
+                                    method: costResult.method,
+                                    stock: currentStock
+                                });
+                                
+                                // Update product with new cost
+                                const updateData = {
+                                    averageCost: newCost,
+                                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                                };
+                                
+                                // Also update purchasePrice if it's significantly different or doesn't exist
+                                if (!product.purchasePrice || Math.abs(product.purchasePrice - newCost) > tolerance) {
+                                    updateData.purchasePrice = newCost;
+                                }
+                                
+                                await db.collection('products').doc(product.id).update(updateData);
+                            }
+                            
+                            successCount++;
+                            return { success: true, product };
+                        } catch (error) {
+                            errorCount++;
+                            errors.push({
+                                productId: product.id,
+                                productName: product.name,
+                                error: error.message
+                            });
+                            return { success: false, product, error };
+                        }
+                    });
+
+                    await Promise.all(batchPromises);
+                    
+                    // Update progress
+                    const progress = Math.min(100, Math.round(((i + batch.length) / totalProducts) * 100));
+                    resultsDiv.innerHTML = `
+                        <div class="result-item result-info">
+                            <i class="fas fa-spinner fa-spin"></i> جاري المعالجة... ${i + batch.length} / ${totalProducts} (${progress}%)
+                        </div>
+                    `;
+                }
+
+                // Display results
+                statsDiv.innerHTML = `
+                    <div class="stat-card">
+                        <h4 class="text-success">${successCount}</h4>
+                        <p>نجح | Success</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-warning">${updatedCount}</h4>
+                        <p>تم التحديث | Updated</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-info">${skippedCount}</h4>
+                        <p>تم التخطي | Skipped</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-danger">${errorCount}</h4>
+                        <p>أخطاء | Errors</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-secondary">${totalProducts}</h4>
+                        <p>إجمالي | Total</p>
+                    </div>
+                `;
+
+                let html = `<h4 class="text-success">✅ تم إعادة حساب التكاليف بنجاح</h4>`;
+                html += `<div class="result-item result-info">
+                    <strong>الإعدادات المستخدمة:</strong><br>
+                    طريقة الحساب: <strong>${costingMethod.toUpperCase()}</strong><br>
+                    المشتريات تؤثر على التكلفة: ${purchasesAffectCost ? '✅ نعم' : '❌ لا'}<br>
+                    مرتجعات الشراء تؤثر على التكلفة: ${purchaseReturnsAffectCost ? '✅ نعم' : '❌ لا'}<br>
+                    التعديلات اليدوية تؤثر على التكلفة: ${adjustmentsAffectCost ? '✅ نعم' : '❌ لا'}<br>
+                    التحويلات تؤثر على التكلفة: ${transfersAffectCost ? '✅ نعم' : '❌ لا'}
+                </div>`;
+                
+                if (updated.length > 0) {
+                    html += `<h5 class="text-warning mt-3">📊 المنتجات التي تم تحديث تكلفتها (${updated.length}):</h5>`;
+                    updated.slice(0, 50).forEach(item => {
+                        html += `<div class="result-item result-warning">
+                            <strong>${item.productName}</strong> (${item.productId})<br>
+                            التكلفة القديمة: ${item.oldCost.toFixed(2)} → التكلفة الجديدة: ${item.newCost.toFixed(2)} 
+                            (الفرق: ${item.difference.toFixed(2)}) | الطريقة: ${item.method}
+                        </div>`;
+                    });
+                    if (updated.length > 50) {
+                        html += `<p class="text-muted">... و ${updated.length - 50} منتج آخر تم تحديثه</p>`;
+                    }
+                }
+
+                if (errors.length > 0) {
+                    html += `<h5 class="text-danger mt-3">❌ الأخطاء (${errors.length}):</h5>`;
+                    errors.forEach(item => {
+                        html += `<div class="result-item result-failed">
+                            <strong>${item.productName}</strong> (${item.productId}): ${item.error}
+                        </div>`;
+                    });
+                }
+
+                if (updated.length === 0 && errors.length === 0) {
+                    html += '<div class="result-item result-passed">جميع التكاليف صحيحة ولا تحتاج إلى تحديث</div>';
+                }
+
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error recalculating costs:', error);
+                resultsDiv.innerHTML = `<div class="result-item result-failed">
+                    <strong>خطأ:</strong> ${error.message}
+                </div>`;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Recalculate inventory value
+         * حساب قيمة المخزون من حركات المخزون (inventoryMovements) مع totalCost
+         */
+        async function recalculateInventoryValue() {
+            showLoading();
+            const resultsDiv = document.getElementById('results-content');
+            const statsDiv = document.getElementById('stats');
+            
+            try {
+                resultsDiv.innerHTML = '<div class="result-item result-info"><i class="fas fa-spinner fa-spin"></i> جاري حساب قيمة المخزون من حركات المخزون...</div>';
+                
+                // Get all inventory movements with totalCost
+                const movementsSnapshot = await db.collection('inventoryMovements')
+                    .where('type', 'in', ['in', 'adjustment']) // Only in movements and adjustments
+                    .get();
+                
+                const productValues = {};
+                const productStock = {};
+                
+                // Process movements to calculate value
+                movementsSnapshot.forEach(movementDoc => {
+                    const movement = movementDoc.data();
+                    const productId = movement.productId;
+                    
+                    if (!productValues[productId]) {
+                        productValues[productId] = {
+                            productId: productId,
+                            productName: movement.productName || 'غير محدد',
+                            quantity: 0,
+                            totalValue: 0,
+                            averageCost: 0
+                        };
+                        productStock[productId] = 0;
+                    }
+                    
+                    // Update quantity based on movement type
+                    const quantity = Math.abs(movement.quantityInMainUnit || movement.quantity || 0);
+                    
+                    if (movement.type === 'in') {
+                        // Add quantity and value
+                        productStock[productId] += quantity;
+                        if (movement.totalCost) {
+                            productValues[productId].totalValue += movement.totalCost;
+                        } else if (movement.unitPrice && quantity > 0) {
+                            // Fallback: calculate from unitPrice
+                            productValues[productId].totalValue += movement.unitPrice * quantity;
+                        }
+                    } else if (movement.type === 'adjustment') {
+                        // Adjustment: set quantity directly
+                        productStock[productId] = movement.newQuantity || 0;
+                        if (movement.totalCost) {
+                            productValues[productId].totalValue = movement.totalCost;
+                        }
+                    }
+                    
+                    // Update quantity
+                    productValues[productId].quantity = productStock[productId];
+                    
+                    // Calculate average cost
+                    if (productValues[productId].quantity > 0) {
+                        productValues[productId].averageCost = productValues[productId].totalValue / productValues[productId].quantity;
+                    }
+                });
+                
+                // Filter items with positive quantity
+                const items = Object.values(productValues).filter(item => item.quantity > 0);
+                const totalValue = items.reduce((sum, item) => sum + item.totalValue, 0);
+                
+                statsDiv.innerHTML = `
+                    <div class="stat-card">
+                        <h4 class="text-success">${formatNumber(totalValue)}</h4>
+                        <p>إجمالي القيمة | Total Value</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-info">${items.length}</h4>
+                        <p>منتجات | Products</p>
+                    </div>
+                `;
+                
+                let html = '<h4 class="text-success">📊 قيمة المخزون الحالية</h4>';
+                html += `<div class="result-item result-passed">
+                    <strong>إجمالي قيمة المخزون:</strong> ${formatCurrency(totalValue)}<br>
+                    <strong>عدد المنتجات:</strong> ${items.length}<br>
+                    <strong>ملاحظة:</strong> تم الحساب من حركات المخزون (inventoryMovements) باستخدام totalCost
+                </div>`;
+                
+                if (items.length > 0) {
+                    html += '<h5 class="mt-3">أعلى 20 منتج من حيث القيمة:</h5>';
+                    html += '<table class="table table-striped mt-3"><thead><tr><th>المنتج</th><th>الكمية</th><th>متوسط التكلفة</th><th>القيمة الإجمالية</th></tr></thead><tbody>';
+                    
+                    // Sort by value descending
+                    const sortedItems = items.sort((a, b) => b.totalValue - a.totalValue);
+                    
+                    sortedItems.slice(0, 20).forEach(item => {
+                        html += `<tr>
+                            <td>${item.productName || item.productId}</td>
+                            <td>${item.quantity.toFixed(2)}</td>
+                            <td>${formatCurrency(item.averageCost)}</td>
+                            <td><strong>${formatCurrency(item.totalValue)}</strong></td>
+                        </tr>`;
+                    });
+                    
+                    html += '</tbody></table>';
+                    
+                    if (items.length > 20) {
+                        html += `<p class="text-muted">... و ${items.length - 20} منتج آخر</p>`;
+                    }
+                } else {
+                    html += '<div class="result-item result-warning">لا توجد منتجات برصيد في حركات المخزون</div>';
+                }
+                
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error recalculating inventory value:', error);
+                resultsDiv.innerHTML = `<div class="result-item result-failed">
+                    <strong>خطأ:</strong> ${error.message}
+                </div>`;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Fix cost discrepancies
+         */
+        async function fixCostDiscrepancies() {
+            showLoading();
+            const resultsDiv = document.getElementById('results-content');
+            const statsDiv = document.getElementById('stats');
+            
+            try {
+                resultsDiv.innerHTML = '<div class="result-item result-info"><i class="fas fa-spinner fa-spin"></i> جاري البحث عن اختلافات التكلفة...</div>';
+                
+                if (typeof Collections === 'undefined') {
+                    throw new Error('Collections module not loaded');
+                }
+                
+                if (typeof CostingMethods === 'undefined') {
+                    throw new Error('CostingMethods module not loaded');
+                }
+                
+                const products = await Collections.getProducts({ limit: 10000 });
+                const discrepancies = [];
+                
+                // Get costing method
+                const settings = await CostingMethods.getInventorySettings();
+                const costingMethod = settings.costingMethod || 'fifo';
+                
+                // Check first 100 products for discrepancies
+                const checkLimit = Math.min(100, products.length);
+                
+                for (let i = 0; i < checkLimit; i++) {
+                    const product = products[i];
+                    try {
+                        const currentCost = product.averageCost || product.purchasePrice || 0;
+                        
+                        // Calculate expected cost
+                        const costResult = await CostingMethods.calculateProductCost(
+                            product.id,
+                            null,
+                            0,
+                            null,
+                            null
+                        );
+                        
+                        const expectedCost = costResult.averageCost || 0;
+                        const difference = Math.abs(currentCost - expectedCost);
+                        
+                        // If difference is more than 1% or more than 0.01, it's a discrepancy
+                        const threshold = Math.max(0.01, currentCost * 0.01);
+                        if (difference > threshold) {
+                            discrepancies.push({
+                                productId: product.id,
+                                productName: product.name,
+                                currentCost,
+                                expectedCost,
+                                difference,
+                                percentage: currentCost > 0 ? (difference / currentCost * 100) : 0
+                            });
+                        }
+                    } catch (error) {
+                        console.warn(`Error checking product ${product.id}:`, error);
+                    }
+                }
+                
+                statsDiv.innerHTML = `
+                    <div class="stat-card">
+                        <h4 class="text-warning">${discrepancies.length}</h4>
+                        <p>اختلافات | Discrepancies</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-info">${checkLimit}</h4>
+                        <p>تم الفحص | Checked</p>
+                    </div>
+                `;
+                
+                let html = '<h4 class="text-info">📊 نتائج فحص اختلافات التكلفة</h4>';
+                
+                if (discrepancies.length > 0) {
+                    html += `<h5 class="text-warning mt-3">⚠️ المنتجات باختلافات في التكلفة (${discrepancies.length}):</h5>`;
+                    
+                    // Sort by difference descending
+                    discrepancies.sort((a, b) => b.difference - a.difference);
+                    
+                    discrepancies.slice(0, 50).forEach(item => {
+                        html += `<div class="result-item result-warning">
+                            <strong>${item.productName}</strong> (${item.productId})<br>
+                            التكلفة الحالية: ${item.currentCost.toFixed(2)} | المتوقعة: ${item.expectedCost.toFixed(2)}<br>
+                            الفرق: ${item.difference.toFixed(2)} (${item.percentage.toFixed(2)}%)
+                        </div>`;
+                    });
+                    
+                    if (discrepancies.length > 50) {
+                        html += `<p class="text-muted">... و ${discrepancies.length - 50} منتج آخر</p>`;
+                    }
+                    
+                    html += `<div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>ملاحظة:</strong> يمكنك استخدام "إعادة حساب جميع التكاليف" لإصلاح هذه الاختلافات.
+                    </div>`;
+                } else {
+                    html += '<div class="result-item result-passed">✅ لا توجد اختلافات كبيرة في التكلفة</div>';
+                }
+                
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error fixing cost discrepancies:', error);
+                resultsDiv.innerHTML = `<div class="result-item result-failed">
+                    <strong>خطأ:</strong> ${error.message}
+                </div>`;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Audit negative stock
+         */
+        async function auditNegativeStock() {
+            showLoading();
+            const resultsDiv = document.getElementById('results-content');
+            const statsDiv = document.getElementById('stats');
+            
+            try {
+                resultsDiv.innerHTML = '<div class="result-item result-info"><i class="fas fa-spinner fa-spin"></i> جاري فحص الأرصدة السالبة...</div>';
+                
+                if (typeof Collections === 'undefined') {
+                    throw new Error('Collections module not loaded');
+                }
+                
+                const products = await Collections.getProducts({ limit: 10000 });
+                const negativeStocks = [];
+                
+                for (const product of products) {
+                    if (product.currentStock < 0) {
+                        negativeStocks.push({
+                            productId: product.id,
+                            productName: product.name,
+                            stock: product.currentStock
+                        });
+                    }
+                }
+                
+                statsDiv.innerHTML = `
+                    <div class="stat-card">
+                        <h4 class="text-danger">${negativeStocks.length}</h4>
+                        <p>أرصدة سالبة | Negative</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-info">${products.length}</h4>
+                        <p>إجمالي | Total</p>
+                    </div>
+                `;
+                
+                let html = '<h4 class="text-info">📊 نتائج فحص الأرصدة السالبة</h4>';
+                
+                if (negativeStocks.length > 0) {
+                    html += `<h5 class="text-danger mt-3">❌ المنتجات بأرصدة سالبة (${negativeStocks.length}):</h5>`;
+                    negativeStocks.slice(0, 50).forEach(item => {
+                        html += `<div class="result-item result-failed">
+                            <strong>${item.productName}</strong><br>
+                            الرصيد: ${item.stock.toFixed(2)}
+                        </div>`;
+                    });
+                    if (negativeStocks.length > 50) {
+                        html += `<p class="text-muted">... و ${negativeStocks.length - 50} منتج آخر</p>`;
+                    }
+                } else {
+                    html += '<div class="result-item result-passed">✅ لا توجد أرصدة سالبة</div>';
+                }
+                
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error auditing negative stock:', error);
+                resultsDiv.innerHTML = `<div class="result-item result-failed">
+                    <strong>خطأ:</strong> ${error.message}
+                </div>`;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        /**
+         * Display audit results helper
+         */
+        function displayAuditResults(data) {
+            const statsDiv = document.getElementById('stats');
+            const resultsDiv = document.getElementById('results-content');
+            
+            if (data.stats) {
+                statsDiv.innerHTML = `
+                    <div class="stat-card">
+                        <h4 class="text-info">${data.stats.total || 0}</h4>
+                        <p>إجمالي | Total</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-danger">${data.stats.noEntry || 0}</h4>
+                        <p>بدون قيد | No Entry</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-success">${data.stats.hasEntry || 0}</h4>
+                        <p>مع قيد | Has Entry</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 class="text-warning">${data.stats.multiple || 0}</h4>
+                        <p>قيد متعدد | Multiple</p>
+                    </div>
+                `;
+            }
+            
+            if (data.items && data.items.length > 0) {
+                let html = `<h4>${data.title || 'النتائج'}</h4>`;
+                html += '<table class="table table-striped mt-3"><thead><tr><th>النوع</th><th>رقم الفاتورة</th><th>حالة القيد</th></tr></thead><tbody>';
+                
+                data.items.slice(0, 100).forEach(item => {
+                    const status = item.entryStatus?.status || 'no_entry';
+                    const statusText = status === 'no_entry' ? 'بدون قيد' : 
+                                     status === 'has_entry' ? 'مع قيد' : 'قيد متعدد';
+                    const statusClass = status === 'no_entry' ? 'text-danger' : 
+                                      status === 'has_entry' ? 'text-success' : 'text-warning';
+                    
+                    html += `<tr>
+                        <td>${item.typeLabel || item.type}</td>
+                        <td>${item.invoiceNo || item.voucherNumber || item.id}</td>
+                        <td class="${statusClass}">${statusText}</td>
+                    </tr>`;
+                });
+                
+                html += '</tbody></table>';
+                if (data.items.length > 100) {
+                    html += `<p class="text-muted">... و ${data.items.length - 100} عنصر آخر</p>`;
+                }
+                
+                resultsDiv.innerHTML = html;
+            }
+        }
+
+        // Initialize auditor
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (typeof PreReleaseAuditor !== 'undefined') {
+                auditor = new PreReleaseAuditor();
+                console.log('✅ تم تحميل أداة التدقيق بنجاح');
+            } else {
+                console.warn('⚠️ سكربت التدقيق غير محمّل. تأكد من تحميل js/utils/pre-release-audit.js');
+            }
+            
+            // Initialize repost audit module if available
+            if (typeof RepostAuditModule !== 'undefined') {
+                try {
+                    await RepostAuditModule.init();
+                    console.log('✅ تم تحميل وحدة إعادة ترحيل القيود بنجاح');
+                } catch (error) {
+                    console.warn('⚠️ خطأ في تهيئة وحدة إعادة ترحيل القيود:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+

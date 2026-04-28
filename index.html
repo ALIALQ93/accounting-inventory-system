@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌿 ROSEMARY - Accounting & Inventory System | نظام المحاسبة والمخزون</title>
+    
+    <!-- Favicon - Rosemary Plant -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+    
+    <!-- Bootstrap CSS - Will be switched based on language -->
+    <link id="bootstrapCSS" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts - Cairo for Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS - design-system أساس، style عام، app-layout يoverride التخطيط -->
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/app-layout.css">
+    <link rel="stylesheet" href="css/buttons-modern.css">
+    <link rel="stylesheet" href="css/products-modern.css">
+    <link rel="stylesheet" href="css/bulk-import-modern.css">
+    <link rel="stylesheet" href="css/categories-modern.css">
+    <link rel="stylesheet" href="css/units.css">
+    <link rel="stylesheet" href="css/currencies-modern.css">
+    <link rel="stylesheet" href="css/chart-of-accounts-modern.css">
+    <link rel="stylesheet" href="css/cost-centers-modern.css">
+    <link rel="stylesheet" href="css/vouchers-modern.css">
+    <link rel="stylesheet" href="css/accounting-reports-modern.css">
+    <link rel="stylesheet" href="css/accounting-reports-vertical-layout.css">
+    <link rel="stylesheet" href="css/parties-modern.css">
+    <link rel="stylesheet" href="css/period-lock-modern.css">
+    <link rel="stylesheet" href="css/settings-modern.css">
+    <link rel="stylesheet" href="css/warehouses-modern.css">
+    <link rel="stylesheet" href="css/purchases-excel-table.css">
+    <link rel="stylesheet" href="css/modules-overrides.css">
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-overlay" style="display: none !important;">
+        <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">جاري التحميل...</span>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <!-- Login Header with Icon -->
+            <div class="login-header">
+                <div class="login-icon-wrapper">
+                    <i class="fas fa-spa rosemary-main-icon"></i>
+                </div>
+                <h2 class="login-title">ROSEMARY</h2>
+                <p class="login-subtitle">Accounting & Inventory System</p>
+                <p class="login-subtitle-ar">نظام المحاسبة والمخزون</p>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="loginForm" class="login-form">
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control login-input" id="loginEmail" placeholder="البريد الإلكتروني" required>
+                    <label for="loginEmail">
+                        <i class="fas fa-envelope me-2"></i>البريد الإلكتروني
+                    </label>
+                    </div>
+                
+                <div class="form-floating mb-4">
+                    <input type="password" class="form-control login-input" id="loginPassword" placeholder="كلمة المرور" required>
+                    <label for="loginPassword">
+                        <i class="fas fa-lock me-2"></i>كلمة المرور
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-login w-100">
+                    <span class="login-btn-text">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        تسجيل الدخول
+                    </span>
+                    <span class="login-btn-loading" style="display: none;">
+                        <i class="fas fa-spinner fa-spin me-2"></i>
+                        جاري تسجيل الدخول...
+                    </span>
+                </button>
+            </form>
+            
+            <!-- Login Footer -->
+            <div class="login-footer">
+                <div class="security-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>تسجيل دخول آمن ومشفر</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" style="display: none;">
+        
+        <!-- Top Navbar -->
+        <nav class="navbar navbar-expand-lg top-navbar">
+            <div class="container-fluid">
+                <!-- Brand -->
+                <a class="brand-logo" href="#">
+                    <div class="logo-container">
+                        <i class="fas fa-spa rosemary-nav-icon"></i>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-title">ROSEMARY</div>
+                        <div class="brand-subtitle">Accounting System</div>
+                    </div>
+                </a>
+
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-box"></i>
+                        <div class="stat-content">
+                            <div class="stat-label">المنتجات</div>
+                            <div class="stat-value" id="productsCount">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-shopping-cart"></i>
+                        <div class="stat-content">
+                            <div class="stat-label">المبيعات</div>
+                            <div class="stat-value" id="salesCount">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-wallet"></i>
+                        <div class="stat-content">
+                            <div class="stat-label">الرصيد</div>
+                            <div class="stat-value" id="cashBalance">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Menu -->
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Language Switcher -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light language-btn" type="button" id="languageSwitcher" data-bs-toggle="dropdown" title="تغيير اللغة / Change Language">
+                            <i class="fas fa-language"></i>
+                            <span id="currentLanguageDisplay">العربية</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item language-option" href="#" data-lang="ar">
+                                    <span class="flag">🇸🇦</span> العربية
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item language-option" href="#" data-lang="en">
+                                    <span class="flag">🇬🇧</span> English
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Notifications -->
+                    <div class="dropdown">
+                        <a class="notification-btn" href="#" role="button" data-bs-toggle="dropdown" id="notificationBtn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge" style="display: none;">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end notification-dropdown" id="notificationDropdown">
+                            <li><h6 class="dropdown-header">الإشعارات</h6></li>
+                            <li><a class="dropdown-item text-center text-muted" href="#"><i class="fas fa-spinner fa-spin"></i> جاري التحميل...</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- User Info & Logout -->
+                    <div class="user-menu-simple">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name" id="currentUser">المستخدم</div>
+                            <div class="user-status">
+                                <i class="fas fa-circle"></i>
+                                <span id="connectionStatus">متصل</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-logout" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>خروج</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid p-0">
+            <div class="row g-0">
+                <!-- Enhanced Sidebar -->
+                <aside class="enhanced-sidebar" id="sidebar">
+                    <!-- Sidebar Header -->
+                    <div class="sidebar-header">
+                        <div class="sidebar-brand">
+                            <i class="fas fa-spa rosemary-sidebar-icon"></i>
+                        </div>
+                        <button class="sidebar-toggle" id="toggleSidebar">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+
+                    <!-- Sidebar Content -->
+                    <div class="sidebar-content">
+                        <!-- Main Navigation -->
+                        <div class="sidebar-section">
+                            <div class="section-title">القائمة الرئيسية</div>
+                            <ul class="nav flex-column sidebar-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#" data-module="dashboard" data-tooltip="لوحة التحكم">
+                                        <div class="nav-icon dashboard-icon">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                        <span class="nav-text">لوحة التحكم</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="sales" data-tooltip="المبيعات">
+                                        <div class="nav-icon sales-icon">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </div>
+                                        <span class="nav-text">المبيعات</span>
+                                        <span class="nav-count" id="partiesCount">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="sales-returns" data-tooltip="مرتجع المبيعات">
+                                        <div class="nav-icon sales-returns-icon">
+                                            <i class="fas fa-undo"></i>
+                                        </div>
+                                        <span class="nav-text">مرتجع المبيعات</span>
+                                        <span class="nav-count" id="salesReturnsCount">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="purchases" data-tooltip="المشتريات">
+                                        <div class="nav-icon purchases-icon">
+                                            <i class="fas fa-cart-plus"></i>
+                                        </div>
+                                        <span class="nav-text">المشتريات</span>
+                                        <span class="nav-count" id="purchasesCount">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="purchase-returns" data-tooltip="مرتجع المشتريات">
+                                        <div class="nav-icon purchase-returns-icon">
+                                            <i class="fas fa-undo"></i>
+                                        </div>
+                                        <span class="nav-text">مرتجع المشتريات</span>
+                                        <span class="nav-count" id="purchaseReturnsCount">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="products" data-tooltip="المنتجات">
+                                        <div class="nav-icon products-icon">
+                                            <i class="fas fa-box"></i>
+                                        </div>
+                                        <span class="nav-text">المنتجات</span>
+                                        <span class="nav-badge">جديد</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="inventory" data-tooltip="المخزون">
+                                        <div class="nav-icon inventory-icon">
+                                            <i class="fas fa-boxes"></i>
+                                        </div>
+                                        <span class="nav-text">المخزون</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="warehouses" data-tooltip="المستودعات">
+                                        <div class="nav-icon warehouses-icon">
+                                            <i class="fas fa-warehouse"></i>
+                                        </div>
+                                        <span class="nav-text">المستودعات</span>
+                                        <span class="nav-badge">جديد</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="sales-reps" data-tooltip="المندوبين">
+                                        <div class="nav-icon sales-reps-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <span class="nav-text">المندوبين</span>
+                                        <span class="nav-badge">جديد</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="parties" data-tooltip="العملاء والموردون">
+                                        <div class="nav-icon parties-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <span class="nav-text">العملاء والموردون</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Accounting Section -->
+                        <div class="sidebar-section">
+                            <div class="section-title">إدارة الحسابات</div>
+                            <ul class="nav flex-column sidebar-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="chart-of-accounts" data-tooltip="شجرة الحسابات">
+                                        <div class="nav-icon accounts-icon">
+                                            <i class="fas fa-sitemap"></i>
+                                        </div>
+                                        <span class="nav-text">شجرة الحسابات</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="vouchers" data-tooltip="السندات">
+                                        <div class="nav-icon vouchers-icon">
+                                            <i class="fas fa-file-invoice"></i>
+                                        </div>
+                                        <span class="nav-text">السندات</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="currencies" data-tooltip="العملات">
+                                        <div class="nav-icon currencies-icon">
+                                            <i class="fas fa-coins"></i>
+                                        </div>
+                                        <span class="nav-text">العملات</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="cost-centers" data-tooltip="مراكز الكلفة">
+                                        <div class="nav-icon cost-centers-icon">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                        <span class="nav-text">مراكز الكلفة</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Reports & System Section -->
+                        <div class="sidebar-section">
+                            <div class="section-title">التقارير والنظام</div>
+                            <ul class="nav flex-column sidebar-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="reports" data-tooltip="التقارير العامة">
+                                        <div class="nav-icon reports-icon">
+                                            <i class="fas fa-chart-bar"></i>
+                                        </div>
+                                        <span class="nav-text">التقارير العامة</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="users" data-tooltip="المستخدمون">
+                                        <div class="nav-icon users-icon">
+                                            <i class="fas fa-user-shield"></i>
+                                        </div>
+                                        <span class="nav-text">المستخدمون</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-module="settings" data-tooltip="الإعدادات">
+                                        <div class="nav-icon settings-icon">
+                                            <i class="fas fa-cog"></i>
+                                        </div>
+                                        <span class="nav-text">الإعدادات</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Footer -->
+                    <div class="sidebar-footer">
+                        <div class="sidebar-copyright">
+                            © 2024
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Main Content Area - Dynamic Content Loaded by Modules -->
+                <main class="col-lg-10 p-4" id="content-area">
+                    <!-- محتوى الوحدات سيتم تحميله ديناميكياً من JS -->
+                    <div class="loading text-center py-5">
+                        <i class="fas fa-spinner fa-spin fa-3x text-primary mb-3"></i>
+                        <p class="text-muted">جاري تحميل النظام...</p>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+        <!-- Simple Bulk Import Modal -->
+        <div class="modal fade bulk-import-modal" id="bulkImportModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bulkImportTitle">
+                            <i class="fas fa-magic"></i>
+                            إدراج منتجات متعدد
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Instructions Card -->
+                        <div class="bulk-instructions-card">
+                            <h6>
+                                <i class="fas fa-lightbulb"></i>
+                                كيفية الاستخدام
+                            </h6>
+                            <p>🎯 <strong>توليد تلقائي للأكواد:</strong> سيتم إنشاء كود المنتج تلقائياً بناءً على الفئة المختارة</p>
+                            <p>📋 <strong>نسخ من Excel:</strong> يمكنك نسخ البيانات مباشرة من Excel ولصقها في الجدول</p>
+                            <p>✏️ <strong>الإدخال اليدوي:</strong> أو قم بملء الحقول يدوياً حسب حاجتك</p>
+                            <ul>
+                                <li><span style="color: #38ef7d;">●</span> اسم المنتج <strong>(مطلوب)</strong></li>
+                                <li><span style="color: #74b9ff;">●</span> الفئة، الوحدة، العملة، الأسعار <strong>(اختياري)</strong></li>
+                                <li><span style="color: #ffeaa7;">●</span> الكود سيتم توليده تلقائياً عند اختيار الفئة</li>
+                            </ul>
+                        </div>
+
+                        <!-- Toolbar -->
+                        <div class="bulk-toolbar">
+                            <button type="button" class="btn btn-add" id="addBulkRowBtn" onclick="ProductsModule.addBulkRow()">
+                                <i class="fas fa-plus"></i> إضافة صف
+                            </button>
+                            <button type="button" class="btn btn-clear" onclick="ProductsModule.clearTable()">
+                                <i class="fas fa-broom"></i> مسح الكل
+                            </button>
+                            <button type="button" class="btn btn-sample" onclick="ProductsModule.fillSampleData()">
+                                <i class="fas fa-flask"></i> بيانات تجريبية
+                            </button>
+                            <button type="button" class="btn btn-template" onclick="ProductsModule.downloadTemplate()">
+                                <i class="fas fa-download"></i> تحميل قالب
+                            </button>
+                            
+                            <div class="bulk-stats">
+                                <span class="badge badge-rows" id="bulkRowsCount">0 صف</span>
+                                <span class="badge badge-valid" id="bulkValidCount">0 صالح</span>
+                                <span class="badge badge-invalid" id="bulkInvalidCount">0 خطأ</span>
+                            </div>
+                        </div>
+
+                        <!-- Table Container -->
+                        <div class="bulk-table-container">
+                            <div class="paste-hint">
+                                <i class="fas fa-mouse-pointer"></i>
+                                <span>انقر هنا ثم اضغط Ctrl+V للصق البيانات من Excel</span>
+                            </div>
+                            <div class="bulk-table-scroll">
+                                <table class="bulk-table" id="bulkImportTable">
+                                    <thead>
+                                        <tr>
+                                            <th style="min-width: 50px; width: 50px;">#</th>
+                                            <th style="min-width: 200px; width: 220px;">
+                                                <i class="fas fa-tag"></i>
+                                                اسم المنتج *
+                                            </th>
+                                            <th style="min-width: 140px; width: 160px;">
+                                                <i class="fas fa-qrcode"></i>
+                                                الكود (تلقائي)
+                                            </th>
+                                            <th style="min-width: 150px; width: 170px;">
+                                                <i class="fas fa-folder"></i>
+                                                الفئة
+                                            </th>
+                                            <th style="min-width: 130px; width: 150px;">
+                                                <i class="fas fa-ruler"></i>
+                                                الوحدة
+                                            </th>
+                                            <th style="min-width: 100px; width: 120px;">
+                                                <i class="fas fa-coins"></i>
+                                                العملة
+                                            </th>
+                                            <th style="min-width: 120px; width: 130px;">
+                                                <i class="fas fa-shopping-cart"></i>
+                                                سعر الشراء
+                                            </th>
+                                            <th style="min-width: 120px; width: 130px;">
+                                                <i class="fas fa-dollar-sign"></i>
+                                                سعر البيع
+                                            </th>
+                                            <th style="min-width: 120px; width: 130px;">
+                                                <i class="fas fa-boxes"></i>
+                                                سعر الجملة
+                                            </th>
+                                            <th style="min-width: 100px; width: 110px;">
+                                                <i class="fas fa-cubes"></i>
+                                                المخزون
+                                            </th>
+                                            <th style="min-width: 100px; width: 110px;">
+                                                <i class="fas fa-flag"></i>
+                                                الحد الأدنى
+                                            </th>
+                                            <th style="min-width: 60px; width: 70px;">
+                                                <i class="fas fa-trash"></i>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bulkImportTableBody">
+                                        <!-- Rows will be generated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Results Container -->
+                        <div class="bulk-results" id="importResults" style="display: none;">
+                            <h6>
+                                <i class="fas fa-chart-bar"></i>
+                                نتائج الإدراج
+                            </h6>
+                            <div id="importResultsContent">
+                                <!-- Results will be shown here -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+                            <i class="fas fa-times"></i>
+                            إلغاء
+                        </button>
+                        <button type="button" class="btn btn-import" id="importBtn" onclick="ProductsModule.importBulkProducts()">
+                            <i class="fas fa-upload"></i>
+                            بدء الإدراج
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Product Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">إضافة منتج جديد</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="productForm">
+                        <div class="row g-3">
+                            <!-- Basic Information -->
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2 mb-3">
+                                    <i class="fas fa-info-circle text-primary"></i> المعلومات الأساسية
+                                </h6>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-barcode text-muted me-1"></i> كود المنتج *</label>
+                                <input type="text" class="form-control" id="productCode" required placeholder="PRD0001">
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-tag text-muted me-1"></i> اسم المنتج *</label>
+                                <input type="text" class="form-control" id="productName" required placeholder="اسم المنتج">
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-language text-muted me-1"></i> الاسم الثانوي</label>
+                                <input type="text" class="form-control" id="productName2" placeholder="اختياري">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-folder text-muted me-1"></i> الفئة *</label>
+                                <select class="form-select" id="productCategory" required>
+                                    <option value="">اختر الفئة</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label class="form-label"><i class="fas fa-certificate text-muted me-1"></i> العلامة التجارية</label>
+                                <input type="text" class="form-control" id="productBrand" placeholder="اختياري">
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label class="form-label"><i class="fas fa-qrcode text-muted me-1"></i> الباركود</label>
+                                <input type="text" class="form-control" id="productBarcode" placeholder="اختياري">
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <label class="form-label"><i class="fas fa-align-right text-muted me-1"></i> الوصف</label>
+                                <textarea class="form-control" id="productDescription" rows="2" placeholder="وصف تفصيلي للمنتج..."></textarea>
+                            </div>
+
+                            <!-- Pricing & Units -->
+                            <div class="col-12 mt-4">
+                                <h6 class="border-bottom pb-2 mb-3">
+                                    <i class="fas fa-dollar-sign text-success"></i> التسعير والوحدات
+                                </h6>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label"><i class="fas fa-ruler text-muted me-1"></i> الوحدة الأساسية *</label>
+                                <select class="form-select" id="productUnit" required>
+                                    <option value="">اختر الوحدة</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label"><i class="fas fa-coins text-muted me-1"></i> العملة *</label>
+                                <select class="form-select" id="productCurrency" required>
+                                    <option value="">اختر العملة</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label"><i class="fas fa-shopping-bag text-muted me-1"></i> سعر الشراء *</label>
+                                <div class="input-group">
+                                <input type="number" class="form-control" id="purchasePrice" min="0" step="0.01" required placeholder="0.00">
+                                    <span class="input-group-text" id="purchasePriceCurrency">IQD</span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label class="form-label"><i class="fas fa-tag text-muted me-1"></i> سعر المفرد *</label>
+                                <div class="input-group">
+                                <input type="number" class="form-control" id="sellingPrice" min="0" step="0.01" required placeholder="0.00">
+                                    <span class="input-group-text" id="sellingPriceCurrency">IQD</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label"><i class="fas fa-boxes text-muted me-1"></i> سعر الجملة</label>
+                                <div class="input-group">
+                                <input type="number" class="form-control" id="wholesalePrice" min="0" step="0.01" placeholder="0.00">
+                                    <span class="input-group-text" id="wholesalePriceCurrency">IQD</span>
+                                </div>
+                            </div>
+
+                            <!-- Sub Units Section -->
+                            <div class="col-12 mt-4">
+                                <h6 class="border-bottom pb-2 mb-3">
+                                    <i class="fas fa-layer-group text-purple"></i> الوحدات الفرعية
+                                    <small class="text-muted">(اختياري - لبيع المنتج بوحدات مختلفة)</small>
+                                </h6>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    <strong>مثال:</strong> إذا كانت الوحدة الأساسية "قطعة"، يمكنك إضافة وحدة فرعية "صندوق" مع تعادل (مثلاً: 1 صندوق = 12 قطعة)
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <button type="button" class="btn btn-outline-primary btn-sm" id="addSubUnitBtn" disabled>
+                                    <i class="fas fa-plus"></i> إضافة وحدة فرعية
+                                </button>
+                                <small class="text-muted d-block mt-1">
+                                    <i class="fas fa-info-circle"></i> يتم تفعيل الزر بعد اختيار الوحدة الأساسية
+                                </small>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div id="subUnitsContainer"></div>
+                            </div>
+
+                            <!-- Inventory Management -->
+                            <div class="col-12 mt-4">
+                                <h6 class="border-bottom pb-2 mb-3">
+                                    <i class="fas fa-warehouse text-info"></i> إدارة المخزون
+                                </h6>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-cubes text-muted me-1"></i> المخزون الحالي</label>
+                                <input type="number" class="form-control bg-light" id="currentStock" value="0" min="0" placeholder="0" readonly>
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i> يتم التحديث تلقائياً من حركات الإدخال والإخراج
+                                </small>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-flag text-muted me-1"></i> الحد الأدنى للمخزون *</label>
+                                <input type="number" class="form-control" id="minStock" value="10" min="0" required placeholder="10">
+                                <small class="text-muted">تنبيه عند انخفاض المخزون لهذا الحد</small>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-toggle-on text-muted me-1"></i> الحالة</label>
+                                <select class="form-select" id="productStatus">
+                                    <option value="active">نشط</option>
+                                    <option value="inactive">غير نشط</option>
+                                </select>
+                            </div>
+
+                            <!-- Advanced Tracking -->
+                            <div class="col-12 mt-4">
+                                <h6 class="border-bottom pb-2 mb-3">
+                                    <i class="fas fa-clipboard-check text-warning"></i> التتبع المتقدم
+                                </h6>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="hasExpiryDate">
+                                    <label class="form-check-label" for="hasExpiryDate">
+                                        <i class="fas fa-calendar-times text-danger"></i> تتبع تاريخ الصلاحية
+                                    </label>
+                                </div>
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i> للمنتجات القابلة للتلف (أدوية، أغذية، مستحضرات)
+                                </small>
+                                
+                                <div id="expiryDateSettings" style="display: none;" class="mt-3 p-3 bg-light rounded border">
+                                    <label class="form-label fw-bold mb-2">
+                                        <i class="fas fa-cog"></i> قيود التتبع
+                                    </label>
+                                    
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="forceExpiryOnInput">
+                                        <label class="form-check-label" for="forceExpiryOnInput">
+                                            <i class="fas fa-sign-in-alt text-success"></i> فرض عند الإدخال
+                                        </label>
+                                    </div>
+                                    <small class="text-muted d-block mb-3" style="margin-right: 24px;">
+                                        عند تفعيل هذا الخيار، يجب إدخال تاريخ الصلاحية لكل دفعة عند إضافتها للمخزون
+                                    </small>
+                                    
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="forceExpiryOnOutput">
+                                        <label class="form-check-label" for="forceExpiryOnOutput">
+                                            <i class="fas fa-sign-out-alt text-danger"></i> فرض عند الإخراج
+                                        </label>
+                                    </div>
+                                    <small class="text-muted d-block mb-3" style="margin-right: 24px;">
+                                        عند تفعيل هذا الخيار، يجب اختيار دفعة محددة (بتاريخ صلاحية) عند البيع أو الصرف
+                                    </small>
+                                    
+                                    <hr class="my-2">
+                                    
+                                    <div class="mt-3">
+                                        <label class="form-label">مدة التحذير قبل انتهاء الصلاحية</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="expiryWarningDays" value="30" min="1">
+                                            <span class="input-group-text">يوم</span>
+                                        </div>
+                                        <small class="text-muted">
+                                            سيتم التنبيه عند اقتراب انتهاء صلاحية أي دفعة
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="hasSerialNumber">
+                                    <label class="form-check-label" for="hasSerialNumber">
+                                        <i class="fas fa-hashtag text-primary"></i> تتبع الأرقام التسلسلية
+                                    </label>
+                                </div>
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i> للأجهزة والمعدات (إلكترونيات، سيارات، أجهزة كهربائية)
+                                </small>
+                                
+                                <div id="serialNumberSettings" style="display: none;" class="mt-3 p-3 bg-light rounded border">
+                                    <label class="form-label fw-bold mb-2">
+                                        <i class="fas fa-cog"></i> قيود التتبع
+                                    </label>
+                                    
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="forceSerialOnInput">
+                                        <label class="form-check-label" for="forceSerialOnInput">
+                                            <i class="fas fa-sign-in-alt text-success"></i> فرض عند الإدخال
+                                        </label>
+                                    </div>
+                                    <small class="text-muted d-block mb-3" style="margin-right: 24px;">
+                                        عند تفعيل هذا الخيار، يجب إدخال رقم تسلسلي عند إضافة المنتج للمخزون
+                                    </small>
+                                    
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="forceSerialOnOutput">
+                                        <label class="form-check-label" for="forceSerialOnOutput">
+                                            <i class="fas fa-sign-out-alt text-danger"></i> فرض عند الإخراج
+                                        </label>
+                                    </div>
+                                    <small class="text-muted d-block" style="margin-right: 24px;">
+                                        عند تفعيل هذا الخيار، يجب تحديد رقم تسلسلي عند البيع أو الصرف من المخزون
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Image Upload -->
+                            <div class="col-12 mt-4">
+                                <h6 class="border-bottom pb-2 mb-3">
+                                    <i class="fas fa-image text-danger"></i> صورة المنتج
+                                </h6>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label">رفع صورة</label>
+                                <div class="image-upload-area" onclick="document.getElementById('productImage').click()">
+                                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                    <h6>اضغط لرفع صورة المنتج</h6>
+                                    <p class="text-muted mb-0">أو اسحب الصورة هنا</p>
+                                    <small class="text-muted">الحد الأقصى: 5 ميجا | الصيغ المدعومة: JPG, PNG, GIF</small>
+                                </div>
+                                <input type="file" class="form-control d-none" id="productImage" accept="image/*">
+                                
+                                <div id="imagePreview" class="mt-3" style="display: none;">
+                                    <p class="text-muted">لم يتم اختيار صورة</p>
+                                </div>
+                            </div>
+
+                            <!-- Notes Section -->
+                            <div class="col-12 mt-4">
+                                <h6 class="border-bottom pb-2 mb-3">
+                                    <i class="fas fa-sticky-note text-secondary"></i> ملاحظات إضافية
+                                </h6>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label">ملاحظات</label>
+                                <textarea class="form-control" id="productNotes" rows="2" placeholder="أي ملاحظات أو تعليمات خاصة بالمنتج..."></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> إلغاء
+                    </button>
+                    <button type="button" class="btn btn-warning" id="resetProductFormBtn" style="display: none;">
+                        <i class="fas fa-undo"></i> استعادة
+                    </button>
+                    <button type="button" class="btn btn-primary" id="saveProductBtn">
+                        <i class="fas fa-save"></i> حفظ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div class="modal fade" id="categoryModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalTitle">إضافة فئة جديدة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="categoryForm">
+                        <div class="mb-3">
+                            <label class="form-label">اسم الفئة *</label>
+                            <input type="text" class="form-control" id="categoryName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">كود الفئة *</label>
+                            <input type="text" class="form-control" id="categoryCode" required readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">الوصف</label>
+                            <textarea class="form-control" id="categoryDescription" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">اللون</label>
+                            <input type="color" class="form-control form-control-color w-100" id="categoryColor" value="#3498db">
+                        </div>
+                        
+                        <!-- Icon Picker -->
+                        <div class="mb-3">
+                            <label class="form-label">اختر الأيقونة</label>
+                            <input type="hidden" id="categoryIcon" value="fas fa-folder">
+                            
+                            <!-- Icon Preview -->
+                            <div class="mb-3 d-flex align-items-center gap-3">
+                                <div id="categoryIconPreview" class="category-icon-display-enhanced" style="background: linear-gradient(135deg, #3498db 0%, #5dade2 100%); width: 70px; height: 70px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);">
+                                    <i class="fas fa-folder"></i>
+                                </div>
+                                <div>
+                                    <strong id="selectedIconText">fas fa-folder</strong>
+                                    <br>
+                                    <small class="text-muted">انقر على أيقونة لاختيارها</small>
+                                </div>
+                            </div>
+                            
+                            <!-- Icons Grid -->
+                            <div class="icon-picker-grid">
+                                <div class="icon-picker-item" data-icon="fas fa-folder" title="مجلد">
+                                    <i class="fas fa-folder"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-box" title="صندوق">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-shopping-cart" title="عربة تسوق">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-laptop" title="لابتوب">
+                                    <i class="fas fa-laptop"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-mobile-alt" title="موبايل">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-tv" title="تلفاز">
+                                    <i class="fas fa-tv"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-utensils" title="أطعمة">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-tshirt" title="ملابس">
+                                    <i class="fas fa-tshirt"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-book" title="كتب">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-pills" title="أدوية">
+                                    <i class="fas fa-pills"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-tools" title="أدوات">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-car" title="سيارات">
+                                    <i class="fas fa-car"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-home" title="منزل">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-couch" title="أثاث">
+                                    <i class="fas fa-couch"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-gamepad" title="ألعاب">
+                                    <i class="fas fa-gamepad"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-futbol" title="رياضة">
+                                    <i class="fas fa-futbol"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-spa" title="تجميل">
+                                    <i class="fas fa-spa"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-paint-brush" title="فنون">
+                                    <i class="fas fa-paint-brush"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-wrench" title="صيانة">
+                                    <i class="fas fa-wrench"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-hammer" title="بناء">
+                                    <i class="fas fa-hammer"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-plug" title="كهربائيات">
+                                    <i class="fas fa-plug"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-camera" title="كاميرات">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-headphones" title="صوتيات">
+                                    <i class="fas fa-headphones"></i>
+                                </div>
+                                <div class="icon-picker-item" data-icon="fas fa-coffee" title="مشروبات">
+                                    <i class="fas fa-coffee"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">الحالة</label>
+                            <select class="form-select" id="categoryStatus">
+                                <option value="active">نشط</option>
+                                <option value="inactive">غير نشط</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="saveCategoryBtn">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Import Modal - Excel-like Grid -->
+    <div class="modal fade bulk-import-modal" id="bulkImportExcelModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-file-excel"></i> استيراد جماعي للمنتجات
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Instructions -->
+                    <div class="alert alert-info mb-3">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-info-circle"></i> كيفية الاستخدام:
+                                </h6>
+                                <ul class="mb-0">
+                                    <li>الصق البيانات مباشرة من Excel في الجدول أدناه</li>
+                                    <li>أو املأ الخلايا يدوياً (انقر على أي خلية واكتب)</li>
+                                    <li><strong>الكود تلقائي:</strong> سيتم توليده تلقائياً بناءً على الفئة</li>
+                                    <li>استخدم زر "إضافة صف" لإضافة منتجات أخرى</li>
+                                </ul>
+                        </div>
+                            <div class="col-md-4 text-end">
+                                <button class="btn btn-sm btn-outline-primary" id="downloadTemplateBtn">
+                                    <i class="fas fa-download"></i> تحميل قالب Excel
+                                </button>
+                        </div>
+                        </div>
+                    </div>
+
+                    <!-- Toolbar -->
+                    <div class="bulk-import-toolbar mb-3">
+                        <button class="btn btn-success btn-sm" id="addBulkRow">
+                            <i class="fas fa-plus"></i> إضافة صف
+                        </button>
+                        <button class="btn btn-danger btn-sm" id="clearBulkTable">
+                            <i class="fas fa-trash"></i> مسح الكل
+                        </button>
+                        <button class="btn btn-info btn-sm" id="fillSampleData">
+                            <i class="fas fa-flask"></i> بيانات تجريبية
+                        </button>
+                        <div class="ms-auto">
+                            <span class="badge bg-primary" id="bulkExcelRowsCount">0 صف</span>
+                            <span class="badge bg-success" id="bulkExcelValidCount">0 صالح</span>
+                            <span class="badge bg-danger" id="bulkExcelInvalidCount">0 غير صالح</span>
+                        </div>
+                    </div>
+
+                    <!-- Excel-like Table -->
+                    <div class="excel-grid-container">
+                        <div class="paste-hint">
+                            <i class="fas fa-mouse-pointer"></i>
+                            <span>انقر على الجدول ثم الصق البيانات من Excel (Ctrl+V)</span>
+                        </div>
+                        <table class="excel-grid-table" id="bulkImportExcelTable" tabindex="0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">#</th>
+                                    <th style="width: 250px;">
+                                        <i class="fas fa-tag"></i> الاسم *
+                                    </th>
+                                    <th style="width: 180px;">
+                                        <i class="fas fa-folder"></i> الفئة *
+                                    </th>
+                                    <th style="width: 150px;">
+                                        <i class="fas fa-ruler"></i> الوحدة *
+                                    </th>
+                                    <th style="width: 120px;">
+                                        <i class="fas fa-coins"></i> العملة *
+                                    </th>
+                                    <th style="width: 120px;">
+                                        <i class="fas fa-dollar-sign"></i> سعر الشراء
+                                    </th>
+                                    <th style="width: 120px;">
+                                        <i class="fas fa-tag"></i> سعر البيع *
+                                    </th>
+                                    <th style="width: 120px;">
+                                        <i class="fas fa-boxes"></i> سعر الجملة
+                                    </th>
+                                    <th style="width: 100px;">
+                                        <i class="fas fa-flag"></i> الحد الأدنى
+                                    </th>
+                                    <th style="width: 80px;">
+                                        <i class="fas fa-times-circle"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="bulkImportExcelTableBody">
+                                <!-- Rows will be added dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Info Messages -->
+                    <div id="bulkExcelValidationMessages" class="mt-3"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> إلغاء
+                    </button>
+                    <button type="button" class="btn btn-success btn-lg" id="confirmBulkImportBtn">
+                        <i class="fas fa-cloud-upload-alt"></i> استيراد المنتجات
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Modal -->
+    <div class="modal fade" id="accountModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient">
+                    <h5 class="modal-title" id="accountModalTitle">
+                        <i class="fas fa-file-invoice-dollar me-2"></i>
+                        إضافة حساب جديد
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="accountForm">
+                        <!-- Parent Account Section -->
+                        <div class="form-section mb-4">
+                            <div class="section-header">
+                                <i class="fas fa-sitemap text-success"></i>
+                                <span class="section-title">الحساب الأب</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <select class="form-select form-select-lg" id="parentAccount" required>
+                                        <option value="">لا يوجد (حساب أساسي - فقط 7 حسابات مسموحة)</option>
+                                    </select>
+                                    <div class="form-text">
+                                        <i class="fas fa-lightbulb"></i>
+                                        اختر الحساب الذي سينتمي إليه هذا الحساب الجديد
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Basic Info Section -->
+                        <div class="form-section mb-4">
+                            <div class="section-header">
+                                <i class="fas fa-info-circle text-primary"></i>
+                                <span class="section-title">المعلومات الأساسية</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-hashtag text-muted"></i> كود الحساب
+                                    </label>
+                                    <input type="text" class="form-control" id="accountCode" 
+                                           placeholder="1.1.1" required readonly 
+                                           style="background: #f8f9fa; font-family: 'Courier New';">
+                                    <div class="form-text">تلقائي</div>
+                                </div>
+                                
+                                <div class="col-md-9">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-signature text-muted"></i> اسم الحساب *
+                                    </label>
+                                    <input type="text" class="form-control" id="accountName" 
+                                           placeholder="مثال: النقدية بالصندوق" required autofocus>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-globe text-muted"></i> الاسم الثاني (English)
+                                    </label>
+                                    <input type="text" class="form-control" id="accountName2" 
+                                           placeholder="Example: Cash in Hand" 
+                                           style="direction: ltr; text-align: left;">
+                                    <div class="form-text">اختياري - للتقارير باللغة الإنجليزية</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Properties Section -->
+                        <div class="form-section mb-4">
+                            <div class="section-header">
+                                <i class="fas fa-sliders-h text-info"></i>
+                                <span class="section-title">خصائص الحساب</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-balance-scale text-muted"></i> الطبيعة *
+                                    </label>
+                                    <select class="form-select" id="accountNature" required>
+                                        <option value="">اختر...</option>
+                                        <option value="debit">🔵 مدين (Debit)</option>
+                                        <option value="credit">🟢 دائن (Credit)</option>
+                                        <option value="both">🟣 مدين ودائن</option>
+                                    </select>
+                                    <div class="form-text">
+                                        الأصول: مدين | الخصوم: دائن
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-coins text-muted"></i> العملة *
+                                    </label>
+                                    <select class="form-select" id="accountCurrency" required>
+                                        <option value="">اختر...</option>
+                                    </select>
+                                    <div class="form-text">من إدارة العملات</div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-toggle-on text-muted"></i> الحالة
+                                    </label>
+                                    <select class="form-select" id="accountStatus">
+                                        <option value="active">✅ نشط</option>
+                                        <option value="inactive">⏸️ غير نشط</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Type Section -->
+                        <div class="form-section mb-4">
+                            <div class="section-header">
+                                <i class="fas fa-project-diagram text-warning"></i>
+                                <span class="section-title">تصنيف الحساب</span>
+                            </div>
+                            <div class="account-type-selector">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="isParentAccount" 
+                                           style="width: 3.5rem; height: 1.75rem; cursor: pointer;">
+                                    <label class="form-check-label ms-3" for="isParentAccount" style="cursor: pointer;">
+                                        <div class="switch-label-content">
+                                            <div class="switch-icon">
+                                                <i class="fas fa-folder-tree"></i>
+                                            </div>
+                                            <div class="switch-text">
+                                                <h6 class="mb-1">حساب رئيسي (Parent Account)</h6>
+                                                <p class="mb-0" id="isParentHelpText">
+                                                    <strong class="text-primary">غير مفعّل:</strong> 
+                                                    حساب نهائي - يُستخدم مباشرة في المعاملات المالية
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <i class="fas fa-comment-alt text-secondary"></i>
+                                <span class="section-title">ملاحظات إضافية</span>
+                            </div>
+                            <textarea class="form-control" id="accountDescription" rows="3" 
+                                      placeholder="أي ملاحظات أو تفاصيل إضافية عن الحساب..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i> إلغاء
+                    </button>
+                    <button type="button" class="btn btn-success btn-lg" id="saveAccountBtn">
+                        <i class="fas fa-save me-1"></i> حفظ الحساب
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Currency Modal -->
+    <div class="modal fade" id="currencyModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="currencyModalTitle">إضافة عملة جديدة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="currencyForm">
+                        <!-- Alert for base currency -->
+                        <div class="alert alert-warning" id="baseCurrencyNote" style="display: none;">
+                            <i class="fas fa-star"></i>
+                            <strong>عملة أساسية:</strong> هذه هي العملة الأولى في النظام وستكون العملة الأساسية. 
+                            سعر صرفها = 1 ولا يمكن تعديلها أو حذفها.
+                        </div>
+
+                        <div class="row g-3">
+                            <!-- Currency Code -->
+                            <div class="col-md-4">
+                                <label class="form-label">
+                                    <i class="fas fa-code text-muted me-1"></i> كود العملة *
+                                </label>
+                                <input type="text" class="form-control" id="currencyCode" 
+                                       placeholder="USD" maxlength="3" required
+                                       style="text-transform: uppercase;">
+                                <small class="text-muted">3 أحرف (مثال: USD, EUR, IQD)</small>
+                            </div>
+
+                            <!-- Currency Name -->
+                            <div class="col-md-4">
+                                <label class="form-label">
+                                    <i class="fas fa-globe text-muted me-1"></i> اسم العملة *
+                                </label>
+                                <input type="text" class="form-control" id="currencyName" 
+                                       placeholder="دولار أمريكي" required>
+                            </div>
+
+                            <!-- Currency Symbol -->
+                            <div class="col-md-4">
+                                <label class="form-label">
+                                    <i class="fas fa-dollar-sign text-muted me-1"></i> الرمز *
+                                </label>
+                                <input type="text" class="form-control" id="currencySymbol" 
+                                       placeholder="$" required>
+                            </div>
+
+                            <!-- Exchange Rate -->
+                            <div class="col-md-6" id="exchangeRateContainer">
+                                <label class="form-label">
+                                    <i class="fas fa-exchange-alt text-muted me-1"></i> سعر الصرف *
+                                </label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="currencyExchangeRate" 
+                                           placeholder="1450" min="0" step="0.0001" required value="1">
+                                    <span class="input-group-text" id="exchangeRateHelp">مقابل العملة الأساسية</span>
+                                </div>
+                                <small class="text-muted">
+                                    كم من هذه العملة يساوي 1 من العملة الأساسية
+                                </small>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-toggle-on text-muted me-1"></i> الحالة
+                                </label>
+                                <select class="form-select" id="currencyStatus">
+                                <option value="active">نشط</option>
+                                <option value="inactive">غير نشط</option>
+                            </select>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="col-12">
+                                <label class="form-label">
+                                    <i class="fas fa-info-circle text-muted me-1"></i> ملاحظات
+                                </label>
+                                <textarea class="form-control" id="currencyNotes" rows="3" 
+                                          placeholder="ملاحظات إضافية عن العملة..."></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> إلغاء
+                    </button>
+                    <button type="button" class="btn btn-primary" id="saveCurrencyBtn">
+                        <i class="fas fa-save"></i> حفظ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unit Modal -->
+    <div class="modal fade" id="unitModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="unitModalTitle">إضافة وحدة جديدة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="unitForm">
+                        <div class="mb-3">
+                            <label class="form-label">اسم الوحدة *</label>
+                            <input type="text" class="form-control" id="unitName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">كود الوحدة *</label>
+                            <input type="text" class="form-control" id="unitCode" required readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">الرمز</label>
+                            <input type="text" class="form-control" id="unitSymbol" placeholder="مثل: كغ، لتر، قطعة">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">الوصف</label>
+                            <textarea class="form-control" id="unitDescription" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">الحالة</label>
+                            <select class="form-select" id="unitStatus">
+                                <option value="active">نشط</option>
+                                <option value="inactive">غير نشط</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="saveUnitBtn">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Voucher Modal - Professional Receipt Voucher -->
+    <div class="modal fade" id="voucherModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen-lg-down" style="max-width: 95%; width: 1400px;">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient-receipt">
+                    <h5 class="modal-title" id="voucherModalTitle">
+                        <i class="fas fa-arrow-down me-2"></i>
+                        سند قبض جديد
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="voucherForm">
+                        <!-- Basic Info Section -->
+                        <div class="form-section mb-3">
+                            <div class="section-header">
+                                <i class="fas fa-info-circle text-primary"></i>
+                                <span class="section-title">المعلومات الأساسية</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-hashtag"></i> نوع السند *
+                                    </label>
+                                    <select class="form-select" id="voucherType" required>
+                                        <option value="receipt">💰 سند قبض</option>
+                                        <option value="payment">💸 سند صرف</option>
+                                        <option value="journal">📘 سند يومية</option>
+                                        <option value="entry">✏️ سند قيد</option>
+                                    </select>
+                                    <small class="text-muted">القيد العام يُنشأ تلقائياً عند ترحيل السند</small>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-barcode"></i> رقم السند *
+                                    </label>
+                                    <input type="text" class="form-control" id="voucherNumber" 
+                                           placeholder="RV20240001" required readonly
+                                           style="background: #f8f9fa; font-family: 'Courier New';">
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-calendar"></i> التاريخ *
+                                    </label>
+                                    <input type="date" class="form-control" id="voucherDate" required>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-toggle-on"></i> الحالة
+                                    </label>
+                                    <select class="form-select" id="voucherStatus">
+                                        <option value="draft">📝 مسودة</option>
+                                        <option value="posted">✅ مرحّل</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-wallet"></i> الحساب المقابل (الصندوق/البنك)
+                                        <span id="contraAccountRequired" class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="voucherContraAccountDisplay" 
+                                               placeholder="اضغط للبحث عن حساب..." readonly 
+                                               style="cursor: pointer; background: white;">
+                                        <input type="hidden" id="voucherContraAccount">
+                                        <button class="btn btn-outline-primary" type="button" id="searchContraAccountBtn">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Account Balance and Currency Display -->
+                                    <div id="contraAccountInfo" class="mt-2" style="display: none;">
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <div class="bg-light rounded p-2 border">
+                                                    <small class="text-muted d-block">الرصيد الحالي:</small>
+                                                    <strong id="contraAccountBalance" class="text-primary">0.00</strong>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="bg-light rounded p-2 border">
+                                                    <small class="text-muted d-block">العملة الأساسية:</small>
+                                                    <strong id="contraAccountCurrency" class="text-success">IQD</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <small class="text-muted" id="contraAccountHelp">إلزامي لسندات القبض والصرف، اختياري لسند اليومية والقيد</small>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-cubes"></i> مركز الكلفة الرئيسي للسند
+                                    </label>
+                                    <select class="form-select" id="voucherCostCenter">
+                                        <option value="">اختر مركز الكلفة...</option>
+                                    </select>
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle"></i> 
+                                        يُطبق على جميع الأسطر التي لم تحدد مركز كلفة خاص بها
+                                    </small>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-coins"></i> العملة الرئيسية للسند *
+                                    </label>
+                                    <select class="form-select" id="voucherMainCurrency" required>
+                                        <option value="">اختر العملة...</option>
+                                    </select>
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle"></i> 
+                                        العملة الرئيسية لحساب إجمالي السند وعرضه
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Entries Table Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <div style="flex: 1;">
+                                    <i class="fas fa-table text-success"></i>
+                                    <span class="section-title" id="voucherEntriesTitle">تفاصيل السند</span>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" id="columnSettingsBtn">
+                                        <i class="fas fa-columns"></i> الأعمدة
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-success" id="addEntryBtn">
+                                        <i class="fas fa-plus"></i> إضافة سطر
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Entries Table -->
+                            <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                                <table class="table table-bordered table-hover voucher-entries-table">
+                                    <thead class="table-light sticky-top" id="voucherEntriesHead">
+                                        <!-- ✅ إصلاح: صف واحد فقط لكل نوع - يتم التبديل حسب نوع السند -->
+                                        <tr id="receiptPaymentHeader">
+                                            <th width="4%" class="text-center">#</th>
+                                            <th width="20%" class="column-account">الحساب *</th>
+                                            <th width="8%" class="column-accountCode">كود</th>
+                                            <th width="10%" class="column-credit">المبلغ *</th>
+                                            <th width="7%" class="column-currency">العملة</th>
+                                            <th width="8%" class="column-exchangeRate">سعر الصرف</th>
+                                            <th width="10%" class="column-localAmount">المبلغ المحلي</th>
+                                            <th width="13%" class="column-description">البيان</th>
+                                            <th width="10%" class="column-costCenter">مركز الكلفة</th>
+                                            <th width="8%" class="column-receipt">إيصال</th>
+                                            <th width="2%" class="text-center">×</th>
+                                        </tr>
+                                        <tr id="journalHeader" style="display: none;">
+                                            <th width="3%" class="text-center">#</th>
+                                            <th width="18%">الحساب *</th>
+                                            <th width="8%">كود</th>
+                                            <th width="9%">المدين *</th>
+                                            <th width="9%">الدائن *</th>
+                                            <th width="6%">العملة</th>
+                                            <th width="7%">سعر الصرف</th>
+                                            <th width="9%">المبلغ المحلي</th>
+                                            <th width="13%">البيان</th>
+                                            <th width="11%">مركز الكلفة</th>
+                                            <th width="7%" class="text-center">×</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="voucherEntriesBody">
+                                        <!-- Rows will be added here dynamically -->
+                                    </tbody>
+                                    <tfoot class="table-light">
+                                        <tr id="receiptPaymentFooter">
+                                            <td colspan="3" class="text-end fw-bold">الإجمالي:</td>
+                                            <td class="column-credit">
+                                                <strong id="totalCredit" class="text-success">0.00</strong>
+                                                <small id="totalCreditCurrency" class="text-muted d-block"></small>
+                                            </td>
+                                            <td colspan="5"></td>
+                                        </tr>
+                                        <tr id="journalFooter" style="display: none;">
+                                            <td colspan="3" class="text-end fw-bold">الإجمالي:</td>
+                                            <td>
+                                                <strong id="totalDebit" class="text-primary">0.00</strong>
+                                                <small id="totalDebitCurrency" class="text-muted d-block"></small>
+                                            </td>
+                                            <td>
+                                                <strong id="totalCredit2" class="text-success">0.00</strong>
+                                                <small id="totalCredit2Currency" class="text-muted d-block"></small>
+                                            </td>
+                                            <td colspan="4">
+                                                <span id="balanceStatus" class="fw-bold"></span>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light d-flex justify-content-between">
+                    <div class="navigation-buttons">
+                        <button type="button" class="btn btn-outline-secondary" id="prevVoucherBtn" title="السند السابق">
+                            <i class="fas fa-chevron-right"></i> السابق
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" id="nextVoucherBtn" title="السند التالي">
+                            التالي <i class="fas fa-chevron-left"></i>
+                        </button>
+                    </div>
+                    <div class="action-buttons">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i> إلغاء
+                        </button>
+                        <button type="button" class="btn btn-primary btn-lg" id="saveVoucherBtn">
+                            <i class="fas fa-save me-1"></i> حفظ السند
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Search Modal -->
+    <div class="modal fade" id="accountSearchModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-search me-2"></i> البحث عن حساب
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Search Box -->
+                        <div class="mb-3">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" class="form-control" id="accountSearchInput" 
+                                   placeholder="ابحث بالكود أو الاسم..." autofocus>
+                        </div>
+                        </div>
+                    
+                    <!-- Filter by Type -->
+                        <div class="mb-3">
+                        <select class="form-select" id="accountSearchTypeFilter">
+                            <option value="">جميع الأنواع</option>
+                            <option value="assets">الأصول</option>
+                            <option value="liabilities">الخصوم</option>
+                            <option value="equity">حقوق الملكية</option>
+                            <option value="revenue">الإيرادات</option>
+                            <option value="expenses">المصروفات</option>
+                        </select>
+                        </div>
+                    
+                    <!-- Results Table -->
+                    <div class="account-search-results-container" style="max-height: 500px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 8px;">
+                        <table class="table table-hover table-bordered mb-0">
+                            <thead class="table-light sticky-top" style="z-index: 10;">
+                                <tr>
+                                    <th width="15%">الكود</th>
+                                    <th width="40%">اسم الحساب</th>
+                                    <th width="15%">النوع</th>
+                                    <th width="15%">الطبيعة</th>
+                                    <th width="15%">اختيار</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accountSearchResults">
+                                <!-- Search results will be displayed here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-2 text-muted small text-center" id="accountSearchCount">
+                        <!-- سيتم عرض عدد النتائج هنا -->
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> إلغاء
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Column Settings Modal -->
+    <div class="modal fade" id="columnSettingsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-columns"></i> إعدادات الأعمدة
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="list-group">
+                        <label class="list-group-item">
+                            <input class="form-check-input me-2" type="checkbox" checked disabled> الحساب
+                        </label>
+                        <label class="list-group-item">
+                            <input class="form-check-input me-2" type="checkbox" id="col_accountCode" checked> كود الحساب
+                        </label>
+                        <label class="list-group-item">
+                            <input class="form-check-input me-2" type="checkbox" checked disabled> الدائن (المبلغ)
+                        </label>
+                        <label class="list-group-item">
+                            <input class="form-check-input me-2" type="checkbox" id="col_description" checked> البيان
+                        </label>
+                        <label class="list-group-item">
+                            <input class="form-check-input me-2" type="checkbox" id="col_currency" checked> العملة
+                        </label>
+                        <label class="list-group-item">
+                            <input class="form-check-input me-2" type="checkbox" id="col_costCenter" checked> مركز الكلفة
+                        </label>
+                        <label class="list-group-item">
+                            <input class="form-check-input me-2" type="checkbox" id="col_receipt" checked> رقم الإيصال
+                            </label>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                        <i class="fas fa-check"></i> تطبيق
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cost Center Modal -->
+    <div class="modal fade" id="costCenterModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient">
+                    <h5 class="modal-title" id="costCenterModalTitle">
+                        <i class="fas fa-cubes me-2"></i>
+                        إضافة مركز كلفة جديد
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="costCenterForm">
+                        <!-- Basic Info Section -->
+                        <div class="form-section mb-4">
+                            <div class="section-header">
+                                <i class="fas fa-info-circle text-primary"></i>
+                                <span class="section-title">المعلومات الأساسية</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-hashtag text-muted"></i> الكود *
+                                    </label>
+                                    <input type="text" class="form-control" id="costCenterCode" 
+                                           placeholder="مثال: CC001" required>
+                                    <div class="form-text">يُنشأ تلقائياً</div>
+                                </div>
+                                
+                                <div class="col-md-8">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-signature text-muted"></i> اسم مركز الكلفة *
+                                    </label>
+                                    <input type="text" class="form-control" id="costCenterName" 
+                                           placeholder="مثال: قسم المبيعات" required autofocus>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Properties Section -->
+                        <div class="form-section mb-4">
+                            <div class="section-header">
+                                <i class="fas fa-sliders-h text-info"></i>
+                                <span class="section-title">خصائص المركز</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-cubes text-muted"></i> النوع *
+                                    </label>
+                                    <select class="form-select" id="costCenterType" required>
+                                        <option value="department">🏢 قسم</option>
+                                        <option value="branch">📍 فرع</option>
+                                        <option value="project">📊 مشروع</option>
+                                        <option value="other">📦 أخرى</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-user-tie text-muted"></i> المسؤول
+                                    </label>
+                                    <input type="text" class="form-control" id="costCenterManager" 
+                                           placeholder="اسم المسؤول">
+                                    <div class="form-text">اختياري</div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-toggle-on text-muted"></i> الحالة
+                                    </label>
+                                    <select class="form-select" id="costCenterStatus">
+                                        <option value="active">✅ نشط</option>
+                                        <option value="inactive">⏸️ غير نشط</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <i class="fas fa-comment-alt text-secondary"></i>
+                                <span class="section-title">ملاحظات إضافية</span>
+                            </div>
+                            <textarea class="form-control" id="costCenterDescription" rows="3" 
+                                      placeholder="وصف تفصيلي لمركز الكلفة..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i> إلغاء
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg" id="saveCostCenterBtn">
+                        <i class="fas fa-save me-1"></i> حفظ المركز
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK v8 (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Core Application Scripts -->
+    <script src="js/config.js"></script>
+    <!-- i18n Translation Files -->
+    <script src="js/locales/ar.js"></script>
+    <script src="js/locales/en.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/utils.js"></script>
+    <!-- Data Synchronization Manager -->
+    <script src="js/sync-manager.js"></script>
+    <script src="js/utils/dom-utils.js"></script>
+    <!-- Performance and Accuracy Monitoring Tools -->
+    <script src="js/utils/performance-monitor.js"></script>
+    <script src="js/utils/accuracy-validator.js"></script>
+    <script src="js/utils/inventory-movement-validator.js"></script>
+    <script src="js/utils/invoice-utils.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/costing-methods.js"></script>
+    <script src="js/database-migration.js"></script>
+    <script src="js/buttons-manager.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/sidebar-toggle.js"></script>
+    <script src="js/navbar-stats.js"></script>
+    <script src="js/notifications.js"></script>
+
+    <!-- Image Storage Configuration -->
+    <script src="js/image-storage-config.js"></script>
+    
+    <!-- Database Configuration Manager -->
+    <script src="js/database-config-manager.js"></script>
+    
+    <!-- Module Scripts - Load before app.js -->
+    <script src="js/modules/dashboard.js"></script>
+    <script src="js/modules/products.js"></script>
+    <script src="js/modules/sales.js"></script>
+    <script src="js/modules/sales-returns.js"></script>
+    <script src="js/modules/purchases.js"></script>
+    <script src="js/modules/purchase-returns.js"></script>
+    <script src="js/modules/inventory.js"></script>
+    <script src="js/modules/warehouses.js"></script>
+    <script src="js/modules/sales-reps.js"></script>
+    <script src="js/modules/parties.js"></script>
+    <script src="js/modules/period-lock.js"></script>
+    <script src="js/modules/chart-of-accounts.js"></script>
+    <script src="js/modules/vouchers.js"></script>
+    <script src="js/modules/currencies.js"></script>
+    <script src="js/modules/cost-centers.js"></script>
+    <script src="js/modules/reports.js"></script>
+    <script src="js/modules/users.js"></script>
+    <script src="js/modules/settings.js"></script>
+    
+    <!-- Main App - Load after all modules -->
+    <script src="js/app.js"></script>
+
+</body>
+</html>
