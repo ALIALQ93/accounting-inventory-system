@@ -6,6 +6,8 @@
 
 /* ==================== 1. المتغيرات الكلاسيكية ==================== */
 :root {
+    --sidebar-width: 230px;
+    --sidebar-collapsed-width: 72px;
     /* الألوان الرئيسية */
     --color-primary:        #1a4f72;
     --color-primary-hover:  #154060;
@@ -151,10 +153,11 @@ body {
     background: var(--sidebar-bg) !important;
     border-left: 1px solid var(--sidebar-border) !important;
     box-shadow: -2px 0 8px rgba(0,0,0,0.2) !important;
-    width: 230px !important;
+    width: var(--sidebar-width) !important;
     /* يبدأ أسفل الشريط العلوي مباشرة — لا يتداخل معه */
     top: var(--top-navbar-height) !important;
     padding-top: 0 !important;
+    transition: width 0.2s ease !important;
 }
 
 .sidebar-header {
@@ -261,21 +264,22 @@ body {
 
 /* منطقة المحتوى بجانب القائمة الموسعة */
 #content-area {
-    margin-right: 230px !important;
-    margin-top: 0 !important;       /* الـ margin-top من app-layout.css يُهمَل — الـ mainApp يبدأ بعد النافبار */
-    width: calc(100% - 230px) !important;
+    margin-right: var(--sidebar-width) !important;
+    margin-top: 0 !important;
+    width: calc(100% - var(--sidebar-width)) !important;
     max-width: none !important;
     flex: none !important;
+    transition: margin-right 0.2s ease, width 0.2s ease !important;
 }
 
 body.sidebar-collapsed #content-area,
 .enhanced-sidebar.collapsed ~ #content-area {
-    margin-right: 68px !important;
-    width: calc(100% - 68px) !important;
+    margin-right: var(--sidebar-collapsed-width) !important;
+    width: calc(100% - var(--sidebar-collapsed-width)) !important;
 }
 
 .enhanced-sidebar.collapsed {
-    width: 68px !important;
+    width: var(--sidebar-collapsed-width) !important;
 }
 
 /* ==================== 5. البطاقات ==================== */

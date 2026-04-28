@@ -116,13 +116,10 @@ const SidebarToggle = {
      */
     loadState() {
         const savedState = localStorage.getItem('sidebarCollapsed');
-        
         if (savedState === 'true') {
-            this.isCollapsed = false; // Set to false first
-            this.toggle(); // Then toggle to collapse
+            this.isCollapsed = true;
+            this.collapse(); // مباشرةً بدون animation أو حفظ إضافي
         }
-        
-        console.log('📂 Sidebar state loaded:', this.isCollapsed);
     }
 };
 

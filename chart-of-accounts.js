@@ -1178,15 +1178,15 @@ const ChartOfAccountsModule = {
             const parentAccount = this.allAccounts.find(acc => acc.id === parentAccountId);
             if (parentAccount) {
                 const children = this.allAccounts.filter(acc => acc.parentId === parentAccountId);
-                const lastChildCode = children.length > 0 ? 
-                    Math.max(...children.map(c => parseInt(c.code.split('.').pop()) || 0)) : 0;
+                const lastChildCode = children.length > 0 ?
+                    Math.max(...children.map(c => parseInt((c.code || '').split('.').pop()) || 0)) : 0;
                 newCode = `${parentAccount.code}.${lastChildCode + 1}`;
             }
         } else {
             // Top-level account
             const topLevelAccounts = this.allAccounts.filter(acc => !acc.parentId);
-            const lastTopLevelCode = topLevelAccounts.length > 0 ? 
-                Math.max(...topLevelAccounts.map(c => parseInt(c.code) || 0)) : 0;
+            const lastTopLevelCode = topLevelAccounts.length > 0 ?
+                Math.max(...topLevelAccounts.map(c => parseInt(c.code || '0') || 0)) : 0;
             newCode = (lastTopLevelCode + 1).toString();
         }
         
@@ -1514,6 +1514,16 @@ const ChartOfAccountsModule = {
                 }
             }
             
+            // منع تكرار كود الحساب
+            const codeConflict = this.allAccounts.find(
+                acc => acc.code === code && acc.id !== this.editingAccount?.id
+            );
+            if (codeConflict) {
+                hideLoading();
+                this.showError(`كود الحساب "${code}" مستخدم مسبقاً من قِبَل "${codeConflict.name}". يرجى اختيار كود مختلف.`);
+                return;
+            }
+
             const formData = {
                 name: name,
                 name2: name2 || '',
@@ -1733,45 +1743,52 @@ const ChartOfAccountsModule = {
      * @returns {Promise<Object>} - Updated account balances with parent balances
      */
     async aggregateParentAccountBalances(accountBalances) {
-        for (const account of this.allAccounts) {
+        // ترتيب من الأعمق للأسطح — يضمن معالجة الفروع قبل الآباء في أي تسلسل هرمي
+        const getDepth = (accountId, visited = new Set()) => {
+            if (visited.has(accountId)) return 0; // حماية من الدورات المرجعية
+            visited.add(accountId);
+            const acc = this.allAccounts.find(a => a.id === accountId);
+            return acc?.parentId ? 1 + getDepth(acc.parentId, visited) : 0;
+        };
+
+        const sortedAccounts = [...this.allAccounts].sort(
+            (a, b) => getDepth(b.id) - getDepth(a.id)
+        );
+
+        for (const account of sortedAccounts) {
             const children = this.allAccounts.filter(acc => acc.parentId === account.id);
-            
-            if (children.length > 0) {
-                let totalDebit = accountBalances[account.id]?.debit || 0;
-                let totalCredit = accountBalances[account.id]?.credit || 0;
-                const accountCurrency = account.currency || 'IQD';
-                
-                for (const child of children) {
-                    const childBalance = accountBalances[child.id];
-                    if (childBalance) {
-                        const childCurrency = childBalance.currency || accountCurrency;
-                        
-                        if (childCurrency === accountCurrency) {
-                            totalDebit += childBalance.debit || 0;
-                            totalCredit += childBalance.credit || 0;
-                        } else {
-                            try {
-                                if (childBalance.debit > 0) {
-                                    totalDebit += await this.convertCurrency(childBalance.debit, childCurrency, accountCurrency);
-                                }
-                                if (childBalance.credit > 0) {
-                                    totalCredit += await this.convertCurrency(childBalance.credit, childCurrency, accountCurrency);
-                                }
-                            } catch (conversionError) {
-                                console.error(`❌ Error converting ${childCurrency} to ${accountCurrency}:`, conversionError);
-                            }
-                        }
+            if (children.length === 0) continue;
+
+            let totalDebit  = accountBalances[account.id]?.debit  || 0;
+            let totalCredit = accountBalances[account.id]?.credit || 0;
+            const accountCurrency = account.currency || 'IQD';
+
+            // تحويل عملات الأبناء بالتوازي
+            await Promise.all(children.map(async (child) => {
+                const childBalance = accountBalances[child.id];
+                if (!childBalance) return;
+
+                const childCurrency = childBalance.currency || accountCurrency;
+                try {
+                    if (childCurrency === accountCurrency) {
+                        totalDebit  += childBalance.debit  || 0;
+                        totalCredit += childBalance.credit || 0;
+                    } else {
+                        const [cd, cc] = await Promise.all([
+                            childBalance.debit  > 0 ? this.convertCurrency(childBalance.debit,  childCurrency, accountCurrency) : 0,
+                            childBalance.credit > 0 ? this.convertCurrency(childBalance.credit, childCurrency, accountCurrency) : 0
+                        ]);
+                        totalDebit  += cd;
+                        totalCredit += cc;
                     }
+                } catch (conversionError) {
+                    console.error(`❌ Error converting ${childCurrency} to ${accountCurrency}:`, conversionError);
                 }
-                
-                accountBalances[account.id] = {
-                    debit: totalDebit,
-                    credit: totalCredit,
-                    currency: accountCurrency
-                };
-            }
+            }));
+
+            accountBalances[account.id] = { debit: totalDebit, credit: totalCredit, currency: accountCurrency };
         }
-        
+
         return accountBalances;
     },
 
@@ -2057,8 +2074,7 @@ const ChartOfAccountsModule = {
             return false;
         } catch (error) {
             console.error('Error checking account transactions:', error);
-            // In case of error, assume account has transactions to be safe
-            return true;
+            throw new Error('تعذر التحقق من معاملات الحساب: ' + error.message);
         }
     },
 
