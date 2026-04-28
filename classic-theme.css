@@ -65,6 +65,23 @@ body {
     font-size: 0.9375rem;
 }
 
+/* ==================== 2-B. هيكل التخطيط الرئيسي ==================== */
+
+/* الشريط العلوي + المحتوى يكونان عمودياً */
+#mainApp {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* الصف الذي يحتوي القائمة الجانبية + المحتوى */
+#mainApp > .container-fluid {
+    flex: 1;
+    position: relative;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
 /* ==================== 3. الشريط العلوي (Navbar) ==================== */
 .top-navbar {
     background: #ffffff !important;
@@ -135,11 +152,18 @@ body {
     border-left: 1px solid var(--sidebar-border) !important;
     box-shadow: -2px 0 8px rgba(0,0,0,0.2) !important;
     width: 230px !important;
+    /* يبدأ أسفل الشريط العلوي مباشرة — لا يتداخل معه */
+    top: var(--top-navbar-height) !important;
+    padding-top: 0 !important;
 }
 
 .sidebar-header {
     background: var(--sidebar-header-bg) !important;
-    border-bottom: 1px solid var(--sidebar-border) !important;
+    border-bottom: 2px solid var(--sidebar-active-border) !important;
+    padding: 0.75rem 1rem !important;
+    min-height: 52px !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
 .sidebar-brand {
@@ -238,11 +262,16 @@ body {
 /* منطقة المحتوى بجانب القائمة الموسعة */
 #content-area {
     margin-right: 230px !important;
+    margin-top: 0 !important;       /* الـ margin-top من app-layout.css يُهمَل — الـ mainApp يبدأ بعد النافبار */
+    width: calc(100% - 230px) !important;
+    max-width: none !important;
+    flex: none !important;
 }
 
 body.sidebar-collapsed #content-area,
 .enhanced-sidebar.collapsed ~ #content-area {
     margin-right: 68px !important;
+    width: calc(100% - 68px) !important;
 }
 
 .enhanced-sidebar.collapsed {
@@ -523,10 +552,11 @@ body.sidebar-collapsed #content-area,
 
 /* ==================== 15. تحسينات إضافية ==================== */
 
-/* خط فاصل أعلى منطقة المحتوى */
+/* منطقة المحتوى: لون الخلفية والحشو */
 #content-area {
     padding: 1.5rem !important;
     background: var(--bg-body) !important;
+    min-height: 100% !important;
 }
 
 /* تحسين البحث والفلتر */
