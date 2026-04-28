@@ -898,16 +898,16 @@
                 let fixedMovements = 0;
                 const issues = [];
 
-                purchasesSnapshot.forEach(async (purchaseDoc) => {
+                await Promise.all(purchasesSnapshot.docs.map(async (purchaseDoc) => {
                     const purchase = purchaseDoc.data();
                     const purchaseId = purchaseDoc.id;
-                    
+
                     // Check if inventory movements exist for this purchase
                     const movementsSnapshot = await db.collection('inventoryMovements')
                         .where('sourceType', '==', 'purchase')
                         .where('sourceId', '==', purchaseId)
                         .get();
-                    
+
                     if (movementsSnapshot.empty && purchase.items && purchase.items.length > 0) {
                         missingMovements++;
                         issues.push({
@@ -917,10 +917,7 @@
                             itemsCount: purchase.items.length
                         });
                     }
-                });
-
-                // Wait for all checks to complete
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                }));
 
                 statsDiv.innerHTML = `
                     <div class="stat-card">
@@ -1868,11 +1865,11 @@
          */
         async function generatePurchaseReturnMovements(returnId, returnData) {
             if (!returnData.items || returnData.items.length === 0) return;
-            
+
             const warehouseId = returnData.warehouseId || 'default';
             const warehouse = await Collections.getWarehouse(warehouseId);
             const warehouseName = warehouse?.name || 'المستودع الافتراضي';
-            
+
             for (const item of returnData.items) {
                 // Get product
                 const product = await Collections.getProduct(item.productId);
@@ -1880,7 +1877,7 @@
                     console.warn(`⚠️ Product ${item.productId} not found, skipping`);
                     continue;
                 }
-                
+
                 // Convert quantity to main unit
                 let quantityInMainUnit = item.quantity || 0;
                 if (item.unitId && item.unitId !== product.unitId) {
@@ -1895,10 +1892,10 @@
                         }
                     }
                 }
-                
-                // Calculate previousQuantity from movements before this invoice date
-                const invoiceDate = saleData.date ? 
-                    (saleData.date.toDate ? saleData.date.toDate() : new Date(saleData.date)) : 
+
+                // Calculate previousQuantity from movements before this return date
+                const invoiceDate = returnData.date ?
+                    (returnData.date.toDate ? returnData.date.toDate() : new Date(returnData.date)) :
                     new Date();
                 
                 let previousQuantity = 0;
