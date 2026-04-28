@@ -1,0 +1,837 @@
+/**
+ * Cost Centers Modern Styles
+ * Beautiful and modern design for cost centers management
+ */
+
+/* ==================== Cost Centers Header ==================== */
+.cost-centers-header-modern {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+}
+
+.header-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.header-icon-box {
+    width: 70px;
+    height: 70px;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #2563eb;
+}
+
+.header-text-box {
+    color: #1e293b;
+}
+
+.header-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    color: #1e293b;
+}
+
+.header-subtitle {
+    margin: 0.5rem 0 0 0;
+    font-size: 1rem;
+    color: #64748b;
+}
+
+.header-actions-box {
+    position: relative;
+    z-index: 1;
+}
+
+/* ==================== Stats Cards ==================== */
+.cost-centers-stats-modern {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card-modern {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.stat-card-modern:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card-modern.stat-primary {
+    border-color: rgba(52, 152, 219, 0.2);
+}
+
+.stat-card-modern.stat-primary:hover {
+    border-color: #3498db;
+}
+
+.stat-card-modern.stat-success {
+    border-color: rgba(39, 174, 96, 0.2);
+}
+
+.stat-card-modern.stat-success:hover {
+    border-color: #27ae60;
+}
+
+.stat-card-modern.stat-warning {
+    border-color: rgba(243, 156, 18, 0.2);
+}
+
+.stat-card-modern.stat-warning:hover {
+    border-color: #f39c12;
+}
+
+.stat-card-modern.stat-info {
+    border-color: rgba(52, 73, 94, 0.2);
+}
+
+.stat-card-modern.stat-info:hover {
+    border-color: #34495e;
+}
+
+.stat-card-modern .stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.stat-primary .stat-icon {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(52, 152, 219, 0.2));
+    color: #3498db;
+}
+
+.stat-success .stat-icon {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.2));
+    color: #27ae60;
+}
+
+.stat-warning .stat-icon {
+    background: linear-gradient(135deg, rgba(243, 156, 18, 0.1), rgba(243, 156, 18, 0.2));
+    color: #f39c12;
+}
+
+.stat-info .stat-icon {
+    background: linear-gradient(135deg, rgba(52, 73, 94, 0.1), rgba(52, 73, 94, 0.2));
+    color: #34495e;
+}
+
+.stat-details {
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #2c3e50;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-top: 0.4rem;
+}
+
+/* ==================== Controls ==================== */
+.cost-centers-controls-modern {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.controls-left, .controls-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* ==================== Table ==================== */
+.cost-centers-table-modern {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.table-wrapper-modern {
+    overflow-x: auto;
+}
+
+.cost-centers-table {
+    width: 100%;
+    margin: 0;
+}
+
+.cost-centers-table thead {
+    background: linear-gradient(135deg, #34495e, #2c3e50);
+    color: white;
+}
+
+.cost-centers-table thead th {
+    padding: 1.25rem 1rem;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+}
+
+.cost-centers-table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.cost-centers-table tbody tr:hover {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(52, 152, 219, 0.1));
+}
+
+.cost-centers-table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+/* ==================== Cell Styles ==================== */
+.cost-center-code-cell {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    color: #3498db;
+    background: rgba(52, 152, 219, 0.1);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.cost-center-name-cell strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.cost-center-name-cell small {
+    color: #7f8c8d;
+    font-size: 0.85rem;
+}
+
+.manager-cell {
+    color: #34495e;
+}
+
+.manager-cell i {
+    margin-left: 0.4rem;
+}
+
+/* ==================== Type Badges ==================== */
+.type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.type-badge.type-department {
+    background: linear-gradient(135deg, rgba(243, 156, 18, 0.15), rgba(243, 156, 18, 0.25));
+    color: #f39c12;
+    border: 1px solid rgba(243, 156, 18, 0.3);
+}
+
+.type-badge.type-branch {
+    background: linear-gradient(135deg, rgba(155, 89, 182, 0.15), rgba(155, 89, 182, 0.25));
+    color: #9b59b6;
+    border: 1px solid rgba(155, 89, 182, 0.3);
+}
+
+.type-badge.type-project {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.25));
+    color: #3498db;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+.type-badge.type-other {
+    background: linear-gradient(135deg, rgba(149, 165, 166, 0.15), rgba(149, 165, 166, 0.25));
+    color: #95a5a6;
+    border: 1px solid rgba(149, 165, 166, 0.3);
+}
+
+/* ==================== Empty State ==================== */
+.cost-centers-table-modern .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #bdc3c7;
+    margin-bottom: 1rem;
+}
+
+/* ==================== Modal ==================== */
+/* Ensure modal appears on top */
+#costCenterModal.modal {
+    z-index: 1055 !important;
+}
+
+#costCenterModal.modal.show {
+    z-index: 1055 !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+#costCenterModal.modal.fade.show {
+    opacity: 1 !important;
+    z-index: 1055 !important;
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* Force modal to be visible when shown */
+#costCenterModal.modal.show,
+#costCenterModal.modal.fade.show {
+    pointer-events: auto !important;
+}
+
+/* Ensure modal backdrop is below modal */
+#costCenterModal.modal ~ .modal-backdrop,
+body.modal-open #costCenterModal.modal ~ .modal-backdrop,
+body.modal-open .modal-backdrop:last-of-type {
+    z-index: 1054 !important;
+}
+
+#costCenterModal .modal-dialog {
+    max-width: 700px;
+    z-index: 1056 !important;
+    display: block !important;
+    position: relative !important;
+    margin: 1.75rem auto !important;
+}
+
+#costCenterModal .modal-content {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    position: relative;
+    z-index: 1056 !important;
+    pointer-events: auto !important;
+    display: block !important;
+    background: #ffffff !important;
+}
+
+/* Ensure modal is visible when shown */
+#costCenterModal.modal.show .modal-dialog {
+    transform: none !important;
+    display: block !important;
+}
+
+#costCenterModal.modal.show .modal-content {
+    display: block !important;
+    pointer-events: auto !important;
+}
+
+#costCenterModal .modal-header.bg-gradient {
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    color: white;
+    padding: 1.75rem 2rem;
+    border-bottom: none;
+    position: relative;
+    overflow: hidden;
+}
+
+#costCenterModal .modal-header.bg-gradient::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+#costCenterModal .modal-title {
+    font-weight: 700;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    position: relative;
+    z-index: 1;
+}
+
+#costCenterModal .modal-title i {
+    font-size: 1.6rem;
+}
+
+#costCenterModal .modal-body {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    padding: 2rem !important;
+}
+
+/* Override Bootstrap padding if p-4 class is used */
+#costCenterModal .modal-body.p-4 {
+    padding: 2rem !important;
+}
+
+#costCenterModal .form-section {
+    background: white;
+    padding: 1.75rem;
+    border-radius: 14px;
+    border: 2px solid #e9ecef;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+#costCenterModal .form-section:last-child {
+    margin-bottom: 0;
+}
+
+/* Override Bootstrap mb-4 if used */
+#costCenterModal .form-section.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+#costCenterModal .form-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #3498db, #2c3e50);
+    opacity: 0.8;
+}
+
+#costCenterModal .form-section:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+#costCenterModal .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+    position: relative;
+}
+
+#costCenterModal .section-header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, #3498db, transparent);
+}
+
+#costCenterModal .section-header i {
+    font-size: 1.3rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(52, 152, 219, 0.2));
+    border-radius: 10px;
+}
+
+#costCenterModal .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+#costCenterModal .form-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+}
+
+/* Override Bootstrap fw-bold if used */
+#costCenterModal .form-label.fw-bold {
+    font-weight: 600 !important;
+}
+
+/* Style for text-muted icons in labels */
+#costCenterModal .form-label .text-muted {
+    color: #6c757d !important;
+    opacity: 0.7;
+}
+
+#costCenterModal .form-label i {
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+#costCenterModal .form-control,
+#costCenterModal .form-select {
+    border-radius: 10px;
+    border: 2px solid #e5e7eb;
+    padding: 0.85rem 1.1rem;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    background: #ffffff;
+    width: 100%;
+}
+
+#costCenterModal .form-control::placeholder {
+    color: #9ca3af;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+#costCenterModal .form-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+#costCenterModal .form-control:focus,
+#costCenterModal .form-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.12);
+    transform: translateY(-1px);
+}
+
+#costCenterModal .modal-footer {
+    padding: 1.5rem 2rem !important;
+    border-top: 2px solid #e9ecef;
+    background: #ffffff;
+}
+
+/* Override Bootstrap bg-light if used */
+#costCenterModal .modal-footer.bg-light {
+    background: #ffffff !important;
+}
+
+#costCenterModal .modal-footer .btn-primary {
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    border: none;
+    padding: 0.9rem 2.5rem;
+    font-weight: 700;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(52, 152, 219, 0.35);
+    transition: all 0.3s ease;
+}
+
+#costCenterModal .modal-footer .btn-primary:hover {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(52, 152, 219, 0.45);
+}
+
+#costCenterModal .modal-footer .btn-secondary {
+    padding: 0.9rem 2rem;
+    font-weight: 600;
+    border-radius: 10px;
+    border: 2px solid #6c757d;
+    transition: all 0.3s ease;
+}
+
+#costCenterModal .modal-footer .btn-secondary:hover {
+    background: #5a6268;
+    border-color: #545b62;
+    transform: translateY(-2px);
+}
+
+/* ==================== Select Box Modern ==================== */
+.select-box-modern {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.select-box-modern i {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.select-modern {
+    padding: 0.6rem 2.5rem 0.6rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    background: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236c757d' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 0.75rem center;
+    padding-right: 2.5rem;
+    padding-left: 2.5rem;
+}
+
+.select-modern:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.select-modern:hover {
+    border-color: #cbd5e1;
+}
+
+/* ==================== Search Box Modern ==================== */
+.search-box-modern {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 250px;
+}
+
+.search-box-modern .search-icon {
+    position: absolute;
+    right: 1rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.search-input-modern {
+    width: 100%;
+    padding: 0.6rem 2.5rem 0.6rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.search-input-modern:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.search-input-modern::placeholder {
+    color: #9ca3af;
+}
+
+/* ==================== Button Modern Clear ==================== */
+.btn-modern-clear {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+}
+
+.btn-modern-clear:hover:not(:disabled) {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn-modern-clear:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* ==================== Action Buttons ==================== */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-btn-modern {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn-modern:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn-modern:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.action-btn-modern.action-edit {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.action-btn-modern.action-edit:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2980b9, #21618c);
+}
+
+.action-btn-modern.action-delete {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+.action-btn-modern.action-delete:hover:not(:disabled) {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+}
+
+/* ==================== Status Badge ==================== */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-badge.status-active {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.15), rgba(39, 174, 96, 0.25));
+    color: #27ae60;
+    border: 1px solid rgba(39, 174, 96, 0.3);
+}
+
+.status-badge.status-inactive {
+    background: linear-gradient(135deg, rgba(149, 165, 166, 0.15), rgba(149, 165, 166, 0.25));
+    color: #95a5a6;
+    border: 1px solid rgba(149, 165, 166, 0.3);
+}
+
+/* ==================== Pagination Wrapper ==================== */
+.pagination-wrapper {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    background: white;
+    border-top: 1px solid #e9ecef;
+}
+
+.pagination-wrapper .pagination {
+    margin: 0;
+}
+
+.pagination-wrapper .page-link {
+    color: #3498db;
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem 0.75rem;
+    margin: 0 0.25rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.pagination-wrapper .page-link:hover {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+    transform: translateY(-2px);
+}
+
+.pagination-wrapper .page-item.active .page-link {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border-color: #3498db;
+}
+
+.pagination-wrapper .page-item.disabled .page-link {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ==================== Responsive ==================== */
+@media (max-width: 768px) {
+    .cost-centers-header-modern {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .cost-centers-stats-modern {
+        grid-template-columns: 1fr;
+    }
+    
+    .cost-centers-controls-modern {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .controls-left, .controls-right {
+        width: 100%;
+        justify-content: stretch;
+    }
+    
+    .controls-left > *, .controls-right > * {
+        flex: 1;
+    }
+    
+    .search-box-modern {
+        min-width: 100%;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+}
+

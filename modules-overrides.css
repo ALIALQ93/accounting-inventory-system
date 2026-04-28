@@ -1,0 +1,42 @@
+/**
+ * إلغاء التدرجات والألوان القديمة - فرض التصميم الجديد
+ * يُحمّل آخراً ليتفوق على ملفات الوحدات
+ */
+
+/* إلغاء التدرجات في رؤوس الوحدات */
+.module-header-modern,
+.vouchers-header-modern,
+.accounts-header-modern,
+.cost-centers-header-modern,
+.parties-header,
+.products-header-modern,
+.reports-header-modern,
+.units-header,
+.categories-header,
+.period-lock-header {
+    background: var(--bg-surface) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-default) !important;
+}
+
+/* إلغاء التدرجات في رؤوس الجداول */
+.table thead th,
+.table-modern thead th,
+[class*="-table"] thead th {
+    background: var(--bg-surface-alt) !important;
+    color: var(--text-primary) !important;
+}
+
+/* إلغاء التدرجات في النوافذ */
+.modal-header,
+[class*="modal"] .modal-header {
+    background: var(--bg-surface) !important;
+    color: var(--text-primary) !important;
+}
+
+/* إلغاء التدرجات في الأزرار - ألوان مسطحة */
+.btn-primary { background: var(--color-primary) !important; border-color: var(--color-primary) !important; }
+.btn-success { background: var(--color-success) !important; }
+.btn-danger { background: var(--color-danger) !important; }
+.btn-warning { background: var(--color-warning) !important; }
+.btn-info { background: var(--color-info) !important; }

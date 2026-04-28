@@ -1,0 +1,522 @@
+/**
+ * Settings Modern Styles
+ * Beautiful and modern design for settings management
+ */
+
+/* ==================== Settings Header ==================== */
+.settings-header-modern {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.header-icon-box {
+    width: 70px;
+    height: 70px;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #2563eb;
+}
+
+.header-text-box {
+    color: #1e293b;
+}
+
+.header-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+.header-subtitle {
+    margin: 0.5rem 0 0 0;
+    opacity: 0.95;
+}
+
+/* ==================== Settings Tabs ==================== */
+.settings-tabs-modern {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.settings-tabs-modern .tab-btn {
+    flex: 1;
+    min-width: 250px;
+    padding: 1rem 1.5rem;
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    color: #6c757d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.settings-tabs-modern .tab-btn:hover {
+    border-color: #34495e;
+    color: #34495e;
+    transform: translateY(-2px);
+}
+
+.settings-tabs-modern .tab-btn.active {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+.settings-tabs-modern .tab-btn i {
+    font-size: 1.2rem;
+}
+
+/* ==================== Settings Content ==================== */
+.settings-content {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== Setting Cards ==================== */
+.setting-card {
+    background: white;
+    border-radius: 14px;
+    border: 2px solid #e9ecef;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.setting-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.setting-card-header {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 1.25rem 1.5rem;
+    border-bottom: 2px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.setting-card-header i {
+    font-size: 1.5rem;
+}
+
+.setting-card-header h5 {
+    margin: 0;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.setting-card-body {
+    padding: 1.5rem;
+}
+
+.setting-card-body .form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.setting-card-body .form-control,
+.setting-card-body .form-select {
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.setting-card-body .form-control:focus,
+.setting-card-body .form-select:focus {
+    border-color: #34495e;
+    box-shadow: 0 0 0 0.2rem rgba(52, 73, 94, 0.15);
+}
+
+.setting-card-body .text-muted {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+/* ==================== Form Switch ==================== */
+.setting-card-body .form-check-input {
+    cursor: pointer;
+}
+
+.setting-card-body .form-check-input:checked {
+    background-color: #27ae60;
+    border-color: #27ae60;
+}
+
+.setting-card-body .form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(39, 174, 96, 0.25);
+}
+
+/* ==================== Save Button ==================== */
+#saveVoucherSettingsBtn {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    border: none;
+    padding: 1rem 3rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(39, 174, 96, 0.3);
+    transition: all 0.3s ease;
+}
+
+#saveVoucherSettingsBtn:hover {
+    background: linear-gradient(135deg, #229954, #1e8449);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(39, 174, 96, 0.4);
+}
+
+/* ==================== Database Settings ==================== */
+.database-config {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border: 1px solid #dee2e6;
+}
+
+.database-config h6 {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.form-select:focus,
+.form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* ==================== Fiscal Years Management ==================== */
+.fiscal-years-list {
+    margin-top: 1.5rem;
+}
+
+.fiscal-years-list h6 {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.fiscal-years-list .table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.fiscal-years-list .table thead th {
+    background: linear-gradient(135deg, #495057, #343a40);
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 1rem;
+}
+
+.fiscal-years-list .table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-color: #dee2e6;
+}
+
+.fiscal-years-list .badge {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+}
+
+.fiscal-years-list .btn-group-sm .btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+.input-group .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* ==================== Database Settings ==================== */
+.connection-status {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    border: 2px solid #28a745;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #28a745;
+}
+
+.status-indicator i {
+    font-size: 1.2rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.connection-info p {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* ==================== Image Settings ==================== */
+.storage-status {
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+}
+
+.storage-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #28a745;
+}
+
+.storage-option i {
+    font-size: 1.2rem;
+}
+
+.image-stats p {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.image-stats strong {
+    color: #495057;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.form-check-input:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.badge {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+}
+
+/* ==================== Enhanced Buttons ==================== */
+.btn-outline-primary {
+    border: 2px solid #0d6efd;
+    color: #0d6efd;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+    border-color: #0d6efd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.btn-outline-success {
+    border: 2px solid #28a745;
+    color: #28a745;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    border-color: #28a745;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-outline-info {
+    border: 2px solid #0dcaf0;
+    color: #0dcaf0;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-info:hover {
+    background: linear-gradient(135deg, #0dcaf0, #0aa2c0);
+    border-color: #0dcaf0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 202, 240, 0.3);
+}
+
+.btn-outline-warning {
+    border: 2px solid #ffc107;
+    color: #ffc107;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-warning:hover {
+    background: linear-gradient(135deg, #ffc107, #ffb300);
+    border-color: #ffc107;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+}
+
+.btn-outline-danger {
+    border: 2px solid #dc3545;
+    color: #dc3545;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    border-color: #dc3545;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.btn-outline-secondary {
+    border: 2px solid #6c757d;
+    color: #6c757d;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+    border-color: #6c757d;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+/* ==================== Alert Enhancements ==================== */
+.alert {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    color: #856404;
+    border-left: 4px solid #ffc107;
+}
+
+.alert-warning i {
+    color: #ffc107;
+}
+
+/* ==================== Responsive ==================== */
+@media (max-width: 768px) {
+    .settings-tabs-modern {
+        flex-direction: column;
+    }
+    
+    .settings-tabs-modern .tab-btn {
+        width: 100%;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .connection-status {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+

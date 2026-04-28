@@ -1,0 +1,713 @@
+/**
+ * Period Lock Module - Modern Design
+ * تصميم عصري لوحدة قفل الفترات المحاسبية
+ */
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+.period-lock-header {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-color);
+    border-right: 4px solid var(--color-danger);
+}
+
+.period-lock-header .header-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.period-lock-header .header-icon-box {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+}
+
+.period-lock-header .header-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.period-lock-header .header-subtitle {
+    font-size: 16px;
+    opacity: 0.9;
+    margin: 5px 0 0 0;
+}
+
+/* ==========================================================================
+   CURRENT PERIOD CARD
+   ========================================================================== */
+
+.current-period-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+.current-period-card h5 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.current-period-card h5 i {
+    color: #dc3545;
+    margin-left: 10px;
+}
+
+.period-info {
+    display: flex;
+    gap: 30px;
+    margin-top: 15px;
+}
+
+.period-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.period-detail .label {
+    font-size: 13px;
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.period-detail .value {
+    font-size: 18px;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.period-detail .value .badge {
+    font-size: 14px;
+    padding: 8px 15px;
+}
+
+/* ==========================================================================
+   PERIODS TABLE CARD
+   ========================================================================== */
+
+.periods-table-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.periods-table-card .card-header {
+    padding: 20px 30px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.periods-table-card .card-header h5 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    color: #2c3e50;
+}
+
+.periods-table-card .card-header h5 i {
+    color: #dc3545;
+    margin-left: 10px;
+}
+
+.periods-table-card .filters {
+    display: flex;
+    gap: 10px;
+}
+
+.periods-table-card .filters .form-select-sm {
+    min-width: 150px;
+}
+
+.periods-table-card .table-container {
+    padding: 20px;
+}
+
+.periods-table-card .table-modern thead {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.periods-table-card .table-modern thead th {
+    padding: 15px;
+    font-weight: 600;
+    border: none;
+    text-align: center;
+}
+
+.periods-table-card .table-modern tbody tr {
+    transition: all 0.3s ease;
+}
+
+.periods-table-card .table-modern tbody tr:hover {
+    background: rgba(220, 53, 69, 0.05);
+    transform: translateX(-3px);
+}
+
+.periods-table-card .table-modern tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* ==========================================================================
+   WARNING BOX
+   ========================================================================== */
+
+.warning-box {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%);
+    border: 2px solid #ffc107;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.warning-box i {
+    font-size: 32px;
+    color: #856404;
+    flex-shrink: 0;
+}
+
+.warning-box strong {
+    color: #856404;
+    font-size: 16px;
+}
+
+.warning-box ul {
+    margin: 10px 0 0 0;
+    padding-right: 20px;
+}
+
+.warning-box li {
+    color: #856404;
+    margin: 5px 0;
+}
+
+/* ==========================================================================
+   BADGES
+   ========================================================================== */
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+    padding: 6px 12px;
+    font-weight: 600;
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    padding: 6px 12px;
+    font-weight: 600;
+}
+
+.badge i {
+    margin-left: 5px;
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+
+.btn-lg {
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    border: none;
+    color: #000;
+}
+
+.btn-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+}
+
+.table .btn-sm {
+    padding: 5px 10px;
+    font-size: 13px;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .period-lock-header {
+        padding: 25px 20px;
+    }
+    
+    .period-lock-header .header-title {
+        font-size: 24px;
+    }
+    
+    .period-lock-header .header-subtitle {
+        font-size: 14px;
+    }
+    
+    .current-period-card {
+        padding: 20px;
+    }
+    
+    .period-info {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .current-period-card .text-end {
+        text-align: start !important;
+        margin-top: 20px;
+    }
+    
+    .current-period-card .btn-lg {
+        width: 100%;
+    }
+    
+    .periods-table-card .card-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: start;
+    }
+    
+    .periods-table-card .filters {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .periods-table-card .filters .form-select-sm {
+        width: 100%;
+    }
+    
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    .warning-box {
+        flex-direction: column;
+    }
+}
+
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.current-period-card,
+.periods-table-card,
+.warning-box {
+    animation: slideIn 0.4s ease;
+}
+
+/* ==========================================================================
+   PRINT STYLES
+   ========================================================================== */
+
+@media print {
+    .period-lock-header,
+    .warning-box,
+    .btn {
+        display: none !important;
+    }
+    
+    .current-period-card,
+    .periods-table-card {
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+    }
+}
+
+/* Period Lock Module - Modern Design
+ * تصميم عصري لوحدة قفل الفترات المحاسبية
+ */
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+.period-lock-header {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-color);
+    border-right: 4px solid var(--color-danger);
+}
+
+.period-lock-header .header-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.period-lock-header .header-icon-box {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+}
+
+.period-lock-header .header-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.period-lock-header .header-subtitle {
+    font-size: 16px;
+    opacity: 0.9;
+    margin: 5px 0 0 0;
+}
+
+/* ==========================================================================
+   CURRENT PERIOD CARD
+   ========================================================================== */
+
+.current-period-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+.current-period-card h5 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.current-period-card h5 i {
+    color: #dc3545;
+    margin-left: 10px;
+}
+
+.period-info {
+    display: flex;
+    gap: 30px;
+    margin-top: 15px;
+}
+
+.period-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.period-detail .label {
+    font-size: 13px;
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.period-detail .value {
+    font-size: 18px;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.period-detail .value .badge {
+    font-size: 14px;
+    padding: 8px 15px;
+}
+
+/* ==========================================================================
+   PERIODS TABLE CARD
+   ========================================================================== */
+
+.periods-table-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.periods-table-card .card-header {
+    padding: 20px 30px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.periods-table-card .card-header h5 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    color: #2c3e50;
+}
+
+.periods-table-card .card-header h5 i {
+    color: #dc3545;
+    margin-left: 10px;
+}
+
+.periods-table-card .filters {
+    display: flex;
+    gap: 10px;
+}
+
+.periods-table-card .filters .form-select-sm {
+    min-width: 150px;
+}
+
+.periods-table-card .table-container {
+    padding: 20px;
+}
+
+.periods-table-card .table-modern thead {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.periods-table-card .table-modern thead th {
+    padding: 15px;
+    font-weight: 600;
+    border: none;
+    text-align: center;
+}
+
+.periods-table-card .table-modern tbody tr {
+    transition: all 0.3s ease;
+}
+
+.periods-table-card .table-modern tbody tr:hover {
+    background: rgba(220, 53, 69, 0.05);
+    transform: translateX(-3px);
+}
+
+.periods-table-card .table-modern tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* ==========================================================================
+   WARNING BOX
+   ========================================================================== */
+
+.warning-box {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%);
+    border: 2px solid #ffc107;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.warning-box i {
+    font-size: 32px;
+    color: #856404;
+    flex-shrink: 0;
+}
+
+.warning-box strong {
+    color: #856404;
+    font-size: 16px;
+}
+
+.warning-box ul {
+    margin: 10px 0 0 0;
+    padding-right: 20px;
+}
+
+.warning-box li {
+    color: #856404;
+    margin: 5px 0;
+}
+
+/* ==========================================================================
+   BADGES
+   ========================================================================== */
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+    padding: 6px 12px;
+    font-weight: 600;
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    padding: 6px 12px;
+    font-weight: 600;
+}
+
+.badge i {
+    margin-left: 5px;
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+
+.btn-lg {
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    border: none;
+    color: #000;
+}
+
+.btn-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+}
+
+.table .btn-sm {
+    padding: 5px 10px;
+    font-size: 13px;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .period-lock-header {
+        padding: 25px 20px;
+    }
+    
+    .period-lock-header .header-title {
+        font-size: 24px;
+    }
+    
+    .period-lock-header .header-subtitle {
+        font-size: 14px;
+    }
+    
+    .current-period-card {
+        padding: 20px;
+    }
+    
+    .period-info {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .current-period-card .text-end {
+        text-align: start !important;
+        margin-top: 20px;
+    }
+    
+    .current-period-card .btn-lg {
+        width: 100%;
+    }
+    
+    .periods-table-card .card-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: start;
+    }
+    
+    .periods-table-card .filters {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .periods-table-card .filters .form-select-sm {
+        width: 100%;
+    }
+    
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    .warning-box {
+        flex-direction: column;
+    }
+}
+
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.current-period-card,
+.periods-table-card,
+.warning-box {
+    animation: slideIn 0.4s ease;
+}
+
+/* ==========================================================================
+   PRINT STYLES
+   ========================================================================== */
+
+@media print {
+    .period-lock-header,
+    .warning-box,
+    .btn {
+        display: none !important;
+    }
+    
+    .current-period-card,
+    .periods-table-card {
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+    }
+}
+
+
+

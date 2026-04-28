@@ -1,0 +1,1461 @@
+/**
+ * Accounting Reports - Vertical Layout (Top + Bottom)
+ * تخطيط عمودي احترافي: قسم علوي للخيارات + قسم سفلي للتقرير
+ */
+
+/* ==========================================================================
+   WORKSPACE - VERTICAL LAYOUT
+   ========================================================================== */
+
+.report-workspace-vertical {
+    width: 100%;
+    height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+    background: #f5f7fa;
+}
+
+/* Header Compact */
+.workspace-header-compact {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.btn-back-compact {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.4);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-back-compact:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateX(5px);
+}
+
+.workspace-title-compact {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+}
+
+.btn-help-compact {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.4);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-help-compact:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+/* ==========================================================================
+   VERTICAL LAYOUT CONTAINER
+   ========================================================================== */
+
+.workspace-vertical-layout {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   TOP SECTION - Configuration & Options
+   ========================================================================== */
+
+.workspace-top-section {
+    background: white;
+    border-bottom: 3px solid #dee2e6;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    z-index: 50;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.top-section-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid #dee2e6;
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.btn-toggle-options {
+    margin-left: auto;
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-toggle-options:hover {
+    background: #667eea;
+    color: white;
+}
+
+.top-section-content {
+    padding: 25px 30px;
+}
+
+/* Generate Button in Top Section */
+.top-section-footer {
+    padding: 20px 30px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-top: 2px solid #dee2e6;
+    text-align: center;
+}
+
+.btn-generate-report-large {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    padding: 18px 50px;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-generate-report-large::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn-generate-report-large:hover::before {
+    width: 400px;
+    height: 400px;
+}
+
+.btn-generate-report-large:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(40, 167, 69, 0.6);
+}
+
+.btn-generate-report-large span,
+.btn-generate-report-large i {
+    position: relative;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   BOTTOM SECTION - Report Display
+   ========================================================================== */
+
+.workspace-bottom-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f5f7fa;
+    overflow: hidden;
+}
+
+.bottom-section-toolbar {
+    background: white;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #dee2e6;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    z-index: 40;
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    gap: 10px;
+}
+
+.toolbar-center {
+    flex: 1;
+    text-align: center;
+}
+
+.report-status-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #6c757d;
+}
+
+.report-status-text .text-success {
+    color: #28a745 !important;
+}
+
+.btn-toolbar-compact {
+    padding: 10px 20px;
+    border: 2px solid #dee2e6;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.btn-toolbar-compact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.btn-toolbar-primary {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.btn-toolbar-primary:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-toolbar-success {
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.btn-toolbar-success:hover {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.btn-toolbar-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.btn-toolbar-danger:hover {
+    background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+    color: white;
+}
+
+.bottom-section-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.report-content-large {
+    min-height: 100%;
+    background: white;
+    margin: 20px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+/* Empty State */
+.report-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    text-align: center;
+}
+
+.report-empty-state i {
+    opacity: 0.3;
+}
+
+/* ==========================================================================
+   TABS STYLING
+   ========================================================================== */
+
+.report-config-tabs {
+    margin-bottom: 20px;
+}
+
+.report-config-tabs .nav-tabs {
+    border-bottom: 3px solid #667eea;
+    gap: 5px;
+}
+
+.report-config-tabs .nav-link {
+    color: #6c757d;
+    border: none;
+    padding: 12px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-radius: 8px 8px 0 0;
+}
+
+.report-config-tabs .nav-link:hover {
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.report-config-tabs .nav-link.active {
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-bottom: 3px solid #667eea;
+}
+
+.report-config-tabs .tab-content {
+    padding: 20px 0;
+}
+
+.config-section {
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border-left: 4px solid #667eea;
+}
+
+.config-section h6 {
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ==========================================================================
+   STATISTICS CARDS
+   ========================================================================== */
+
+.trial-balance-statistics {
+    background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+    padding: 25px;
+    border-radius: 15px;
+    border: 2px solid #e9ecef;
+    margin-bottom: 25px;
+}
+
+.stat-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #dee2e6;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-color: #667eea;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 28px;
+    margin-left: 15px;
+}
+
+.stat-icon.bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-icon.bg-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #00bcd4 100%);
+}
+
+.stat-icon.bg-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.stat-icon.bg-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #95a5a6 100%);
+}
+
+.stat-details {
+    flex: 1;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.type-distribution {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #dee2e6;
+}
+
+.type-distribution h6 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+/* ==========================================================================
+   CURRENCY CARDS
+   ========================================================================== */
+
+.currency-breakdown {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.currency-breakdown h6 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.currency-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.currency-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    border-color: #667eea;
+}
+
+.currency-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.currency-body {
+    padding: 15px;
+}
+
+.currency-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 14px;
+}
+
+.currency-row.border-top {
+    border-top: 2px solid #dee2e6;
+    margin-top: 8px;
+    padding-top: 12px;
+}
+
+.currency-row span:first-child {
+    color: #6c757d;
+}
+
+.currency-row span:last-child {
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   COST CENTER AS COLUMN (NOT ROW)
+   ========================================================================== */
+
+/* Cost Centers as Columns (not rows) */
+.account-row-with-cc {
+    background: #f8f9fa;
+}
+
+.cost-center-columns {
+    display: flex;
+    gap: 15px;
+    padding: 10px;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 8px;
+    margin-top: 5px;
+    flex-wrap: wrap;
+}
+
+.cost-center-column {
+    flex: 1;
+    min-width: 150px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    border-left: 3px solid #667eea;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.cost-center-column:hover {
+    transform: translateX(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.cost-center-name {
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 8px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cost-center-name i {
+    font-size: 14px;
+}
+
+.cost-center-amount {
+    color: #2c3e50;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.cost-center-amount .label {
+    color: #6c757d;
+    font-size: 12px;
+}
+
+.cost-center-amount .value {
+    font-weight: 700;
+}
+
+/* Group headers and subtotals */
+.group-header {
+    font-size: 16px;
+    font-weight: 700;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.group-subtotal {
+    font-weight: 700;
+    font-size: 15px;
+    border-top: 2px solid currentColor !important;
+}
+
+/* Cost Center Detail Rows */
+.cost-center-detail-row {
+    background: #f8f9fa;
+}
+
+.cost-center-detail-row td {
+    font-size: 14px;
+    padding: 10px 12px;
+}
+
+.cost-center-detail-row:hover {
+    background: #e9ecef;
+}
+
+/* Account Total Row */
+.account-total-row {
+    background: rgba(102, 126, 234, 0.1);
+    border-top: 2px solid #667eea;
+}
+
+.account-total-row td {
+    font-weight: 700;
+    padding: 12px;
+}
+
+.account-total-row:hover {
+    background: rgba(102, 126, 234, 0.15);
+}
+
+/* Cost Center Grouping */
+.cost-center-group-header {
+    font-size: 16px;
+    font-weight: 700;
+    border-top: 3px solid #ffc107 !important;
+}
+
+.cost-center-group-header td {
+    padding: 15px !important;
+}
+
+.cost-center-group-subtotal {
+    font-weight: 700;
+    border-bottom: 2px solid #ffc107 !important;
+}
+
+.cost-center-group-subtotal td {
+    padding: 12px !important;
+}
+
+.trial-balance-by-cc .group-header {
+    background: rgba(255, 193, 7, 0.15) !important;
+}
+
+/* ==========================================================================
+   SCROLLBAR STYLING
+   ========================================================================== */
+
+.workspace-top-section::-webkit-scrollbar,
+.bottom-section-content::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.workspace-top-section::-webkit-scrollbar-track,
+.bottom-section-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.workspace-top-section::-webkit-scrollbar-thumb,
+.bottom-section-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+}
+
+.workspace-top-section::-webkit-scrollbar-thumb:hover,
+.bottom-section-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .workspace-header-compact {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .workspace-title-compact {
+        text-align: center;
+        font-size: 18px;
+    }
+    
+    .bottom-section-toolbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .toolbar-left,
+    .toolbar-right,
+    .toolbar-center {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .btn-toolbar-compact {
+        flex: 1;
+    }
+    
+    .report-content-large {
+        margin: 10px;
+        padding: 15px;
+    }
+}
+
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.workspace-vertical-layout {
+    animation: slideDown 0.4s ease;
+}
+
+/* تخطيط عمودي احترافي: قسم علوي للخيارات + قسم سفلي للتقرير */
+
+/* ==========================================================================
+   WORKSPACE - VERTICAL LAYOUT
+   ========================================================================== */
+
+.report-workspace-vertical {
+    width: 100%;
+    height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+    background: #f5f7fa;
+}
+
+/* Header Compact */
+.workspace-header-compact {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.btn-back-compact {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.4);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-back-compact:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateX(5px);
+}
+
+.workspace-title-compact {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+}
+
+.btn-help-compact {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.4);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-help-compact:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+/* ==========================================================================
+   VERTICAL LAYOUT CONTAINER
+   ========================================================================== */
+
+.workspace-vertical-layout {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   TOP SECTION - Configuration & Options
+   ========================================================================== */
+
+.workspace-top-section {
+    background: white;
+    border-bottom: 3px solid #dee2e6;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    z-index: 50;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.top-section-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid #dee2e6;
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.btn-toggle-options {
+    margin-left: auto;
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-toggle-options:hover {
+    background: #667eea;
+    color: white;
+}
+
+.top-section-content {
+    padding: 25px 30px;
+}
+
+/* Generate Button in Top Section */
+.top-section-footer {
+    padding: 20px 30px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-top: 2px solid #dee2e6;
+    text-align: center;
+}
+
+.btn-generate-report-large {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    padding: 18px 50px;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-generate-report-large::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn-generate-report-large:hover::before {
+    width: 400px;
+    height: 400px;
+}
+
+.btn-generate-report-large:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(40, 167, 69, 0.6);
+}
+
+.btn-generate-report-large span,
+.btn-generate-report-large i {
+    position: relative;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   BOTTOM SECTION - Report Display
+   ========================================================================== */
+
+.workspace-bottom-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f5f7fa;
+    overflow: hidden;
+}
+
+.bottom-section-toolbar {
+    background: white;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #dee2e6;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    z-index: 40;
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    gap: 10px;
+}
+
+.toolbar-center {
+    flex: 1;
+    text-align: center;
+}
+
+.report-status-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #6c757d;
+}
+
+.report-status-text .text-success {
+    color: #28a745 !important;
+}
+
+.btn-toolbar-compact {
+    padding: 10px 20px;
+    border: 2px solid #dee2e6;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.btn-toolbar-compact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.btn-toolbar-primary {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.btn-toolbar-primary:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-toolbar-success {
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.btn-toolbar-success:hover {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.btn-toolbar-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.btn-toolbar-danger:hover {
+    background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+    color: white;
+}
+
+.bottom-section-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.report-content-large {
+    min-height: 100%;
+    background: white;
+    margin: 20px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+/* Empty State */
+.report-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    text-align: center;
+}
+
+.report-empty-state i {
+    opacity: 0.3;
+}
+
+/* ==========================================================================
+   TABS STYLING
+   ========================================================================== */
+
+.report-config-tabs {
+    margin-bottom: 20px;
+}
+
+.report-config-tabs .nav-tabs {
+    border-bottom: 3px solid #667eea;
+    gap: 5px;
+}
+
+.report-config-tabs .nav-link {
+    color: #6c757d;
+    border: none;
+    padding: 12px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-radius: 8px 8px 0 0;
+}
+
+.report-config-tabs .nav-link:hover {
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.report-config-tabs .nav-link.active {
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-bottom: 3px solid #667eea;
+}
+
+.report-config-tabs .tab-content {
+    padding: 20px 0;
+}
+
+.config-section {
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border-left: 4px solid #667eea;
+}
+
+.config-section h6 {
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ==========================================================================
+   STATISTICS CARDS
+   ========================================================================== */
+
+.trial-balance-statistics {
+    background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+    padding: 25px;
+    border-radius: 15px;
+    border: 2px solid #e9ecef;
+    margin-bottom: 25px;
+}
+
+.stat-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #dee2e6;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-color: #667eea;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 28px;
+    margin-left: 15px;
+}
+
+.stat-icon.bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-icon.bg-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #00bcd4 100%);
+}
+
+.stat-icon.bg-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.stat-icon.bg-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #95a5a6 100%);
+}
+
+.stat-details {
+    flex: 1;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.type-distribution {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #dee2e6;
+}
+
+.type-distribution h6 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+/* ==========================================================================
+   CURRENCY CARDS
+   ========================================================================== */
+
+.currency-breakdown {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.currency-breakdown h6 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.currency-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.currency-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    border-color: #667eea;
+}
+
+.currency-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.currency-body {
+    padding: 15px;
+}
+
+.currency-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 14px;
+}
+
+.currency-row.border-top {
+    border-top: 2px solid #dee2e6;
+    margin-top: 8px;
+    padding-top: 12px;
+}
+
+.currency-row span:first-child {
+    color: #6c757d;
+}
+
+.currency-row span:last-child {
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   COST CENTER AS COLUMN (NOT ROW)
+   ========================================================================== */
+
+/* Cost Centers as Columns (not rows) */
+.account-row-with-cc {
+    background: #f8f9fa;
+}
+
+.cost-center-columns {
+    display: flex;
+    gap: 15px;
+    padding: 10px;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 8px;
+    margin-top: 5px;
+    flex-wrap: wrap;
+}
+
+.cost-center-column {
+    flex: 1;
+    min-width: 150px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    border-left: 3px solid #667eea;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.cost-center-column:hover {
+    transform: translateX(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.cost-center-name {
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 8px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cost-center-name i {
+    font-size: 14px;
+}
+
+.cost-center-amount {
+    color: #2c3e50;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.cost-center-amount .label {
+    color: #6c757d;
+    font-size: 12px;
+}
+
+.cost-center-amount .value {
+    font-weight: 700;
+}
+
+/* Group headers and subtotals */
+.group-header {
+    font-size: 16px;
+    font-weight: 700;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.group-subtotal {
+    font-weight: 700;
+    font-size: 15px;
+    border-top: 2px solid currentColor !important;
+}
+
+/* Cost Center Detail Rows */
+.cost-center-detail-row {
+    background: #f8f9fa;
+}
+
+.cost-center-detail-row td {
+    font-size: 14px;
+    padding: 10px 12px;
+}
+
+.cost-center-detail-row:hover {
+    background: #e9ecef;
+}
+
+/* Account Total Row */
+.account-total-row {
+    background: rgba(102, 126, 234, 0.1);
+    border-top: 2px solid #667eea;
+}
+
+.account-total-row td {
+    font-weight: 700;
+    padding: 12px;
+}
+
+.account-total-row:hover {
+    background: rgba(102, 126, 234, 0.15);
+}
+
+/* Cost Center Grouping */
+.cost-center-group-header {
+    font-size: 16px;
+    font-weight: 700;
+    border-top: 3px solid #ffc107 !important;
+}
+
+.cost-center-group-header td {
+    padding: 15px !important;
+}
+
+.cost-center-group-subtotal {
+    font-weight: 700;
+    border-bottom: 2px solid #ffc107 !important;
+}
+
+.cost-center-group-subtotal td {
+    padding: 12px !important;
+}
+
+.trial-balance-by-cc .group-header {
+    background: rgba(255, 193, 7, 0.15) !important;
+}
+
+/* ==========================================================================
+   SCROLLBAR STYLING
+   ========================================================================== */
+
+.workspace-top-section::-webkit-scrollbar,
+.bottom-section-content::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.workspace-top-section::-webkit-scrollbar-track,
+.bottom-section-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.workspace-top-section::-webkit-scrollbar-thumb,
+.bottom-section-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+}
+
+.workspace-top-section::-webkit-scrollbar-thumb:hover,
+.bottom-section-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .workspace-header-compact {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .workspace-title-compact {
+        text-align: center;
+        font-size: 18px;
+    }
+    
+    .bottom-section-toolbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .toolbar-left,
+    .toolbar-right,
+    .toolbar-center {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .btn-toolbar-compact {
+        flex: 1;
+    }
+    
+    .report-content-large {
+        margin: 10px;
+        padding: 15px;
+    }
+}
+
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.workspace-vertical-layout {
+    animation: slideDown 0.4s ease;
+}
+

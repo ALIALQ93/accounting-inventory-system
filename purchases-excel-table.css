@@ -1,0 +1,961 @@
+/* Excel-like Table Styles for Purchase Items */
+
+.excel-table {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.excel-table th {
+    background-color: #4472c4;
+    color: white;
+    font-weight: 600;
+    padding: 8px 6px;
+    text-align: center;
+    border: 1px solid #8eaadb;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    user-select: none;
+}
+
+.excel-table td {
+    padding: 6px;
+    border: 1px solid #d0d7de;
+    vertical-align: middle;
+    background-color: #ffffff;
+}
+
+.excel-table tbody tr:hover {
+    background-color: #f1f5f9;
+}
+
+.excel-table tbody tr:nth-child(even) {
+    background-color: #fafbfc;
+}
+
+.excel-table tbody tr:nth-child(even):hover {
+    background-color: #f1f5f9;
+}
+
+/* Resizable columns */
+.resizable {
+    position: relative;
+    min-width: 50px;
+}
+
+.resize-handle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 5px;
+    height: 100%;
+    background: #007bff;
+    cursor: col-resize;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 20;
+}
+
+.resize-handle:hover {
+    opacity: 1 !important;
+}
+
+/* Column visibility controls */
+.column-controls {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.column-controls .form-check-inline {
+    margin-right: 15px;
+    margin-bottom: 5px;
+}
+
+.column-controls .form-check-input {
+    margin-right: 5px;
+}
+
+/* Form controls in table */
+.excel-table .form-control,
+.excel-table .form-select {
+    border: 1px solid #d0d7de;
+    border-radius: 3px;
+    padding: 4px 6px;
+    font-size: 12px;
+    height: auto;
+    min-height: 28px;
+}
+
+.excel-table .form-control:focus,
+.excel-table .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Button styles in table */
+.excel-table .btn {
+    padding: 2px 6px;
+    font-size: 11px;
+    line-height: 1.2;
+}
+
+/* Input number styling */
+.excel-table input[type="number"] {
+    text-align: right;
+}
+
+/* Readonly inputs */
+.excel-table input[readonly] {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+/* Required field indicator */
+.excel-table .form-control[required],
+.excel-table .form-select[required] {
+    border-left: 3px solid #dc3545;
+}
+
+/* Date input styling */
+.excel-table input[type="date"] {
+    min-width: 120px;
+}
+
+/* Serial number input */
+.excel-table .serial-number-input {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+}
+
+/* Notes input */
+.excel-table .notes-input {
+    min-width: 150px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .excel-table {
+        font-size: 11px;
+    }
+    
+    .excel-table th,
+    .excel-table td {
+        padding: 4px 3px;
+    }
+    
+    .excel-table .form-control,
+    .excel-table .form-select {
+        font-size: 10px;
+        padding: 2px 4px;
+        min-height: 24px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .excel-table {
+        font-size: 10px;
+    }
+    
+    .excel-table th {
+        background-color: #4472c4 !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .excel-table td {
+        border: 1px solid #000 !important;
+    }
+    
+    .resize-handle {
+        display: none;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .excel-table {
+        background-color: #1e1e1e;
+        color: #ffffff;
+    }
+    
+    .excel-table th {
+        background-color: #2d4a6b;
+        border-color: #4a6fa5;
+    }
+    
+    .excel-table td {
+        background-color: #1e1e1e;
+        border-color: #404040;
+    }
+    
+    .excel-table tbody tr:hover {
+        background-color: #2d2d2d;
+    }
+    
+    .excel-table tbody tr:nth-child(even) {
+        background-color: #252525;
+    }
+    
+    .excel-table tbody tr:nth-child(even):hover {
+        background-color: #2d2d2d;
+    }
+    
+    .excel-table .form-control,
+    .excel-table .form-select {
+        background-color: #2d2d2d;
+        border-color: #404040;
+        color: #ffffff;
+    }
+    
+    .excel-table .form-control:focus,
+    .excel-table .form-select:focus {
+        border-color: #007bff;
+        background-color: #2d2d2d;
+    }
+    
+    .excel-table input[readonly] {
+        background-color: #404040;
+        color: #cccccc;
+    }
+}
+
+/* Animation for column show/hide */
+.col-product,
+.col-quantity,
+.col-unit,
+.col-price,
+.col-discount,
+.col-expiry,
+.col-serial,
+.col-notes {
+    transition: all 0.3s ease;
+}
+
+/* Loading state */
+.excel-table.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.excel-table.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 1000;
+}
+
+/* Error state */
+.excel-table .form-control.is-invalid,
+.excel-table .form-select.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Success state */
+.excel-table .form-control.is-valid,
+.excel-table .form-select.is-valid {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+/* Tooltip styles for table headers */
+.excel-table th[title] {
+    cursor: help;
+}
+
+/* Custom scrollbar for table container */
+.table-responsive::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* ============================================
+   Modal Z-Index Fix for Purchase Module
+   ============================================
+   Ensure picker modals appear above the main purchase modal
+*/
+
+/* Main purchase modal (fullscreen) */
+#purchaseModal.modal {
+    z-index: 1050;
+}
+
+#purchaseModal.modal.show {
+    z-index: 1050;
+}
+
+/* Picker modals inside purchase modal - must appear above main modal */
+#supplierPickerModal.modal,
+#warehousePickerModal.modal,
+#costCenterPickerModal.modal,
+#salesRepPickerModal.modal,
+#supplierModal.modal {
+    z-index: 1060 !important;
+}
+
+#supplierPickerModal.modal.show,
+#warehousePickerModal.modal.show,
+#costCenterPickerModal.modal.show,
+#salesRepPickerModal.modal.show,
+#supplierModal.modal.show {
+    z-index: 1060 !important;
+}
+
+/* Modal backdrop for picker modals - must be above main modal backdrop */
+#supplierPickerModal.modal ~ .modal-backdrop,
+#warehousePickerModal.modal ~ .modal-backdrop,
+#costCenterPickerModal.modal ~ .modal-backdrop,
+#salesRepPickerModal.modal ~ .modal-backdrop,
+#supplierModal.modal ~ .modal-backdrop {
+    z-index: 1055 !important;
+}
+
+/* When multiple modals are open, ensure proper stacking */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Ensure picker modals are always on top when opened from purchase modal */
+#purchaseModal.modal.show ~ #supplierPickerModal.modal,
+#purchaseModal.modal.show ~ #warehousePickerModal.modal,
+#purchaseModal.modal.show ~ #costCenterPickerModal.modal,
+#purchaseModal.modal.show ~ #salesRepPickerModal.modal,
+#purchaseModal.modal.show ~ #supplierModal.modal {
+    z-index: 1060 !important;
+}
+
+/* Account picker modals (if used in purchase form) */
+#accountPickerModal.modal,
+#defaultCounterAccountPickerModal.modal,
+#defaultCreditAccountPickerModal.modal,
+#defaultAdditionCounterAccountPickerModal.modal,
+#defaultDiscountCounterAccountPickerModal.modal {
+    z-index: 1060 !important;
+}
+
+#accountPickerModal.modal.show,
+#defaultCounterAccountPickerModal.modal.show,
+#defaultCreditAccountPickerModal.modal.show,
+#defaultAdditionCounterAccountPickerModal.modal.show,
+#defaultDiscountCounterAccountPickerModal.modal.show {
+    z-index: 1060 !important;
+}
+
+/* Fix for nested modals - ensure proper stacking context */
+.modal-dialog {
+    position: relative;
+    z-index: inherit;
+}
+
+/* Ensure modal content is above backdrop */
+.modal-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* Additional fix for fullscreen modal with nested modals */
+.modal-fullscreen .modal-dialog {
+    z-index: inherit;
+}
+
+/* Ensure picker modals work correctly when opened from fullscreen modal */
+.modal-fullscreen ~ #supplierPickerModal,
+.modal-fullscreen ~ #warehousePickerModal,
+.modal-fullscreen ~ #costCenterPickerModal,
+.modal-fullscreen ~ #salesRepPickerModal,
+.modal-fullscreen ~ #supplierModal {
+    z-index: 1060 !important;
+}
+
+/* ============================================
+   Fix for Modal Backdrop Blocking Interaction
+   ============================================
+   Ensure modal content is always interactive
+*/
+
+/* Ensure purchase modal content is always clickable */
+#purchaseModal.modal .modal-content {
+    position: relative;
+    z-index: 1051 !important;
+    pointer-events: auto !important;
+}
+
+/* Ensure modal backdrop doesn't block interaction with modal content */
+#purchaseModal.modal.show ~ .modal-backdrop {
+    z-index: 1049 !important;
+}
+
+/* Fix for when multiple backdrops exist */
+.modal-backdrop {
+    pointer-events: auto !important;
+}
+
+/* Ensure all interactive elements in modal are clickable */
+#purchaseModal.modal .modal-content * {
+    pointer-events: auto !important;
+}
+
+/* Fix for form inputs and buttons */
+#purchaseModal.modal input,
+#purchaseModal.modal select,
+#purchaseModal.modal textarea,
+#purchaseModal.modal button,
+#purchaseModal.modal a {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* Ensure table is interactive */
+#purchaseModal.modal table,
+#purchaseModal.modal tbody,
+#purchaseModal.modal tr,
+#purchaseModal.modal td {
+    pointer-events: auto !important;
+}
+
+/* Fix for any overlay that might block interaction */
+#purchaseModal.modal::before {
+    display: none !important;
+}
+
+#purchaseModal.modal::after {
+    display: none !important;
+}
+
+/* Ensure modal dialog is positioned correctly */
+#purchaseModal.modal .modal-dialog {
+    pointer-events: none !important;
+}
+
+#purchaseModal.modal .modal-dialog .modal-content {
+    pointer-events: auto !important;
+}
+
+/* ============================================
+   Fix for Purchase Return Modal (returnModal)
+   ============================================
+   Same fixes as purchaseModal
+*/
+
+/* Main return modal (fullscreen) */
+#returnModal.modal {
+    z-index: 1050;
+}
+
+#returnModal.modal.show {
+    z-index: 1050;
+}
+
+/* Picker modals inside return modal - must appear above main modal */
+#returnSupplierPickerModal.modal,
+#returnWarehousePickerModal.modal,
+#returnCostCenterPickerModal.modal,
+#returnSalesRepPickerModal.modal,
+#returnAvailableQuantitiesModal.modal {
+    z-index: 1060 !important;
+}
+
+#returnSupplierPickerModal.modal.show,
+#returnWarehousePickerModal.modal.show,
+#returnCostCenterPickerModal.modal.show,
+#returnSalesRepPickerModal.modal.show,
+#returnAvailableQuantitiesModal.modal.show {
+    z-index: 1060 !important;
+}
+
+/* Modal backdrop for return picker modals */
+#returnSupplierPickerModal.modal ~ .modal-backdrop,
+#returnWarehousePickerModal.modal ~ .modal-backdrop,
+#returnCostCenterPickerModal.modal ~ .modal-backdrop,
+#returnSalesRepPickerModal.modal ~ .modal-backdrop,
+#returnAvailableQuantitiesModal.modal ~ .modal-backdrop {
+    z-index: 1055 !important;
+}
+
+/* Ensure return modal content is always interactive */
+#returnModal.modal .modal-content {
+    position: relative;
+    z-index: 1051 !important;
+    pointer-events: auto !important;
+}
+
+/* Ensure modal backdrop doesn't block interaction with return modal content */
+#returnModal.modal.show ~ .modal-backdrop {
+    z-index: 1049 !important;
+}
+
+/* Ensure all interactive elements in return modal are clickable */
+#returnModal.modal .modal-content * {
+    pointer-events: auto !important;
+}
+
+/* Fix for form inputs and buttons in return modal */
+#returnModal.modal input,
+#returnModal.modal select,
+#returnModal.modal textarea,
+#returnModal.modal button,
+#returnModal.modal a {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* Ensure table is interactive in return modal */
+#returnModal.modal table,
+#returnModal.modal tbody,
+#returnModal.modal tr,
+#returnModal.modal td {
+    pointer-events: auto !important;
+}
+
+/* Fix for any overlay that might block interaction in return modal */
+#returnModal.modal::before {
+    display: none !important;
+}
+
+#returnModal.modal::after {
+    display: none !important;
+}
+
+/* Ensure return modal dialog is positioned correctly */
+#returnModal.modal .modal-dialog {
+    pointer-events: none !important;
+}
+
+#returnModal.modal .modal-dialog .modal-content {
+    pointer-events: auto !important;
+}
+
+/* ============================================
+   Fix for Sales Modal (saleModal)
+   ============================================
+   Same fixes as purchaseModal and returnModal
+*/
+
+/* Main sales modal (fullscreen) */
+#saleModal.modal {
+    z-index: 1050;
+}
+
+#saleModal.modal.show {
+    z-index: 1050;
+}
+
+/* Picker modals inside sales modal - must appear above main modal */
+#customerPickerModal.modal,
+#warehousePickerModal.modal,
+#costCenterPickerModal.modal,
+#salesRepPickerModal.modal,
+#customerModal.modal {
+    z-index: 1060 !important;
+}
+
+#customerPickerModal.modal.show,
+#warehousePickerModal.modal.show,
+#costCenterPickerModal.modal.show,
+#salesRepPickerModal.modal.show,
+#customerModal.modal.show {
+    z-index: 1060 !important;
+}
+
+/* Modal backdrop for sales picker modals */
+#customerPickerModal.modal ~ .modal-backdrop,
+#warehousePickerModal.modal ~ .modal-backdrop,
+#costCenterPickerModal.modal ~ .modal-backdrop,
+#salesRepPickerModal.modal ~ .modal-backdrop,
+#customerModal.modal ~ .modal-backdrop {
+    z-index: 1055 !important;
+}
+
+/* Ensure sales modal content is always interactive */
+#saleModal.modal .modal-content {
+    position: relative;
+    z-index: 1051 !important;
+    pointer-events: auto !important;
+}
+
+/* Ensure modal backdrop doesn't block interaction with sales modal content */
+#saleModal.modal.show ~ .modal-backdrop {
+    z-index: 1049 !important;
+}
+
+/* Ensure all interactive elements in sales modal are clickable */
+#saleModal.modal .modal-content * {
+    pointer-events: auto !important;
+}
+
+/* Fix for form inputs and buttons in sales modal */
+#saleModal.modal input,
+#saleModal.modal select,
+#saleModal.modal textarea,
+#saleModal.modal button,
+#saleModal.modal a {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* Ensure table is interactive in sales modal */
+#saleModal.modal table,
+#saleModal.modal tbody,
+#saleModal.modal tr,
+#saleModal.modal td {
+    pointer-events: auto !important;
+}
+
+/* Fix for any overlay that might block interaction in sales modal */
+#saleModal.modal::before {
+    display: none !important;
+}
+
+#saleModal.modal::after {
+    display: none !important;
+}
+
+/* Ensure sales modal dialog is positioned correctly */
+#saleModal.modal .modal-dialog {
+    pointer-events: none !important;
+}
+
+#saleModal.modal .modal-dialog .modal-content {
+    pointer-events: auto !important;
+}
+
+/* ============================================
+   Fix for SweetAlert Product Picker Modal
+   ============================================
+   Ensure product picker search input works correctly
+   ============================================ */
+
+/* SweetAlert Container */
+.swal2-container {
+    z-index: 10600 !important; /* SweetAlert default z-index */
+}
+
+.swal2-popup {
+    z-index: 10601 !important;
+}
+
+/* Product Picker Search Input */
+.swal2-html-container {
+    text-align: start !important;
+    padding: 0 !important;
+}
+
+.swal2-html-container #productPickerSearch {
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    cursor: text !important;
+    background-color: white !important;
+    color: #000000 !important;
+    border: 1px solid #dee2e6 !important;
+    width: 100% !important;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 1rem !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    line-height: 1.5 !important;
+    box-sizing: border-box !important;
+}
+
+.swal2-html-container #productPickerSearch:focus {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+    outline: none !important;
+    background-color: white !important;
+    color: #000000 !important;
+}
+
+.swal2-html-container #productPickerSearch::placeholder {
+    color: #6c757d !important;
+    opacity: 1 !important;
+}
+
+.swal2-html-container #productPickerSearch:disabled,
+.swal2-html-container #productPickerSearch[readonly] {
+    background-color: #f8f9fa !important;
+    color: #6c757d !important;
+    cursor: not-allowed !important;
+}
+
+/* Input Group in SweetAlert */
+.swal2-html-container .input-group {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+}
+
+.swal2-html-container .input-group-text {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0.5rem 0.75rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.swal2-html-container .input-group-lg .input-group-text {
+    padding: 0.75rem 1rem !important;
+}
+
+/* Table in SweetAlert */
+.swal2-html-container .table-responsive {
+    max-height: 450px !important;
+    overflow-y: auto !important;
+    overflow-x: auto !important;
+    width: 100% !important;
+    display: block !important;
+}
+
+.swal2-html-container .table {
+    width: 100% !important;
+    margin-bottom: 0 !important;
+    border-collapse: collapse !important;
+}
+
+.swal2-html-container .table thead {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+    background: #f2f3f4 !important;
+}
+
+.swal2-html-container .table thead th {
+    background: #e7e9ec !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 11 !important;
+}
+
+.swal2-html-container .table tbody {
+    background-color: #fff !important;
+}
+
+.swal2-html-container .table tbody tr {
+    cursor: pointer !important;
+}
+
+.swal2-html-container .table tbody tr:hover {
+    background-color: #f1f5f9 !important;
+}
+
+/* Excel-like cells in SweetAlert */
+.swal2-html-container .excel-cell {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+.swal2-html-container .product-pick-item {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+.swal2-html-container .product-pick-item:hover {
+    background-color: #f1f5f9 !important;
+}
+
+/* Ensure all interactive elements are clickable */
+.swal2-html-container input,
+.swal2-html-container button,
+.swal2-html-container select,
+.swal2-html-container textarea,
+.swal2-html-container a,
+.swal2-html-container .btn {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+.swal2-html-container input[type="text"],
+.swal2-html-container input[type="search"] {
+    cursor: text !important;
+}
+
+/* Fix for SweetAlert backdrop */
+.swal2-backdrop-show {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Ensure SweetAlert content is above backdrop */
+.swal2-popup {
+    position: relative !important;
+    z-index: 10601 !important;
+}
+
+/* Fix for input focus in SweetAlert */
+.swal2-html-container input:focus,
+.swal2-html-container textarea:focus,
+.swal2-html-container select:focus {
+    outline: none !important;
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+}
+
+/* Fix for RTL in SweetAlert */
+.swal2-popup[dir="rtl"] .swal2-html-container {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+.swal2-popup[dir="rtl"] .swal2-html-container .input-group {
+    direction: rtl !important;
+}
+
+.swal2-popup[dir="rtl"] .swal2-html-container .table {
+    direction: rtl !important;
+}
+
+/* Ensure search input is always visible and interactive */
+.swal2-html-container #productPickerSearch {
+    position: relative !important;
+    z-index: 1 !important;
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* Fix for input-group-lg in SweetAlert */
+.swal2-html-container .input-group-lg > .form-control,
+.swal2-html-container .input-group-lg > .form-select {
+    padding: 0.75rem 1rem !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+}
+
+/* Fix for badge in input-group */
+.swal2-html-container .input-group-text .badge {
+    pointer-events: none !important;
+    user-select: none !important;
+}
+
+/* Ensure table scrollbar is visible */
+.swal2-html-container .table-responsive::-webkit-scrollbar {
+    width: 12px !important;
+    height: 12px !important;
+}
+
+.swal2-html-container .table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1 !important;
+    border-radius: 4px !important;
+}
+
+.swal2-html-container .table-responsive::-webkit-scrollbar-thumb {
+    background: #888 !important;
+    border-radius: 4px !important;
+}
+
+.swal2-html-container .table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #555 !important;
+}
+
+/* Fix for checkbox in SweetAlert */
+.swal2-html-container input[type="checkbox"] {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+
+/* Ensure product picker table is interactive */
+.swal2-html-container #productPickerTable {
+    pointer-events: auto !important;
+}
+
+.swal2-html-container #productPickerTable tbody tr {
+    pointer-events: auto !important;
+}
+
+.swal2-html-container #productPickerTable tbody td {
+    pointer-events: auto !important;
+}
+
+/* Fix for when SweetAlert is opened from purchase modal */
+#purchaseModal.modal.show ~ .swal2-container {
+    z-index: 10700 !important;
+}
+
+#purchaseModal.modal.show ~ .swal2-container .swal2-popup {
+    z-index: 10701 !important;
+}
+
+/* Additional fix for input focus state */
+.swal2-html-container #productPickerSearch:not(:disabled):not([readonly]) {
+    background-color: white !important;
+    color: #000000 !important;
+}
+
+.swal2-html-container #productPickerSearch:not(:disabled):not([readonly]):focus {
+    background-color: white !important;
+    color: #000000 !important;
+    border-color: #667eea !important;
+}
+
+/* Fix for input-group border */
+.swal2-html-container .input-group .form-control {
+    border-left: 1px solid #dee2e6 !important;
+    border-right: 1px solid #dee2e6 !important;
+}
+
+.swal2-html-container .input-group .form-control:first-child {
+    border-right: none !important;
+}
+
+.swal2-html-container .input-group .form-control:last-child {
+    border-left: none !important;
+}
+
+/* Ensure input is not blocked by any overlay */
+.swal2-html-container #productPickerSearch {
+    position: relative !important;
+    z-index: 100 !important;
+}
+
+/* Fix for RTL input-group */
+.swal2-popup[dir="rtl"] .swal2-html-container .input-group .form-control:first-child {
+    border-left: none !important;
+    border-right: 1px solid #dee2e6 !important;
+}
+
+.swal2-popup[dir="rtl"] .swal2-html-container .input-group .form-control:last-child {
+    border-right: none !important;
+    border-left: 1px solid #dee2e6 !important;
+}
+
+/* Fix for input-group-text in RTL */
+.swal2-popup[dir="rtl"] .swal2-html-container .input-group-text:first-child {
+    border-left: 1px solid #dee2e6 !important;
+    border-right: none !important;
+}
+
+.swal2-popup[dir="rtl"] .swal2-html-container .input-group-text:last-child {
+    border-right: 1px solid #dee2e6 !important;
+    border-left: none !important;
+}
+
+
+

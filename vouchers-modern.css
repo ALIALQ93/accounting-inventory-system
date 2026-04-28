@@ -1,0 +1,1025 @@
+/**
+ * Vouchers Modern Styles
+ * Beautiful and modern design for vouchers management
+ */
+
+/* ==================== Vouchers Header ==================== */
+.vouchers-header-modern {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+}
+
+/* ==================== Stats Cards ==================== */
+.vouchers-stats-modern {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card-modern.stat-danger .stat-icon {
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), rgba(231, 76, 60, 0.2));
+    color: #e74c3c;
+}
+
+.stat-card-modern.stat-danger {
+    border-color: rgba(231, 76, 60, 0.2);
+}
+
+.stat-card-modern.stat-danger:hover {
+    border-color: #e74c3c;
+}
+
+/* ==================== Tabs ==================== */
+.vouchers-tabs-modern {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.vouchers-tabs-modern .tab-btn {
+    flex: 1;
+    min-width: 200px;
+    padding: 1rem 1.5rem;
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    color: #6c757d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.vouchers-tabs-modern .tab-btn:hover {
+    border-color: #8e44ad;
+    color: #8e44ad;
+    transform: translateY(-2px);
+}
+
+.vouchers-tabs-modern .tab-btn.active {
+    background: linear-gradient(135deg, #8e44ad, #6c3483);
+    border-color: #8e44ad;
+    color: white;
+    box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+}
+
+.vouchers-tabs-modern .tab-btn i {
+    font-size: 1.2rem;
+}
+
+/* ==================== Controls ==================== */
+.vouchers-controls-modern {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.date-range-modern {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #f8f9fa;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+}
+
+.date-range-modern i {
+    color: #8e44ad;
+    font-size: 1.1rem;
+}
+
+.date-input-modern {
+    border: none;
+    background: white;
+    padding: 0.5rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    min-width: 140px;
+}
+
+.date-input-modern:focus {
+    outline: 2px solid #8e44ad;
+}
+
+.date-range-modern span {
+    color: #6c757d;
+    font-weight: 600;
+}
+
+/* ==================== Table ==================== */
+.vouchers-table-modern {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    width: 100%;
+}
+
+.table-wrapper-modern {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+.vouchers-table thead {
+    background: linear-gradient(135deg, #8e44ad, #6c3483);
+    color: white;
+}
+
+.vouchers-table thead th {
+    padding: 1.25rem 1rem;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+}
+
+.vouchers-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.vouchers-table tbody tr:hover {
+    background: linear-gradient(135deg, rgba(142, 68, 173, 0.05), rgba(142, 68, 173, 0.1));
+}
+
+.vouchers-table tbody tr:nth-child(even) {
+    background-color: rgba(248, 249, 250, 0.5);
+}
+
+.vouchers-table tbody tr:nth-child(even):hover {
+    background: linear-gradient(135deg, rgba(142, 68, 173, 0.08), rgba(142, 68, 173, 0.12));
+}
+
+.vouchers-table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+/* ==================== Cell Styles ==================== */
+.voucher-number-cell {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    color: #8e44ad;
+    background: rgba(142, 68, 173, 0.1);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.voucher-date-cell {
+    color: #34495e;
+    font-weight: 500;
+}
+
+.account-cell {
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.account-cell .fw-bold {
+    font-size: 0.95rem;
+    color: #2c3e50;
+}
+
+.cost-center-cell {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.amount-cell {
+    font-weight: 700;
+    color: #27ae60;
+}
+
+.amount-cell strong {
+    display: block;
+    font-size: 1.1rem;
+}
+
+.amount-cell small {
+    color: #7f8c8d;
+    font-size: 0.8rem;
+}
+
+.description-cell {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ==================== Type Badges ==================== */
+.type-badge.type-receipt {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.15), rgba(39, 174, 96, 0.25));
+    color: #27ae60;
+    border: 1px solid rgba(39, 174, 96, 0.3);
+}
+
+.type-badge.type-payment {
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.15), rgba(231, 76, 60, 0.25));
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.type-badge.type-journal {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.25));
+    color: #3498db;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+/* ==================== Status Badges ==================== */
+.status-badge.status-posted {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.15), rgba(39, 174, 96, 0.25));
+    color: #27ae60;
+    border: 1px solid rgba(39, 174, 96, 0.3);
+}
+
+.status-badge.status-draft {
+    background: linear-gradient(135deg, rgba(149, 165, 166, 0.15), rgba(149, 165, 166, 0.25));
+    color: #95a5a6;
+    border: 1px solid rgba(149, 165, 166, 0.3);
+}
+
+/* ==================== Modal ==================== */
+#voucherModal .modal-dialog {
+    max-width: 700px;
+}
+
+#voucherModal .modal-content {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+#voucherModal .modal-header {
+    color: white;
+    padding: 1.75rem 2rem;
+    border-bottom: none;
+    position: relative;
+    overflow: hidden;
+}
+
+#voucherModal .modal-header.bg-gradient-receipt {
+    background: linear-gradient(135deg, #27ae60, #229954);
+}
+
+#voucherModal .modal-header.bg-gradient-payment {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+#voucherModal .modal-header.bg-gradient-journal {
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+}
+
+#voucherModal .modal-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+#voucherModal .modal-title {
+    font-weight: 700;
+    font-size: 1.4rem;
+    position: relative;
+    z-index: 1;
+}
+
+#voucherModal .modal-body {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    padding: 2rem;
+}
+
+#voucherModal .form-section {
+    background: white;
+    padding: 1.75rem;
+    border-radius: 14px;
+    border: 2px solid #e9ecef;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    margin-bottom: 1.5rem;
+}
+
+#voucherModal .form-section:last-child {
+    margin-bottom: 0;
+}
+
+#voucherModal .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+#voucherModal .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+#voucherModal .form-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.6rem;
+}
+
+#voucherModal .form-control,
+#voucherModal .form-select {
+    border-radius: 10px;
+    border: 2px solid #e5e7eb;
+    padding: 0.85rem 1.1rem;
+    transition: all 0.3s ease;
+}
+
+#voucherModal .form-control:focus,
+#voucherModal .form-select:focus {
+    border-color: #8e44ad;
+    box-shadow: 0 0 0 4px rgba(142, 68, 173, 0.12);
+}
+
+#voucherModal .modal-footer {
+    padding: 1.5rem 2rem;
+    border-top: 2px solid #e9ecef;
+    background: #ffffff;
+}
+
+#voucherModal .modal-footer .btn-primary {
+    background: linear-gradient(135deg, #8e44ad, #6c3483);
+    border: none;
+    padding: 0.9rem 2.5rem;
+    font-weight: 700;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(142, 68, 173, 0.35);
+    transition: all 0.3s ease;
+}
+
+#voucherModal .modal-footer .btn-primary:hover {
+    background: linear-gradient(135deg, #6c3483, #8e44ad);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(142, 68, 173, 0.45);
+}
+
+/* ==================== Voucher View ==================== */
+.voucher-view-modern {
+    text-align: right;
+    padding: 1rem;
+}
+
+.voucher-info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.voucher-info-row:last-child {
+    border-bottom: none;
+}
+
+.voucher-info-row strong {
+    color: #2c3e50;
+    min-width: 120px;
+}
+
+.voucher-info-row span {
+    color: #7f8c8d;
+    text-align: left;
+}
+
+/* ==================== Entries Table ==================== */
+.voucher-entries-table {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.voucher-entries-table thead {
+    background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+}
+
+.voucher-entries-table thead th {
+    font-weight: 700;
+    color: #2c3e50;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.85rem;
+    text-align: center;
+    border: 1px solid #dee2e6;
+}
+
+.voucher-entries-table tbody td {
+    padding: 0.5rem;
+    vertical-align: middle;
+}
+
+.voucher-entries-table .form-control-sm,
+.voucher-entries-table .form-select-sm {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+}
+
+.voucher-entries-table .entry-code {
+    background: #f8f9fa;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: #3498db;
+}
+
+.voucher-entries-table .entry-credit {
+    text-align: right;
+    font-weight: 600;
+    color: #27ae60;
+}
+
+.voucher-entries-table tfoot {
+    background: #f8f9fa;
+}
+
+.voucher-entries-table tfoot td {
+    font-weight: 700;
+    padding: 0.75rem;
+}
+
+#totalCredit {
+    font-size: 1.2rem;
+    color: #27ae60 !important;
+}
+
+/* Column Settings Modal */
+#columnSettingsModal .list-group-item {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#columnSettingsModal .list-group-item:hover {
+    background: #f8f9fa;
+}
+
+#columnSettingsModal .form-check-input {
+    cursor: pointer;
+}
+
+#columnSettingsModal .form-check-input:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Sticky header for table */
+.voucher-entries-table thead.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Entry row hover */
+.voucher-entries-table tbody tr:hover {
+    background: rgba(142, 68, 173, 0.05);
+}
+
+/* Modal XL size */
+#voucherModal .modal-dialog {
+    max-width: 95%;
+    width: 1400px;
+}
+
+/* ==================== Account Search Modal ==================== */
+#accountSearchModal .modal-header {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+#accountSearchModal .table {
+    margin-bottom: 0;
+}
+
+#accountSearchModal tbody tr {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#accountSearchModal tbody tr:hover {
+    background: rgba(52, 152, 219, 0.1);
+}
+
+#accountSearchModal .btn-primary {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    border: none;
+}
+
+#accountSearchModal .btn-primary:hover {
+    background: linear-gradient(135deg, #229954, #1e8449);
+}
+
+/* ==================== Entry Account Search Button ==================== */
+.entry-account-display {
+    cursor: pointer !important;
+}
+
+.entry-account-display:focus {
+    border-color: #8e44ad;
+    box-shadow: 0 0 0 0.2rem rgba(142, 68, 173, 0.15);
+}
+
+/* ==================== Action Buttons ==================== */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.action-btn-modern {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+.action-btn-modern:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn-modern:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.action-btn-modern.action-view {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.action-btn-modern.action-view:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2980b9, #21618c);
+}
+
+.action-btn-modern.action-print {
+    background: linear-gradient(135deg, #2193b0, #6dd5ed);
+}
+
+.action-btn-modern.action-print:hover:not(:disabled) {
+    background: linear-gradient(135deg, #6dd5ed, #2193b0);
+}
+
+.action-btn-modern.action-info {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.action-btn-modern.action-info:hover:not(:disabled) {
+    background: linear-gradient(135deg, #764ba2, #667eea);
+}
+
+.action-btn-modern.action-edit {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.action-btn-modern.action-edit:hover:not(:disabled) {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+}
+
+.action-btn-modern.action-delete {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.action-btn-modern.action-delete:hover:not(:disabled) {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+}
+
+.action-btn-modern i {
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+.action-btn-modern:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================== Table Dimensions & Layout ==================== */
+.vouchers-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.vouchers-table thead th {
+    padding: 1.25rem 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vouchers-table tbody td {
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #ecf0f1;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ضبط أبعاد الأعمدة بشكل صحيح */
+.vouchers-table thead th:nth-child(1),
+.vouchers-table tbody td:nth-child(1) {
+    width: 10%;
+    min-width: 120px;
+    max-width: 150px;
+}
+
+.vouchers-table thead th:nth-child(2),
+.vouchers-table tbody td:nth-child(2) {
+    width: 10%;
+    min-width: 110px;
+    max-width: 140px;
+}
+
+.vouchers-table thead th:nth-child(3),
+.vouchers-table tbody td:nth-child(3) {
+    width: 12%;
+    min-width: 130px;
+    max-width: 160px;
+}
+
+.vouchers-table thead th:nth-child(4),
+.vouchers-table tbody td:nth-child(4) {
+    width: 18%;
+    min-width: 180px;
+    max-width: 250px;
+}
+
+.vouchers-table thead th:nth-child(5),
+.vouchers-table tbody td:nth-child(5) {
+    width: 15%;
+    min-width: 150px;
+    max-width: 200px;
+}
+
+.vouchers-table thead th:nth-child(6),
+.vouchers-table tbody td:nth-child(6) {
+    width: 12%;
+    min-width: 130px;
+    max-width: 180px;
+}
+
+.vouchers-table thead th:nth-child(7),
+.vouchers-table tbody td:nth-child(7) {
+    width: 10%;
+    min-width: 100px;
+    max-width: 130px;
+}
+
+.vouchers-table thead th:nth-child(8),
+.vouchers-table tbody td:nth-child(8) {
+    width: 13%;
+    min-width: 200px;
+    max-width: 280px;
+}
+
+/* تحسين عرض الأعمدة */
+.vouchers-table tbody td:nth-child(1) {
+    text-align: center;
+}
+
+.vouchers-table tbody td:nth-child(2) {
+    text-align: center;
+}
+
+.vouchers-table tbody td:nth-child(3) {
+    text-align: center;
+}
+
+.vouchers-table tbody td:nth-child(4) {
+    text-align: right;
+}
+
+.vouchers-table tbody td:nth-child(5) {
+    text-align: left;
+}
+
+.vouchers-table tbody td:nth-child(6) {
+    text-align: center;
+}
+
+.vouchers-table tbody td:nth-child(7) {
+    text-align: center;
+}
+
+/* ==================== Type Badge Improvements ==================== */
+.type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.type-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.type-badge.type-entry {
+    background: linear-gradient(135deg, rgba(142, 68, 173, 0.15), rgba(142, 68, 173, 0.25));
+    color: #8e44ad;
+    border: 1px solid rgba(142, 68, 173, 0.3);
+}
+
+/* ==================== Status Badge Improvements ==================== */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ==================== Responsive ==================== */
+@media (max-width: 1200px) {
+    .vouchers-table {
+        font-size: 0.9rem;
+    }
+    
+    .vouchers-table thead th,
+    .vouchers-table tbody td {
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .action-buttons {
+        gap: 0.3rem;
+    }
+    
+    .action-btn-modern {
+        min-width: 2rem;
+        min-height: 2rem;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .vouchers-header-modern {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .vouchers-stats-modern {
+        grid-template-columns: 1fr;
+    }
+    
+    .vouchers-tabs-modern {
+        flex-direction: column;
+    }
+    
+    .vouchers-tabs-modern .tab-btn {
+        width: 100%;
+    }
+    
+    .vouchers-controls-modern {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .date-range-modern {
+        flex-wrap: wrap;
+    }
+    
+    .vouchers-table-modern {
+        overflow-x: auto;
+    }
+    
+    .vouchers-table {
+        min-width: 1000px;
+        font-size: 0.85rem;
+    }
+    
+    .vouchers-table thead th,
+    .vouchers-table tbody td {
+        padding: 0.6rem 0.4rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .action-btn-modern {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .voucher-number-cell,
+    .voucher-date-cell,
+    .account-cell,
+    .amount-cell,
+    .cost-center-cell {
+        font-size: 0.8rem;
+    }
+    
+    .type-badge,
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+    }
+}
+
+/* ==================== إصلاح: إخفاء صف العناوين المكرر ==================== */
+/* ✅ إخفاء قوي لصف العناوين المخفي لمنع التكرار */
+#receiptPaymentHeader[style*="display: none"],
+#journalHeader[style*="display: none"],
+#receiptPaymentFooter[style*="display: none"],
+#journalFooter[style*="display: none"] {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+}
+
+/* إخفاء كامل عند استخدام visibility: hidden */
+#receiptPaymentHeader[style*="visibility: hidden"],
+#journalHeader[style*="visibility: hidden"],
+#receiptPaymentFooter[style*="visibility: hidden"],
+#journalFooter[style*="visibility: hidden"] {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    overflow: hidden !important;
+}
+
+/* تأكد من إظهار الصف النشط فقط */
+#receiptPaymentHeader[style*="display: table-row"],
+#journalHeader[style*="display: table-row"],
+#receiptPaymentFooter[style*="display: table-row"],
+#journalFooter[style*="display: table-row"] {
+    display: table-row !important;
+    visibility: visible !important;
+}
+
+/* ==================== تحسينات نافذة البحث عن الحسابات ==================== */
+/* تفاعلية صفوف البحث */
+.account-search-row {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.account-search-row:hover {
+    background-color: #e7f3ff !important;
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15);
+}
+
+.account-search-row.table-active {
+    background-color: #d1e7dd !important;
+}
+
+.account-search-row td {
+    transition: color 0.2s ease;
+}
+
+.account-search-row:hover td {
+    color: #0d6efd;
+}
+
+.account-search-row:hover .btn-primary {
+    background-color: #0a58ca;
+    border-color: #0a58ca;
+    transform: scale(1.05);
+}
+
+/* تحسين مؤشر التحميل */
+#accountSearchResults .spinner-border {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-width: 0.2em;
+}
+
+/* تحسين حقل البحث */
+#accountSearchInput {
+    transition: all 0.3s ease;
+}
+
+#accountSearchInput:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    border-color: #86b7fe;
+}
+
+/* تحسين زر الاختيار */
+#accountSearchResults .btn-primary {
+    transition: all 0.2s ease;
+    border-radius: 6px;
+}
+
+#accountSearchResults .btn-primary:hover {
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+/* رسالة عدم وجود نتائج */
+#accountSearchResults .text-muted {
+    padding: 3rem 1rem;
+}
+
+#accountSearchResults .text-muted i {
+    opacity: 0.5;
+}
+
+/* تحسين التمرير في نتائج البحث */
+.account-search-results-container {
+    scroll-behavior: smooth;
+    background: white;
+}
+
+.account-search-results-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.account-search-results-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.account-search-results-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+.account-search-results-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* تحسين عرض النتائج */
+#accountSearchResults tr {
+    display: table-row !important;
+}
+
+#accountSearchResults td {
+    display: table-cell !important;
+    padding: 0.75rem !important;
+    vertical-align: middle !important;
+}
+
+/* إصلاح: التأكد من ظهور جميع الصفوف */
+#accountSearchModal .account-search-results-container table {
+    width: 100%;
+    table-layout: auto;
+}
+
+#accountSearchModal .account-search-results-container tbody {
+    display: table-row-group !important;
+}
+
+/* تحسين عرض عدد النتائج */
+#accountSearchCount {
+    font-weight: 500;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+

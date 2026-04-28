@@ -1,0 +1,1392 @@
+/**
+ * Parties Module - Modern Design
+ * تصميم عصري لوحدة العملاء والموردين
+ */
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+.parties-header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+}
+
+.parties-header .header-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.parties-header .header-icon-box {
+    width: 80px;
+    height: 80px;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: #2563eb;
+}
+
+.parties-header .header-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+    color: #1e293b;
+}
+
+.parties-header .header-subtitle {
+    font-size: 16px;
+    margin: 5px 0 0 0;
+    color: #64748b;
+}
+
+/* ==========================================================================
+   TABS
+   ========================================================================== */
+
+.parties-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.party-tab {
+    flex: 1;
+    padding: 15px 25px;
+    background: #f8f9fa;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #6c757d;
+}
+
+.party-tab i {
+    font-size: 20px;
+}
+
+.party-tab:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+    transform: translateY(-2px);
+}
+
+.party-tab.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: #667eea;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* ==========================================================================
+   CONTENT
+   ========================================================================== */
+
+.parties-content {
+    min-height: 500px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   DASHBOARD - STATS GRID
+   ========================================================================== */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card-party {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s ease;
+}
+
+.stat-card-party:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.stat-card-party .stat-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 32px;
+}
+
+.stat-card-party .stat-icon.bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-card-party .stat-icon.bg-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.stat-card-party .stat-icon.bg-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #00bcd4 100%);
+}
+
+.stat-card-party .stat-icon.bg-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+}
+
+.stat-card-party .stat-label {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+
+.stat-card-party .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.dashboard-card h5 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.top-party-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    border-bottom: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.top-party-item:hover {
+    background: #f8f9fa;
+}
+
+.top-party-item .rank {
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.top-party-item .party-name {
+    flex: 1;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.top-party-item .party-balance {
+    font-weight: 700;
+    color: #667eea;
+}
+
+/* ==========================================================================
+   TOOLBAR
+   ========================================================================== */
+
+.content-toolbar {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-box {
+    position: relative;
+    width: 300px;
+}
+
+.search-box i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 45px 10px 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+}
+
+/* ==========================================================================
+   TABLE
+   ========================================================================== */
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.table-modern {
+    margin-bottom: 0;
+}
+
+.table-modern thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.table-modern thead th {
+    padding: 15px;
+    font-weight: 600;
+    border: none;
+}
+
+.table-modern tbody tr {
+    transition: all 0.3s ease;
+}
+
+.table-modern tbody tr:hover {
+    background: rgba(102, 126, 234, 0.05);
+    transform: translateX(-3px);
+}
+
+.table-modern tbody td {
+    padding: 15px;
+    vertical-align: middle;
+}
+
+/* ==========================================================================
+   REPORTS GRID
+   ========================================================================== */
+
+.reports-grid-small {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.report-card-small {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.report-card-small:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.report-card-small i {
+    font-size: 48px;
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+.report-card-small h6 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 1200px) {
+    .table-modern {
+        font-size: 0.9rem;
+    }
+    
+    .table-modern thead th,
+    .table-modern tbody td {
+        padding: 10px 8px;
+    }
+    
+    .action-buttons {
+        gap: 0.3rem;
+    }
+    
+    .action-btn-modern {
+        min-width: 2rem;
+        min-height: 2rem;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .parties-tabs {
+        flex-direction: column;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .content-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-box {
+        width: 100%;
+    }
+    
+    .toolbar-right {
+        width: 100%;
+    }
+    
+    .toolbar-right .btn {
+        width: 100%;
+    }
+    
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    .table-modern {
+        min-width: 1000px;
+        font-size: 0.85rem;
+    }
+    
+    .table-modern thead th,
+    .table-modern tbody td {
+        padding: 8px 6px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .action-btn-modern {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .party-code-cell,
+    .party-name-cell,
+    .party-account-cell,
+    .party-balance-cell,
+    .party-phone-cell {
+        font-size: 0.8rem;
+    }
+    
+    .status-badge-party {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+    }
+}
+
+/* Parties Module - Modern Design
+ * تصميم عصري لوحدة العملاء والموردين
+ */
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+.parties-header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+}
+
+.parties-header .header-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.parties-header .header-icon-box {
+    width: 80px;
+    height: 80px;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: #2563eb;
+}
+
+.parties-header .header-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+    color: #1e293b;
+}
+
+.parties-header .header-subtitle {
+    font-size: 16px;
+    margin: 5px 0 0 0;
+    color: #64748b;
+}
+
+/* ==========================================================================
+   TABS
+   ========================================================================== */
+
+.parties-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.party-tab {
+    flex: 1;
+    padding: 15px 25px;
+    background: #f8f9fa;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #6c757d;
+}
+
+.party-tab i {
+    font-size: 20px;
+}
+
+.party-tab:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+    transform: translateY(-2px);
+}
+
+.party-tab.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: #667eea;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* ==========================================================================
+   CONTENT
+   ========================================================================== */
+
+.parties-content {
+    min-height: 500px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   DASHBOARD - STATS GRID
+   ========================================================================== */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card-party {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s ease;
+}
+
+.stat-card-party:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.stat-card-party .stat-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 32px;
+}
+
+.stat-card-party .stat-icon.bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-card-party .stat-icon.bg-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.stat-card-party .stat-icon.bg-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #00bcd4 100%);
+}
+
+.stat-card-party .stat-icon.bg-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+}
+
+.stat-card-party .stat-label {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+
+.stat-card-party .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.dashboard-card h5 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.top-party-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    border-bottom: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.top-party-item:hover {
+    background: #f8f9fa;
+}
+
+.top-party-item .rank {
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.top-party-item .party-name {
+    flex: 1;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.top-party-item .party-balance {
+    font-weight: 700;
+    color: #667eea;
+}
+
+/* ==========================================================================
+   TOOLBAR
+   ========================================================================== */
+
+.content-toolbar {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-box {
+    position: relative;
+    width: 300px;
+}
+
+.search-box i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 45px 10px 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+}
+
+/* ==========================================================================
+   TABLE
+   ========================================================================== */
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.table-modern {
+    margin-bottom: 0;
+}
+
+.table-modern thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.table-modern thead th {
+    padding: 15px;
+    font-weight: 600;
+    border: none;
+}
+
+.table-modern tbody tr {
+    transition: all 0.3s ease;
+}
+
+.table-modern tbody tr:hover {
+    background: rgba(102, 126, 234, 0.05);
+    transform: translateX(-3px);
+}
+
+.table-modern tbody td {
+    padding: 15px;
+    vertical-align: middle;
+}
+
+/* ==========================================================================
+   REPORTS GRID
+   ========================================================================== */
+
+.reports-grid-small {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.report-card-small {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.report-card-small:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.report-card-small i {
+    font-size: 48px;
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+.report-card-small h6 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .table-modern {
+        font-size: 0.9rem;
+    }
+    
+    .table-modern thead th,
+    .table-modern tbody td {
+        padding: 10px 8px;
+    }
+    
+    .action-buttons {
+        gap: 0.3rem;
+    }
+    
+    .action-btn-modern {
+        min-width: 2rem;
+        min-height: 2rem;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .parties-tabs {
+        flex-direction: column;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .content-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-box {
+        width: 100%;
+    }
+    
+    .toolbar-right {
+        width: 100%;
+    }
+    
+    .toolbar-right .btn {
+        width: 100%;
+    }
+    
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    .table-modern {
+        min-width: 1000px;
+        font-size: 0.85rem;
+    }
+    
+    .table-modern thead th,
+    .table-modern tbody td {
+        padding: 8px 6px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .action-btn-modern {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .party-code-cell,
+    .party-name-cell,
+    .party-account-cell,
+    .party-balance-cell,
+    .party-phone-cell {
+        font-size: 0.8rem;
+    }
+    
+    .status-badge-party {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+    }
+    
+    .summary-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .reports-grid .row {
+        flex-direction: column;
+    }
+    
+    .report-card {
+        margin-bottom: 20px;
+    }
+}
+
+/* ==========================================================================
+   REPORTS STYLES
+   ========================================================================== */
+
+.parties-summary {
+    margin-bottom: 30px;
+}
+
+.summary-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.summary-card .card-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+}
+
+.summary-card .card-content h3 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.summary-card .card-content p {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin: 5px 0 0 0;
+}
+
+.parties-actions {
+    margin-bottom: 30px;
+}
+
+.action-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.action-card h4 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.action-card p {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+}
+
+.reports-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.reports-header h3 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.reports-header p {
+    font-size: 16px;
+    color: #7f8c8d;
+}
+
+.reports-grid {
+    margin-bottom: 30px;
+}
+
+.report-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.report-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.report-card .report-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: white;
+    margin: 0 auto 20px;
+}
+
+.report-card .report-content h4 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.report-card .report-content p {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+}
+
+/* Report Modal Styles */
+.parties-report-popup,
+.customer-analysis-popup,
+.supplier-analysis-popup {
+    max-width: 95% !important;
+}
+
+.parties-report,
+.customer-analysis-report,
+.supplier-analysis-report {
+    font-family: 'Cairo', sans-serif;
+    direction: rtl;
+}
+
+.report-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.report-header h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.report-header p {
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.report-summary {
+    margin-bottom: 30px;
+}
+
+.report-summary .row {
+    margin-bottom: 20px;
+}
+
+.summary-item {
+    text-align: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.summary-item h4 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.summary-item p {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin: 0;
+}
+
+.report-details {
+    margin-bottom: 30px;
+}
+
+.report-details h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.balance-summary {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.balance-summary h5 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.balance-summary p {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 10px;
+}
+
+.balance-summary strong {
+    color: #2c3e50;
+}
+
+.analysis-sections {
+    margin-bottom: 30px;
+}
+
+.analysis-item {
+    margin-bottom: 20px;
+}
+
+.analysis-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.bar-label {
+    font-size: 14px;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.bar-value {
+    font-size: 14px;
+    color: #667eea;
+    font-weight: 700;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.stat-item h5 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.stat-item p {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin: 0;
+}
+
+/* ==========================================================================
+   TABLE DIMENSIONS & CELL STYLES (Additional Definitions)
+   ========================================================================== */
+
+.party-code-cell {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.party-name-cell {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.party-group-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+}
+
+.party-group-badge i {
+    font-size: 0.8rem;
+}
+
+.party-account-cell {
+    color: #667eea;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.party-account-cell i {
+    color: #667eea;
+    font-size: 0.85rem;
+}
+
+.party-balance-cell {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.party-balance-cell.positive {
+    color: #667eea;
+}
+
+.party-balance-cell.negative {
+    color: #e74c3c;
+}
+
+.party-balance-cell.zero {
+    color: #27ae60;
+}
+
+.party-phone-cell {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.party-currency-cell {
+    color: #6c757d;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.action-btn-modern {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+.action-btn-modern:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn-modern:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.action-btn-modern:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn-modern.action-view {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.action-btn-modern.action-view:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2980b9, #21618c);
+}
+
+.action-btn-modern.action-edit {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.action-btn-modern.action-edit:hover:not(:disabled) {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+}
+
+.action-btn-modern.action-delete {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.action-btn-modern.action-delete:hover:not(:disabled) {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+}
+
+.action-btn-modern i {
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+.status-badge-party {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.status-badge-party.status-active {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.15), rgba(39, 174, 96, 0.25));
+    color: #27ae60;
+    border: 1px solid rgba(39, 174, 96, 0.3);
+}
+
+.status-badge-party.status-inactive {
+    background: linear-gradient(135deg, rgba(149, 165, 166, 0.15), rgba(149, 165, 166, 0.25));
+    color: #95a5a6;
+    border: 1px solid rgba(149, 165, 166, 0.3);
+}
+
+.status-badge-party:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

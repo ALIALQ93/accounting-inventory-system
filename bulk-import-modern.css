@@ -1,0 +1,1291 @@
+/**
+ * Bulk Import - Ultra Modern Design
+ * تصميم حديث وأنيق للإدراج المتعدد
+ */
+
+/* ========== DESIGN VARIABLES ========== */
+:root {
+    /* Gradient Colors */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --gradient-warning: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-info: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --gradient-dark: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    
+    /* Modern Colors */
+    --color-primary: #667eea;
+    --color-secondary: #764ba2;
+    --color-success: #38ef7d;
+    --color-warning: #ffeaa7;
+    --color-danger: #fd79a8;
+    --color-info: #74b9ff;
+    --color-dark: #2d3436;
+    --color-light: #ddd6fe;
+    
+    /* Glass Effect */
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.18);
+    --glass-backdrop: blur(20px);
+    
+    /* Shadows */
+    --shadow-glow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.15);
+    
+    /* Animations */
+    --animation-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --animation-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ========== BULK IMPORT MODAL ========== */
+.bulk-import-modal {
+    --bs-modal-bg: transparent;
+}
+
+.bulk-import-modal .modal-dialog {
+    margin: 20px auto;
+    max-width: 95vw;
+    width: 95vw;
+    height: calc(100vh - 40px);
+}
+
+/* Fullscreen Modal Variant */
+.bulk-import-modal.modal-fullscreen .modal-dialog {
+    max-width: 100vw;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+}
+
+.bulk-import-modal.modal-fullscreen .modal-content {
+    height: 100vh;
+    border-radius: 0;
+}
+
+.bulk-import-modal .modal-content {
+    height: 100%;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.bulk-import-modal .modal-content::before {
+    display: none;
+}
+
+/* ========== MODAL HEADER ========== */
+.bulk-import-modal .modal-header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    padding: 1.25rem 1.5rem;
+    position: relative;
+}
+
+/* Fullscreen Modal Header */
+.bulk-import-modal.modal-fullscreen .modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 0;
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+}
+
+.bulk-import-modal.modal-fullscreen .modal-header .modal-title {
+    color: white;
+    font-weight: 600;
+}
+
+.bulk-import-modal.modal-fullscreen .modal-header .btn-close {
+    background: rgba(255, 255, 255, 0.2);
+    opacity: 1;
+}
+
+.bulk-import-modal .modal-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 2rem;
+    right: 2rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+}
+
+.bulk-import-modal .modal-title {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.bulk-import-modal .modal-title i {
+    background: var(--gradient-success);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.75rem;
+    animation: pulse 2s infinite;
+}
+
+.bulk-import-modal .btn-close {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: all 0.3s var(--animation-smooth);
+}
+
+.bulk-import-modal .btn-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg) scale(1.1);
+}
+
+/* ========== MODAL BODY ========== */
+.bulk-import-modal .modal-body {
+    padding: 2rem;
+    height: calc(100% - 140px);
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Fullscreen Modal Body */
+.bulk-import-modal.modal-fullscreen .modal-body {
+    background: #f8f9fa;
+    padding: 1.5rem;
+}
+
+/* Custom Scrollbar */
+.bulk-import-modal .modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.bulk-import-modal .modal-body::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.bulk-import-modal .modal-body::-webkit-scrollbar-thumb {
+    background: var(--gradient-info);
+    border-radius: 10px;
+}
+
+/* ========== INSTRUCTIONS CARD ========== */
+.bulk-instructions-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.bulk-instructions-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-info);
+}
+
+.bulk-instructions-card h6 {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bulk-instructions-card h6 i {
+    color: var(--color-info);
+    font-size: 1.25rem;
+}
+
+.bulk-instructions-card p {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+.bulk-instructions-card ul {
+    color: rgba(255, 255, 255, 0.9);
+    padding-right: 1.5rem;
+}
+
+.bulk-instructions-card li {
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+
+.bulk-instructions-card li::marker {
+    color: var(--color-success);
+}
+
+/* ========== TOOLBAR ========== */
+.bulk-toolbar {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.bulk-toolbar .btn {
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.3s var(--animation-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.bulk-toolbar .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.bulk-toolbar .btn:hover::before {
+    left: 100%;
+}
+
+.bulk-toolbar .btn-add {
+    background: var(--gradient-success);
+    color: white;
+    box-shadow: 0 4px 15px rgba(56, 239, 125, 0.3);
+}
+
+.bulk-toolbar .btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(56, 239, 125, 0.4);
+}
+
+.bulk-toolbar .btn-clear {
+    background: var(--gradient-warning);
+    color: white;
+    box-shadow: 0 4px 15px rgba(253, 121, 168, 0.3);
+}
+
+.bulk-toolbar .btn-clear:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(253, 121, 168, 0.4);
+}
+
+.bulk-toolbar .btn-sample {
+    background: var(--gradient-info);
+    color: white;
+    box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
+}
+
+.bulk-toolbar .btn-sample:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(116, 185, 255, 0.4);
+}
+
+.bulk-toolbar .btn-template {
+    background: var(--gradient-dark);
+    color: white;
+    box-shadow: 0 4px 15px rgba(45, 52, 54, 0.3);
+}
+
+.bulk-toolbar .btn-template:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(45, 52, 54, 0.4);
+}
+
+/* Stats Badges */
+.bulk-stats {
+    margin-right: auto;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.bulk-stats .badge {
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeInScale 0.5s var(--animation-bounce);
+}
+
+.bulk-stats .badge-rows { background: var(--gradient-info); }
+.bulk-stats .badge-valid { background: var(--gradient-success); }
+.bulk-stats .badge-invalid { background: var(--gradient-warning); }
+
+/* ========== BULK IMPORT TABLE ========== */
+.bulk-table-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-card);
+}
+
+.bulk-table-scroll {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: auto;
+    position: relative;
+}
+
+/* Custom scrollbar for bulk table */
+.bulk-table-scroll::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.bulk-table-scroll::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.bulk-table-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.bulk-table-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.bulk-table {
+    width: 100%;
+    margin: 0;
+    background: transparent;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.bulk-table thead {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.bulk-table thead th {
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 0.5rem;
+    border: none;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bulk-table thead th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: var(--gradient-success);
+    border-radius: 1px;
+}
+
+.bulk-table thead th i {
+    color: var(--color-success);
+    margin-left: 0.5rem;
+}
+
+.bulk-table tbody tr {
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    transition: all 0.3s var(--animation-smooth);
+}
+
+.bulk-table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.bulk-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.01);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.bulk-table tbody td {
+    padding: 0.5rem 0.4rem;
+    border: none;
+    vertical-align: middle;
+    position: relative;
+    overflow: hidden;
+}
+
+.bulk-table tbody td::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Row Number */
+.bulk-table .row-number {
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin: 0 auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Controls */
+.bulk-table .form-control,
+.bulk-table .form-select,
+.bulk-table .form-control-sm,
+.bulk-table .form-select-sm {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: white;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.5rem;
+    transition: all 0.3s var(--animation-smooth);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.bulk-table .form-control:focus,
+.bulk-table .form-select:focus,
+.bulk-table .form-control-sm:focus,
+.bulk-table .form-select-sm:focus {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: var(--color-success);
+    box-shadow: 0 0 0 2px rgba(56, 239, 125, 0.2);
+    outline: none;
+}
+
+.bulk-table .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.bulk-table .form-select option,
+.bulk-table .form-select-sm option {
+    background: var(--color-dark);
+    color: white;
+    padding: 0.5rem;
+}
+
+/* Auto-generated Code Field */
+.bulk-table .auto-generated-code {
+    background: rgba(56, 239, 125, 0.2) !important;
+    border-color: var(--color-success) !important;
+    color: var(--color-success) !important;
+    font-weight: 600;
+    cursor: not-allowed;
+}
+
+.bulk-table .auto-generated-code::placeholder {
+    color: rgba(56, 239, 125, 0.8) !important;
+}
+
+/* Delete Button */
+.btn-delete-row {
+    background: var(--gradient-warning);
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s var(--animation-smooth);
+    box-shadow: 0 2px 8px rgba(253, 121, 168, 0.3);
+}
+
+.btn-delete-row:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 4px 15px rgba(253, 121, 168, 0.5);
+}
+
+/* ========== MODAL FOOTER ========== */
+.bulk-import-modal .modal-footer {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 0 0 20px 20px;
+    padding: 1.5rem 2rem;
+    gap: 1rem;
+}
+
+/* Fullscreen Modal Footer */
+.bulk-import-modal.modal-fullscreen .modal-footer {
+    background: #f8f9fa;
+    border-top: 2px solid #dee2e6;
+    border-radius: 0;
+    padding: 1rem 1.5rem;
+}
+
+.bulk-import-modal .modal-footer .btn {
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s var(--animation-smooth);
+}
+
+.bulk-import-modal .modal-footer .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s var(--animation-smooth);
+}
+
+.bulk-import-modal .modal-footer .btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.bulk-import-modal .modal-footer .btn-cancel {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.bulk-import-modal .modal-footer .btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.bulk-import-modal .modal-footer .btn-import {
+    background: var(--gradient-success);
+    color: white;
+    box-shadow: 0 6px 20px rgba(56, 239, 125, 0.4);
+}
+
+.bulk-import-modal .modal-footer .btn-import:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(56, 239, 125, 0.5);
+}
+
+.bulk-import-modal .modal-footer .btn-import:disabled {
+    background: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.5);
+    transform: none;
+    box-shadow: none;
+}
+
+/* ========== LOADING STATES ========== */
+.bulk-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 2rem;
+}
+
+.bulk-loading .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top: 3px solid var(--color-success);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.bulk-loading .loading-text {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* ========== RESULT MESSAGES ========== */
+.bulk-results {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.bulk-results h6 {
+    color: white;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.bulk-results .alert {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    margin-bottom: 0.75rem;
+}
+
+.bulk-results .alert-success {
+    border-color: var(--color-success);
+    background: rgba(56, 239, 125, 0.15);
+}
+
+.bulk-results .alert-danger {
+    border-color: var(--color-danger);
+    background: rgba(253, 121, 168, 0.15);
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes slideOutRight {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Row animation */
+.bulk-table tbody tr {
+    animation: slideInUp 0.3s var(--animation-smooth);
+}
+
+.bulk-table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+.bulk-table tbody tr:nth-child(2) { animation-delay: 0.2s; }
+.bulk-table tbody tr:nth-child(3) { animation-delay: 0.3s; }
+.bulk-table tbody tr:nth-child(4) { animation-delay: 0.4s; }
+.bulk-table tbody tr:nth-child(5) { animation-delay: 0.5s; }
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 1400px) {
+    .bulk-table thead th {
+        font-size: 0.8rem;
+        padding: 0.65rem 0.4rem;
+    }
+    
+    .bulk-table tbody td {
+        padding: 0.45rem 0.35rem;
+    }
+    
+    .bulk-table .form-control-sm,
+    .bulk-table .form-select-sm {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.45rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .bulk-import-modal .modal-dialog {
+        margin: 10px;
+        width: calc(100vw - 20px);
+        height: calc(100vh - 20px);
+    }
+    
+    .bulk-table-scroll {
+        max-height: 350px;
+    }
+    
+    .bulk-table thead th {
+        font-size: 0.75rem;
+        padding: 0.6rem 0.35rem;
+    }
+    
+    .bulk-table tbody td {
+        padding: 0.4rem 0.3rem;
+    }
+    
+    .bulk-table .form-control-sm,
+    .bulk-table .form-select-sm {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.4rem;
+    }
+    
+    .bulk-table .form-control,
+    .bulk-table .form-select {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.6rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .bulk-import-modal .modal-content {
+        border-radius: 0;
+    }
+    
+    .bulk-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .bulk-stats {
+        margin: 0;
+        justify-content: center;
+    }
+    
+    .bulk-table-scroll {
+        max-height: 300px;
+    }
+}
+
+/* ========== PASTE HINT ========== */
+.paste-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.1rem;
+    text-align: center;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s var(--animation-smooth);
+}
+
+.bulk-table-container:hover .paste-hint {
+    opacity: 1;
+}
+
+.bulk-table tbody:not(:empty) ~ .paste-hint {
+    display: none;
+}
+
+/* ========== SUCCESS STATES ========== */
+.row-success {
+    background: rgba(56, 239, 125, 0.1) !important;
+    border-right: 3px solid var(--color-success) !important;
+}
+
+.row-error {
+    background: rgba(253, 121, 168, 0.1) !important;
+    border-right: 3px solid var(--color-danger) !important;
+}
+
+.field-error {
+    border-color: var(--color-danger) !important;
+    background: rgba(253, 121, 168, 0.2) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* ========== EXCEL GRID TABLE STYLES ========== */
+/* Styles for the Excel-like grid table (second modal) */
+.excel-grid-container {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: auto;
+    max-height: 60vh;
+    transition: all 0.3s var(--animation-smooth);
+}
+
+.excel-grid-container:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+/* Paste Hint for Excel Grid */
+.excel-grid-container .paste-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #6c757d;
+    font-size: 1rem;
+    text-align: center;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+    background: rgba(255,255,255,0.9);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.excel-grid-container .paste-hint i {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-info);
+}
+
+.excel-grid-container:hover .paste-hint {
+    opacity: 0.7;
+}
+
+.excel-grid-container table:not(:empty) ~ .paste-hint,
+.excel-grid-container tbody:not(:empty) ~ .paste-hint {
+    display: none;
+}
+
+/* Excel Grid Table */
+.excel-grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.excel-grid-table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.excel-grid-table thead th {
+    color: white;
+    font-weight: 600;
+    padding: 14px 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+}
+
+.excel-grid-table thead th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 1px;
+}
+
+.excel-grid-table thead th i {
+    margin-left: 0.5rem;
+    color: rgba(255,255,255,0.9);
+    font-size: 0.9rem;
+}
+
+.excel-grid-table tbody tr {
+    transition: all 0.2s var(--animation-smooth);
+    border-bottom: 1px solid #e9ecef;
+}
+
+.excel-grid-table tbody tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.excel-grid-table tbody tr:hover {
+    background: #e3f2fd;
+    transform: scale(1.001);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+.excel-grid-table tbody td {
+    padding: 10px 8px;
+    border: 1px solid #dee2e6;
+    vertical-align: middle;
+    position: relative;
+}
+
+.excel-grid-table tbody td input,
+.excel-grid-table tbody td select {
+    width: 100%;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.excel-grid-table tbody td input:focus,
+.excel-grid-table tbody td select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    outline: none;
+    transform: scale(1.02);
+}
+
+.excel-grid-table tbody td input::placeholder {
+    color: #adb5bd;
+    font-style: italic;
+}
+
+.excel-grid-table tbody td select {
+    cursor: pointer;
+}
+
+.excel-grid-table tbody td select option {
+    background: white;
+    color: #212529;
+    padding: 8px;
+}
+
+/* Required Field Indicator */
+.excel-grid-table thead th:has-text("*") {
+    position: relative;
+}
+
+.excel-grid-table thead th::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 6px;
+    height: 6px;
+    background: #ffc107;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.excel-grid-table thead th:has-text("*")::before {
+    opacity: 1;
+}
+
+/* Delete Button in Excel Grid */
+.excel-grid-table .btn-delete-row,
+.excel-grid-table .btn-danger {
+    background: var(--gradient-warning);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s var(--animation-smooth);
+    box-shadow: 0 2px 8px rgba(253, 121, 168, 0.3);
+    cursor: pointer;
+    padding: 0;
+}
+
+.excel-grid-table .btn-delete-row:hover,
+.excel-grid-table .btn-danger:hover {
+    transform: scale(1.15) rotate(5deg);
+    box-shadow: 0 4px 15px rgba(253, 121, 168, 0.5);
+}
+
+/* Row Number in Excel Grid */
+.excel-grid-table .row-number {
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    margin: 0 auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* ========== BULK IMPORT TOOLBAR ========== */
+.bulk-import-toolbar {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.bulk-import-toolbar .btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s var(--animation-smooth);
+    padding: 0.5rem 1rem;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.bulk-import-toolbar .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+}
+
+.bulk-import-toolbar .btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.bulk-import-toolbar .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.bulk-import-toolbar .btn-success {
+    background: var(--gradient-success);
+    color: white;
+}
+
+.bulk-import-toolbar .btn-danger {
+    background: var(--gradient-warning);
+    color: white;
+}
+
+.bulk-import-toolbar .btn-info {
+    background: var(--gradient-info);
+    color: white;
+}
+
+.bulk-import-toolbar .btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.bulk-import-toolbar .badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.bulk-import-toolbar .badge.bg-primary {
+    background: var(--gradient-info) !important;
+}
+
+.bulk-import-toolbar .badge.bg-success {
+    background: var(--gradient-success) !important;
+}
+
+.bulk-import-toolbar .badge.bg-danger {
+    background: var(--gradient-warning) !important;
+}
+
+.bulk-import-toolbar .ms-auto {
+    margin-right: auto;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* ========== VALIDATION MESSAGES ========== */
+#bulkValidationMessages {
+    margin-top: 1rem;
+}
+
+#bulkValidationMessages .alert {
+    border-radius: 8px;
+    border: none;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#bulkValidationMessages .alert-info {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    color: #0d47a1;
+    border-right: 4px solid #2196f3;
+}
+
+#bulkValidationMessages .alert-warning {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    color: #e65100;
+    border-right: 4px solid #ff9800;
+}
+
+#bulkValidationMessages .alert-danger {
+    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+    color: #b71c1c;
+    border-right: 4px solid #f44336;
+}
+
+#bulkValidationMessages .alert-success {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    color: #1b5e20;
+    border-right: 4px solid #4caf50;
+}
+
+/* ========== RESPONSIVE DESIGN FOR EXCEL GRID ========== */
+@media (max-width: 1200px) {
+    .excel-grid-container {
+        max-height: 55vh;
+    }
+    
+    .excel-grid-table {
+        font-size: 0.85rem;
+    }
+    
+    .excel-grid-table thead th {
+        padding: 10px 6px;
+        font-size: 0.8rem;
+    }
+    
+    .excel-grid-table tbody td {
+        padding: 8px 6px;
+    }
+}
+
+@media (max-width: 768px) {
+    .excel-grid-container {
+        max-height: 50vh;
+        padding: 0.5rem;
+    }
+    
+    .excel-grid-table {
+        font-size: 0.8rem;
+    }
+    
+    .excel-grid-table thead th {
+        padding: 8px 4px;
+        font-size: 0.75rem;
+    }
+    
+    .excel-grid-table thead th i {
+        display: none;
+    }
+    
+    .excel-grid-table tbody td {
+        padding: 6px 4px;
+    }
+    
+    .excel-grid-table tbody td input,
+    .excel-grid-table tbody td select {
+        font-size: 0.75rem;
+        padding: 6px 8px;
+    }
+    
+    .bulk-import-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1rem;
+    }
+    
+    .bulk-import-toolbar .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .bulk-import-toolbar .ms-auto {
+        margin: 0;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .excel-grid-container .paste-hint {
+        font-size: 0.85rem;
+        padding: 0.75rem 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .excel-grid-container {
+        max-height: 45vh;
+    }
+    
+    .excel-grid-table {
+        font-size: 0.75rem;
+    }
+    
+    .excel-grid-table thead th {
+        padding: 6px 3px;
+        font-size: 0.7rem;
+    }
+    
+    .excel-grid-table tbody td {
+        padding: 4px 3px;
+    }
+}

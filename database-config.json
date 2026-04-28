@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "type": "database-config",
+  "company": "الشركة الافتراضية",
+  "config": {
+    "type": "firebase",
+    "name": "الشركة الافتراضية",
+    "companyId": "default-company",
+    "firebase": {
+      "projectId": "your-project-id",
+      "apiKey": "your-api-key",
+      "authDomain": "your-project.firebaseapp.com",
+      "storageBucket": "your-project.appspot.com"
+    },
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  "createdAt": "2024-01-01T00:00:00.000Z"
+}
+
+
+
