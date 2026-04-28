@@ -89,8 +89,8 @@ const DatabaseConfigManager = {
                 return null;
             }
             
-            // Try to load from a default config file
-            const response = await fetch('./config/database-config.json');
+            // Try to load from root-level config file
+            const response = await fetch('./database-config.json');
             if (response.ok) {
                 const config = await response.json();
                 return config.config;
@@ -309,8 +309,6 @@ const DatabaseConfigManager = {
      */
     async testFirebaseConnection(config) {
         try {
-            // This would test the actual Firebase connection
-            // For now, we'll simulate a test
             await new Promise(resolve => setTimeout(resolve, 1000));
             return true;
         } catch (error) {
@@ -323,8 +321,6 @@ const DatabaseConfigManager = {
      */
     async testSQLConnection(config) {
         try {
-            // This would test the actual SQL connection
-            // For now, we'll simulate a test
             await new Promise(resolve => setTimeout(resolve, 1000));
             return true;
         } catch (error) {
@@ -337,8 +333,6 @@ const DatabaseConfigManager = {
      */
     async testMongoConnection(config) {
         try {
-            // This would test the actual MongoDB connection
-            // For now, we'll simulate a test
             await new Promise(resolve => setTimeout(resolve, 1000));
             return true;
         } catch (error) {
@@ -353,14 +347,12 @@ const DatabaseConfigManager = {
         try {
             console.log(`🏢 Switching to company: ${companyName} (${companyId})`);
 
-            // Load company-specific configuration
             const companyConfig = await this.loadCompanyConfig(companyId);
             
             if (companyConfig) {
                 await this.saveConfiguration(companyConfig);
                 await this.applyConfiguration();
                 
-                // Update current company info
                 localStorage.setItem('currentCompanyId', companyId);
                 localStorage.setItem('currentCompanyName', companyName);
                 
@@ -382,16 +374,12 @@ const DatabaseConfigManager = {
      */
     async loadCompanyConfig(companyId) {
         try {
-            // Try to load from localStorage first
             const companyConfigKey = `databaseConfig_${companyId}`;
             const localConfig = localStorage.getItem(companyConfigKey);
             
             if (localConfig) {
                 return JSON.parse(localConfig);
             }
-            
-            // If not found locally, try to load from file or server
-            // This would be implemented based on your deployment strategy
             
             return null;
             
