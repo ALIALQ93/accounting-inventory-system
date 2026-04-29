@@ -1,12 +1,5 @@
 /* ==================== Chart of Accounts Module Modern Styles ==================== */
 
-/* Header Modern */
-.accounts-header-modern {
-    background: #ffffff;
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: var(--shadow-card);
-}
-
 /* Controls */
 .accounts-controls-modern {
     background: white;
@@ -101,7 +94,7 @@
     background: rgba(59, 130, 246, 0.05);
 }
 
-/* Main Account (Level 0) - الحسابات الخمسة الرئيسية */
+/* Main Account (Level 0) - الحسابات السبعة الرئيسية */
 .tree-node-content.main-account {
     background: rgba(16, 185, 129, 0.08);
     border-right-width: 3px;
@@ -222,6 +215,10 @@
 
 .tree-node-type {
     min-width: 80px;
+    padding: 0.3rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
 }
 
 .type-badge {
@@ -296,13 +293,6 @@
 .account-name-secondary i {
     font-size: 0.75rem;
     opacity: 0.7;
-}
-
-.tree-node-type {
-    padding: 0.3rem 0.8rem;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 600;
 }
 
 .tree-node-type.assets {
@@ -736,7 +726,6 @@
 
 .form-section:hover {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
 }
 
 .section-header {
@@ -780,7 +769,7 @@
 /* Form Controls */
 #accountModal .form-label {
     font-weight: 600;
-    color: #374151;
+    color: #2c3e50;
     margin-bottom: 0.6rem;
     display: flex;
     align-items: center;
@@ -1028,17 +1017,6 @@
     background: #5a6268;
     border-color: #545b62;
     transform: translateY(-2px);
-}
-
-#accountModal .form-label {
-    font-weight: 600;
-    color: #2c3e50;
-}
-
-#accountModal .form-control:focus,
-#accountModal .form-select:focus {
-    border-color: #27ae60;
-    box-shadow: 0 0 0 0.2rem rgba(39, 174, 96, 0.25);
 }
 
 /* Responsive */

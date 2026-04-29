@@ -271,6 +271,13 @@
     border-color: var(--btn-info);
 }
 
+/* Aliases for convenience */
+.btn-modern-outline { background: transparent; color: var(--btn-secondary); border-color: var(--btn-secondary); }
+.btn-modern-outline:hover:not(:disabled) { background: var(--btn-secondary); color: var(--btn-text-white); }
+
+.btn-modern-clear { background: transparent; color: var(--text-secondary, #6c757d); border-color: var(--border-default, #dee2e6); }
+.btn-modern-clear:hover:not(:disabled) { background: var(--bg-surface-alt, #f8f9fa); color: var(--text-primary); border-color: var(--border-muted, #ced4da); }
+
 /* ========== GHOST BUTTONS ========== */
 
 /* Ghost Primary */
