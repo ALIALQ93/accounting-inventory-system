@@ -158,7 +158,7 @@ const NavbarStats = {
             }
             
             // Update display
-            navCashBalance.textContent = new Intl.NumberFormat('ar-IQ').format(Math.max(0, balance)) + ' د.ع';
+            navCashBalance.textContent = new Intl.NumberFormat('en-US', { numberingSystem: 'latn' }).format(Math.max(0, balance)) + ' د.ع';
             this.animateNumber(navCashBalance);
             
             console.log(`💰 Cash balance updated: ${balance}`);

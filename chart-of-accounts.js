@@ -28,6 +28,54 @@ const ChartOfAccountsModule = {
     },
 
     /**
+     * Check if account code is one of the 7 root main accounts.
+     */
+    isMainAccountCode(code) {
+        return ['1', '2', '3', '4', '5', '6', '7'].includes(String(code));
+    },
+
+    // ─── Public Data API (used by other modules) ──────────────────────────────
+
+    /**
+     * Get all accounts — returns cached allAccounts or loads from Firestore.
+     * Other modules should call this instead of querying chartOfAccounts directly.
+     * @param {boolean} forceReload - Force fresh Firestore read
+     * @returns {Promise<Array>} All accounts array
+     */
+    async getAccounts(forceReload = false) {
+        if (!forceReload && this.allAccounts && this.allAccounts.length > 0) {
+            return this.allAccounts;
+        }
+        await this.loadAccounts();
+        return this.allAccounts;
+    },
+
+    /**
+     * Get only leaf (final) accounts — accounts with no children.
+     * These are the only accounts valid for use in transactions.
+     * @returns {Array} Leaf accounts array
+     */
+    getLeafAccounts() {
+        const all = this.allAccounts || [];
+        const parentIdSet = new Set(
+            all.filter(a => a.parentId).map(a => a.parentId)
+        );
+        return all.filter(acc => !parentIdSet.has(acc.id));
+    },
+
+    /**
+     * Find a single account by its Firestore document ID.
+     * Returns null if not found or accounts not yet loaded.
+     * @param {string} id - Account document ID
+     * @returns {Object|null}
+     */
+    getAccountById(id) {
+        return (this.allAccounts || []).find(acc => acc.id === id) || null;
+    },
+
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /**
      * Get HTML for chart of accounts module
      */
     getHTML() {
@@ -327,7 +375,7 @@ const ChartOfAccountsModule = {
         try {
             // Check if main accounts already exist
             const existingMainAccounts = this.allAccounts.filter(acc => 
-                ['1', '2', '3', '4', '5', '6', '7'].includes(acc.code)
+                this.isMainAccountCode(acc.code)
             );
 
             if (existingMainAccounts.length > 0) {
@@ -538,7 +586,7 @@ const ChartOfAccountsModule = {
         if (!btn) return;
 
         const existingMainAccounts = this.allAccounts.filter(acc => 
-            ['1', '2', '3', '4', '5', '6', '7'].includes(acc.code)
+            this.isMainAccountCode(acc.code)
         );
 
         if (existingMainAccounts.length === 7) {
@@ -617,7 +665,7 @@ const ChartOfAccountsModule = {
                 <div class="empty-state-accounts">
                     <i class="fas fa-sitemap"></i>
                     <h4>لا توجد حسابات</h4>
-                    <p>ابدأ بإنشاء الحسابات الرئيسية الخمسة</p>
+                    <p>ابدأ بإنشاء الحسابات الرئيسية السبعة</p>
                     <button class="btn-modern btn-modern-success" onclick="ChartOfAccountsModule.createMainAccounts()">
                         <i class="fas fa-magic"></i>
                         <span>إنشاء الحسابات الرئيسية</span>
@@ -649,7 +697,7 @@ const ChartOfAccountsModule = {
         const hasChildren = children.length > 0;
         const isExpanded = this.expandedNodes.has(account.id) || this.allExpanded;
         const isParent = account.isParentAccount === true || account.isParentAccount === 'true';
-        const isMainAccount = ['1', '2', '3', '4', '5', '6', '7'].includes(account.code);
+        const isMainAccount = this.isMainAccountCode(account.code);
         const typeClass = account.type || 'default';
 
         let html = `
@@ -671,7 +719,7 @@ const ChartOfAccountsModule = {
                                 ${isMainAccount ? '<i class="fas fa-star text-warning ms-2" title="حساب أساسي"></i>' : ''}
                                 ${account.isCustomerAccount ? '<i class="fas fa-user-tie text-success ms-2" title="حساب عميل - محمي"></i>' : ''}
                                 ${account.isSupplierAccount ? '<i class="fas fa-truck text-warning ms-2" title="حساب مورد - محمي"></i>' : ''}
-                                ${!account.isCustomerAccount && !account.isSupplierAccount && isParent ? '<i class="fas fa-folder-tree text-success ms-1" title="حساب رئيسي"></i>' : ''}
+                                ${!isMainAccount && !account.isCustomerAccount && !account.isSupplierAccount && isParent ? '<i class="fas fa-folder-tree text-success ms-1" title="حساب رئيسي"></i>' : ''}
                                 ${!account.isCustomerAccount && !account.isSupplierAccount && !isParent ? '<i class="fas fa-file-invoice text-info ms-1" title="حساب نهائي"></i>' : ''}
                             </div>
                             ${account.name2 ? `<div class="tree-node-name2"><i class="fas fa-globe"></i> ${account.name2}</div>` : ''}
@@ -691,31 +739,7 @@ const ChartOfAccountsModule = {
                     </div>
                     
                     <div class="tree-node-actions">
-                        ${hasChildren && !account.isCustomerAccount && !account.isSupplierAccount && !account.isSystemProtected && account.canHaveChildren !== false ? `
-                            <button class="action-btn-modern action-add" 
-                                    onclick="ChartOfAccountsModule.showAddEditAccountModal(null, '${account.id}')" 
-                                    title="إضافة حساب فرعي">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        ` : hasChildren && (account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected || account.canHaveChildren === false) ? `
-                            <button class="action-btn-modern action-add disabled" 
-                                    title="🔒 حساب محمي - لا يمكن إضافة حسابات فرعية تحته${account.isCustomerAccount ? ' (حساب عميل)' : account.isSupplierAccount ? ' (حساب مورد)' : ''}"
-                                    disabled>
-                                <i class="fas fa-lock"></i>
-                            </button>
-                        ` : ''}
-                        <button class="action-btn-modern action-edit ${account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected ? 'disabled' : ''}" 
-                                onclick="ChartOfAccountsModule.editAccount('${account.id}')" 
-                                title="${account.isCustomerAccount ? '🔒 حساب عميل محمي - لا يمكن تعديله من هنا' : account.isSupplierAccount ? '🔒 حساب مورد محمي - لا يمكن تعديله من هنا' : account.isSystemProtected ? '🔒 حساب محمي - لا يمكن تعديله' : isMainAccount ? 'تعديل العملة والاسم الثاني فقط' : 'تعديل'}"
-                                ${account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected ? 'disabled' : ''}>
-                            <i class="fas ${account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected ? 'fa-lock' : 'fa-edit'}"></i>
-                        </button>
-                        <button class="action-btn-modern action-delete ${isMainAccount || account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected ? 'disabled' : ''}" 
-                                onclick="ChartOfAccountsModule.deleteAccount('${account.id}')" 
-                                title="${account.isCustomerAccount ? '🔒 حساب عميل محمي - لا يمكن حذفه من هنا' : account.isSupplierAccount ? '🔒 حساب مورد محمي - لا يمكن حذفه من هنا' : account.isSystemProtected ? '🔒 حساب محمي - لا يمكن حذفه' : isMainAccount ? 'لا يمكن حذف الحسابات الأساسية' : 'حذف'}"
-                                ${isMainAccount || account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected ? 'disabled' : ''}>
-                            <i class="fas ${account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected ? 'fa-lock' : 'fa-trash-alt'}"></i>
-                        </button>
+                        ${this.renderAccountActionButtons(account, hasChildren)}
                     </div>
                 </div>
         `;
@@ -730,6 +754,57 @@ const ChartOfAccountsModule = {
 
         html += '</div>';
         return html;
+    },
+
+    /**
+     * Build action buttons HTML for a given account (shared by tree and table views).
+     * @param {Object} account
+     * @param {boolean} includeAdd - whether to include the "add child" button
+     */
+    renderAccountActionButtons(account, includeAdd = false) {
+        const isMainAccount = this.isMainAccountCode(account.code);
+        const isProtected = account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected;
+        const cannotHaveChildren = isProtected || account.canHaveChildren === false;
+
+        const addBtn = includeAdd
+            ? cannotHaveChildren
+                ? `<button class="action-btn-modern action-add disabled"
+                        title="🔒 حساب محمي - لا يمكن إضافة حسابات فرعية تحته${account.isCustomerAccount ? ' (حساب عميل)' : account.isSupplierAccount ? ' (حساب مورد)' : ''}"
+                        disabled>
+                    <i class="fas fa-lock"></i>
+                   </button>`
+                : `<button class="action-btn-modern action-add"
+                        onclick="ChartOfAccountsModule.showAddEditAccountModal(null, '${account.id}')"
+                        title="إضافة حساب فرعي">
+                    <i class="fas fa-plus"></i>
+                   </button>`
+            : '';
+
+        const editTitle = account.isCustomerAccount ? '🔒 حساب عميل محمي - لا يمكن تعديله من هنا'
+            : account.isSupplierAccount ? '🔒 حساب مورد محمي - لا يمكن تعديله من هنا'
+            : account.isSystemProtected ? '🔒 حساب محمي - لا يمكن تعديله'
+            : isMainAccount ? 'تعديل العملة والاسم الثاني فقط' : 'تعديل';
+
+        const deleteTitle = account.isCustomerAccount ? '🔒 حساب عميل محمي - لا يمكن حذفه من هنا'
+            : account.isSupplierAccount ? '🔒 حساب مورد محمي - لا يمكن حذفه من هنا'
+            : account.isSystemProtected ? '🔒 حساب محمي - لا يمكن حذفه'
+            : isMainAccount ? 'لا يمكن حذف الحسابات الأساسية' : 'حذف';
+
+        const editBtn = `<button class="action-btn-modern action-edit ${isProtected ? 'disabled' : ''}"
+                onclick="ChartOfAccountsModule.editAccount('${account.id}')"
+                title="${editTitle}"
+                ${isProtected ? 'disabled' : ''}>
+            <i class="fas ${isProtected ? 'fa-lock' : 'fa-edit'}"></i>
+        </button>`;
+
+        const deleteBtn = `<button class="action-btn-modern action-delete ${isMainAccount || isProtected ? 'disabled' : ''}"
+                onclick="ChartOfAccountsModule.deleteAccount('${account.id}')"
+                title="${deleteTitle}"
+                ${isMainAccount || isProtected ? 'disabled' : ''}>
+            <i class="fas ${isProtected ? 'fa-lock' : 'fa-trash-alt'}"></i>
+        </button>`;
+
+        return addBtn + editBtn + deleteBtn;
     },
 
     /**
@@ -889,7 +964,7 @@ const ChartOfAccountsModule = {
         }
 
         pageAccounts.forEach((account, index) => {
-            const isMainAccount = ['1', '2', '3', '4', '5', '6', '7'].includes(account.code);
+            const isMainAccount = this.isMainAccountCode(account.code);
             const isParent = account.isParentAccount === true || account.isParentAccount === 'true';
             const hasChildren = this.allAccounts.some(acc => acc.parentId === account.id);
             
@@ -936,18 +1011,7 @@ const ChartOfAccountsModule = {
                 </td>
                 <td class="text-center">
                     <div class="action-buttons">
-                        <button class="action-btn-modern action-edit ${account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected ? 'disabled' : ''}" 
-                                onclick="ChartOfAccountsModule.editAccount('${account.id}')" 
-                                title="${account.isCustomerAccount ? '🔒 حساب عميل محمي - لا يمكن تعديله من هنا' : account.isSupplierAccount ? '🔒 حساب مورد محمي - لا يمكن تعديله من هنا' : account.isSystemProtected ? '🔒 حساب محمي - لا يمكن تعديله' : isMainAccount ? 'تعديل العملة والاسم الثاني فقط' : 'تعديل'}"
-                                ${account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected ? 'disabled' : ''}>
-                            <i class="fas ${account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected ? 'fa-lock' : 'fa-edit'}"></i>
-                        </button>
-                        <button class="action-btn-modern action-delete ${isMainAccount || account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected ? 'disabled' : ''}" 
-                                onclick="ChartOfAccountsModule.deleteAccount('${account.id}')" 
-                                title="${account.isCustomerAccount ? '🔒 حساب عميل محمي - لا يمكن حذفه من هنا' : account.isSupplierAccount ? '🔒 حساب مورد محمي - لا يمكن حذفه من هنا' : account.isSystemProtected ? '🔒 حساب محمي - لا يمكن حذفه' : isMainAccount ? 'لا يمكن حذف الحسابات الأساسية' : 'حذف'}"
-                                ${isMainAccount || account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected ? 'disabled' : ''}>
-                            <i class="fas ${account.isCustomerAccount || account.isSupplierAccount || account.isSystemProtected ? 'fa-lock' : 'fa-trash-alt'}"></i>
-                        </button>
+                        ${this.renderAccountActionButtons(account, false)}
                     </div>
                 </td>
             `;
@@ -955,72 +1019,9 @@ const ChartOfAccountsModule = {
         });
 
         this.renderPagination();
-        
-        // ✅ حساب وعرض الأرصدة في الجدول
-        this.calculateAndDisplayTableBalances();
-    },
-    
-    /**
-     * Calculate and display balances in table view
-     */
-    async calculateAndDisplayTableBalances() {
-        try {
-            // Load all general entries
-            const entriesSnapshot = await db.collection('generalEntries')
-                .where('status', '==', 'posted')
-                .get();
-            
-            // Calculate balance for each account
-            const accountBalances = {};
-            
-            entriesSnapshot.forEach(doc => {
-                const generalEntry = doc.data();
-                if (generalEntry.entries && Array.isArray(generalEntry.entries)) {
-                    generalEntry.entries.forEach(entry => {
-                        const accountId = entry.accountId;
-                        
-                        if (!accountBalances[accountId]) {
-                            accountBalances[accountId] = {
-                                debit: 0,
-                                credit: 0,
-                                currency: entry.currency || 'IQD'
-                            };
-                        }
-                        
-                        accountBalances[accountId].debit += parseFloat(entry.debit) || 0;
-                        accountBalances[accountId].credit += parseFloat(entry.credit) || 0;
-                    });
-                }
-            });
-            
-            // Update table balances
-            this.filteredAccounts.forEach(account => {
-                const balanceEl = document.getElementById(`table-balance-${account.id}`);
-                if (!balanceEl) return;
-                
-                const balance = accountBalances[account.id];
-                
-                if (balance) {
-                    const netBalance = balance.debit - balance.credit;
-                    const absBalance = Math.abs(netBalance);
-                    const balanceType = netBalance >= 0 ? 'مدين' : 'دائن';
-                    const balanceClass = netBalance >= 0 ? 'text-primary' : 'text-success';
-                    
-                    balanceEl.innerHTML = `
-                        <span class="${balanceClass} fw-bold">${this.formatCurrency(absBalance)}</span>
-                        <small class="text-muted d-block">${account.currency || 'IQD'} - ${balanceType}</small>
-                    `;
-                } else {
-                    balanceEl.innerHTML = `
-                        <span class="text-muted">0.00</span>
-                        <small class="text-muted d-block">${account.currency || 'IQD'}</small>
-                    `;
-                }
-            });
-            
-        } catch (error) {
-            console.error('Error calculating table balances:', error);
-        }
+
+        // حساب وعرض الأرصدة (نفس الدالة الموحدة مع الكاش والتجميع)
+        this.calculateAndDisplayBalances();
     },
 
     /**
@@ -1091,9 +1092,11 @@ const ChartOfAccountsModule = {
         
         const currentValue = parentAccountDropdown.value; // Save current value
 
-        // ✅ التحقق: هل وصلنا للحد الأقصى من الحسابات الأساسية؟
+        // هل يمكن إضافة/الإبقاء على حساب جذر؟
+        // نعم فقط إذا: العدد أقل من 7، أو نعدّل حساباً هو نفسه جذر بالفعل
         const existingMainAccounts = this.allAccounts.filter(acc => !acc.parentId);
-        const canAddMainAccount = this.editingAccount || existingMainAccounts.length < 7;
+        const isEditingRootAccount = this.editingAccount && !this.editingAccount.parentId;
+        const canAddMainAccount = isEditingRootAccount || existingMainAccounts.length < 7;
         
         if (canAddMainAccount) {
             parentAccountDropdown.innerHTML = '<option value="">حساب أساسي (بدون حساب أب)</option>';
@@ -1110,7 +1113,7 @@ const ChartOfAccountsModule = {
             }
             
             // ✅ تضمين الحسابات الأساسية (1-7) دائماً
-            const isMainAccount = ['1', '2', '3', '4', '5', '6', '7'].includes(acc.code);
+            const isMainAccount = this.isMainAccountCode(acc.code);
             if (isMainAccount) {
                 return true;
             }
@@ -1146,7 +1149,10 @@ const ChartOfAccountsModule = {
     getAccountLevel(account) {
         let level = 0;
         let current = account;
+        const visited = new Set();
         while (current.parentId) {
+            if (visited.has(current.id)) break; // حماية من الدورات المرجعية
+            visited.add(current.id);
             level++;
             current = this.allAccounts.find(acc => acc.id === current.parentId);
             if (!current) break;
@@ -1282,7 +1288,7 @@ const ChartOfAccountsModule = {
             // Edit mode
             const account = this.allAccounts.find(acc => acc.id === accountId);
             if (account) {
-                const isMainAccount = ['1', '2', '3', '4', '5', '6', '7'].includes(account.code);
+                const isMainAccount = this.isMainAccountCode(account.code);
 
                 this.editingAccount = account;
                 
@@ -1396,48 +1402,18 @@ const ChartOfAccountsModule = {
             const currency = document.getElementById('accountCurrency').value;
             const nature = document.getElementById('accountNature').value;
             
-            // ✅ منع إضافة حساب أساسي ثامن
-            if (!this.editingAccount && !parentId) {
-                // هذا حساب أساسي جديد
-                const existingMainAccounts = this.allAccounts.filter(acc => !acc.parentId);
-                if (existingMainAccounts.length >= 7) {
-                    hideLoading();
-                    this.showError('⚠️ لا يمكن إضافة أكثر من 7 حسابات أساسية!\n\nالحسابات الأساسية المسموحة:\n1. الأصول\n2. الخصوم\n3. حقوق الملكية\n4. الإيرادات\n5. المصروفات\n6. صافي المبيعات\n7. صافي المشتريات\n\nالرجاء إضافة هذا الحساب كحساب فرعي.');
-                    return;
-                }
-            }
-            
-            // ✅ التحقق من الحقول المطلوبة
-            if (!name) {
-                hideLoading();
-                this.showError('الرجاء إدخال اسم الحساب');
-                return;
-            }
-            
-            if (!code) {
-                hideLoading();
-                this.showError('الرجاء إدخال كود الحساب');
-                return;
-            }
-            
-            if (!currency) {
-                hideLoading();
-                this.showError('الرجاء اختيار العملة');
-                return;
-            }
-            
-            if (!nature) {
-                hideLoading();
-                this.showError('الرجاء اختيار طبيعة الحساب (مدين/دائن)');
-                return;
-            }
-            
-            // Get type from parent (or null for main accounts)
+            // ورث النوع من أقرب جد يحمله (الأب أو جده أو الجذر)
             let type = null;
             if (parentId) {
-                const parentAccount = this.allAccounts.find(acc => acc.id === parentId);
-                if (parentAccount) {
-                    type = parentAccount.type;
+                let ancestor = this.allAccounts.find(acc => acc.id === parentId);
+                const visited = new Set();
+                while (ancestor) {
+                    if (visited.has(ancestor.id)) break;
+                    visited.add(ancestor.id);
+                    if (ancestor.type) { type = ancestor.type; break; }
+                    ancestor = ancestor.parentId
+                        ? this.allAccounts.find(acc => acc.id === ancestor.parentId)
+                        : null;
                 }
             }
             
@@ -1514,16 +1490,6 @@ const ChartOfAccountsModule = {
                 }
             }
             
-            // منع تكرار كود الحساب
-            const codeConflict = this.allAccounts.find(
-                acc => acc.code === code && acc.id !== this.editingAccount?.id
-            );
-            if (codeConflict) {
-                hideLoading();
-                this.showError(`كود الحساب "${code}" مستخدم مسبقاً من قِبَل "${codeConflict.name}". يرجى اختيار كود مختلف.`);
-                return;
-            }
-
             const formData = {
                 name: name,
                 name2: name2 || '',
@@ -1541,7 +1507,7 @@ const ChartOfAccountsModule = {
 
             if (this.editingAccount) {
                 // Update existing account
-                const isMainAccount = ['1', '2', '3', '4', '5', '6', '7'].includes(this.editingAccount.code);
+                const isMainAccount = this.isMainAccountCode(this.editingAccount.code);
                 
                 if (isMainAccount) {
                     // ✅ For main accounts, only update name2 and currency
@@ -1616,7 +1582,7 @@ const ChartOfAccountsModule = {
         }
 
         // Check if it's a main account (cannot be deleted)
-        const isMainAccount = ['1', '2', '3', '4', '5', '6', '7'].includes(account.code);
+        const isMainAccount = this.isMainAccountCode(account.code);
         if (isMainAccount) {
             this.showError('🔒 لا يمكن حذف الحسابات الأساسية السبعة!\n\nهذه الحسابات هي الأساس للنظام المحاسبي.');
             return;
@@ -1688,14 +1654,9 @@ const ChartOfAccountsModule = {
             debitInAccountCurrency = parseFloat(entry.debit) || 0;
             creditInAccountCurrency = parseFloat(entry.credit) || 0;
         } else {
-            // الحساب بعملة أجنبية
-            if (originalCurrency === accountCurrency && exchangeRate > 0) {
-                debitInAccountCurrency = originalDebit || (parseFloat(entry.debit) || 0) / exchangeRate;
-                creditInAccountCurrency = originalCredit || (parseFloat(entry.credit) || 0) / exchangeRate;
-            } else {
-                debitInAccountCurrency = parseFloat(entry.debit) || 0;
-                creditInAccountCurrency = parseFloat(entry.credit) || 0;
-            }
+            // الحساب بعملة أجنبية — القيم المخزنة هي بالعملة الأساسية
+            debitInAccountCurrency = parseFloat(entry.debit) || 0;
+            creditInAccountCurrency = parseFloat(entry.credit) || 0;
         }
         
         return { debit: debitInAccountCurrency, credit: creditInAccountCurrency };
@@ -1914,13 +1875,10 @@ const ChartOfAccountsModule = {
     },
 
     /**
-     * Format currency
+     * Format currency — delegates to the global formatCurrency() from utils.js
      */
     formatCurrency(amount) {
-        return new Intl.NumberFormat('ar-IQ', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }).format(amount || 0);
+        return formatCurrency(amount);
     },
     
     /**
@@ -2264,11 +2222,4 @@ const ChartOfAccountsModule = {
     }
 };
 
-// Initialize when DOM is ready (only once)
-document.addEventListener('DOMContentLoaded', () => {
-    // Only initialize if the module's section is present
-    if (document.getElementById('chart-of-accounts')) {
-        ChartOfAccountsModule.initialize();
-    }
-});
 

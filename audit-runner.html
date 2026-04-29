@@ -375,8 +375,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <!-- Load config if available -->
-    <script src="js/config.js"></script>
-    
+    <script src="config.js"></script>
+
     <!-- Initialize Firebase -->
     <script>
         // Initialize Firebase if config is available and not already initialized
@@ -389,7 +389,7 @@
                 } else {
                     console.log('✅ Firebase already initialized, using existing instance');
                 }
-                
+
                 // Get db and auth references
                 const db = firebase.firestore();
                 const auth = firebase.auth();
@@ -405,34 +405,31 @@
             }
         }
     </script>
-    
+
     <!-- Load database module -->
-    <script src="js/database.js"></script>
-    
+    <script src="database.js"></script>
+
     <!-- Load audit script -->
-    <script src="js/utils/pre-release-audit.js"></script>
-    
+    <script src="pre-release-audit.js"></script>
+
     <!-- Load modules for repost audit -->
-    <script src="js/modules/accounts.js"></script>
-    <script src="js/modules/suppliers.js"></script>
-    <script src="js/modules/customers.js"></script>
-    <script src="js/modules/cost-centers.js"></script>
-    <script src="js/modules/currencies.js"></script>
-    <script src="js/modules/products.js"></script>
-    <script src="js/modules/purchases.js"></script>
-    <script src="js/modules/sales.js"></script>
-    <script src="js/modules/purchase-returns.js"></script>
-    <script src="js/modules/sales-returns.js"></script>
-    <script src="js/modules/vouchers.js"></script>
-    
+    <script src="chart-of-accounts.js"></script>
+    <script src="parties.js"></script>
+    <script src="cost-centers.js"></script>
+    <script src="currencies.js"></script>
+    <script src="products.js"></script>
+    <script src="costing-methods.js"></script>
+    <script src="purchases.js"></script>
+    <script src="sales.js"></script>
+    <script src="purchase-returns.js"></script>
+    <script src="sales-returns.js"></script>
+    <script src="vouchers.js"></script>
+
     <!-- Load repost entries audit module -->
-    <script src="js/modules/repost-entries-audit.js"></script>
-    
-    <!-- Load costing methods -->
-    <script src="js/costing-methods.js"></script>
-    
+    <script src="repost-entries-audit.js"></script>
+
     <!-- Load inventory module -->
-    <script src="js/modules/inventory.js"></script>
+    <script src="inventory.js"></script>
     
     <!-- Helper functions for audit runner -->
     <script>

@@ -1376,12 +1376,7 @@ const Collections = {
     // Accounts
     async getAccounts() {
         try {
-            // Load from chartOfAccounts (the main chart of accounts)
-            const snapshot = await db.collection('chartOfAccounts').get();
-            return snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
+            return await ChartOfAccountsModule.getAccounts();
         } catch (error) {
             console.error('Error getting accounts:', error);
             throw error;
@@ -1390,13 +1385,10 @@ const Collections = {
 
     async getAccount(accountId) {
         try {
-            // Load from chartOfAccounts (the main chart of accounts)
-            const doc = await db.collection('chartOfAccounts').doc(accountId).get();
-            if (doc.exists) {
-                return { id: doc.id, ...doc.data() };
-            } else {
-                throw new Error('Account not found');
-            }
+            await ChartOfAccountsModule.getAccounts();
+            const account = ChartOfAccountsModule.getAccountById(accountId);
+            if (account) return account;
+            throw new Error('Account not found');
         } catch (error) {
             console.error('Error getting account:', error);
             throw error;
