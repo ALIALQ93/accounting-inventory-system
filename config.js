@@ -147,6 +147,38 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = { firebaseConfig, appConfig, auth, db };
 }
 
+// ─── Enforce Latin (English) digits globally ──────────────────────────────────
+// Patches Number and Date prototype methods so that ANY .toLocaleString() call
+// in the app — regardless of which locale is passed — always renders 0-9 instead
+// of Arabic-Indic numerals (٠١٢٣٤٥٦٧٨٩). This is the single authoritative fix
+// for all 35+ raw .toLocaleString() calls scattered across the codebase.
+(function enforceLatinDigits() {
+    const _numToLocale = Number.prototype.toLocaleString;
+    Number.prototype.toLocaleString = function(locales, options) {
+        return _numToLocale.call(this, locales || 'en-US',
+            Object.assign({}, options, { numberingSystem: 'latn' }));
+    };
+
+    const _dateToLocaleString = Date.prototype.toLocaleString;
+    Date.prototype.toLocaleString = function(locales, options) {
+        return _dateToLocaleString.call(this, locales,
+            Object.assign({}, options, { numberingSystem: 'latn', calendar: 'gregory' }));
+    };
+
+    const _dateToLocaleDateString = Date.prototype.toLocaleDateString;
+    Date.prototype.toLocaleDateString = function(locales, options) {
+        return _dateToLocaleDateString.call(this, locales,
+            Object.assign({}, options, { numberingSystem: 'latn', calendar: 'gregory' }));
+    };
+
+    const _dateToLocaleTimeString = Date.prototype.toLocaleTimeString;
+    Date.prototype.toLocaleTimeString = function(locales, options) {
+        return _dateToLocaleTimeString.call(this, locales,
+            Object.assign({}, options, { numberingSystem: 'latn' }));
+    };
+})();
+// ─────────────────────────────────────────────────────────────────────────────
+
 console.log('✅ Config module loaded');
 console.log('📱 App:', appConfig.appName, 'v' + appConfig.appVersion);
 

@@ -1004,10 +1004,10 @@ const VouchersModule = {
     },
 
     /**
-     * Format currency
+     * Format currency — delegates to the global formatCurrency() from utils.js
      */
     formatCurrency(amount) {
-        return new Intl.NumberFormat('ar-IQ').format(amount || 0);
+        return formatCurrency(amount);
     },
 
     /**

@@ -595,7 +595,7 @@ const DashboardModule = {
             }
 
             if (isCurrency) {
-                countSpan.textContent = new Intl.NumberFormat('ar-IQ').format(Math.round(current));
+                countSpan.textContent = new Intl.NumberFormat('en-US', { numberingSystem: 'latn' }).format(Math.round(current));
             } else {
                 countSpan.textContent = Math.round(current);
             }

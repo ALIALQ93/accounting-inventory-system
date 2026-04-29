@@ -1875,13 +1875,10 @@ const ChartOfAccountsModule = {
     },
 
     /**
-     * Format currency
+     * Format currency — delegates to the global formatCurrency() from utils.js
      */
     formatCurrency(amount) {
-        return new Intl.NumberFormat('ar-IQ', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }).format(amount || 0);
+        return formatCurrency(amount);
     },
     
     /**
