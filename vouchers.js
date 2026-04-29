@@ -1518,77 +1518,23 @@ const VouchersModule = {
         try {
             const searchTerm = document.getElementById('accountSearchInput')?.value.toLowerCase() || '';
             const typeFilter = document.getElementById('accountSearchTypeFilter')?.value || '';
-            
-            // Load accounts from Firebase - show all leaf accounts (final accounts)
-            // ✅ إصلاح: استخدام isLeafAccount أو isFinalAccount أو canHaveChildren
-            let query = db.collection('chartOfAccounts');
-            
-            // Try to get only leaf accounts (accounts that cannot have children)
-            const snapshot = await query.get();
-            
-            // Filter to get only leaf/final accounts
-            const filteredAccounts = [];
-            
-            // ✅ إصلاح: عرض الحسابات النهائية فقط من شجرة الحسابات
-            // الحساب النهائي هو:
-            // 1. محدد كنهائي صراحة (isLeafAccount/isFinalAccount/canHaveChildren===false)
-            // 2. حساب فرعي (له parentId) - حسابات العملاء/الموردين/الحسابات الفرعية
-            // 3. حساب لا يحتوي على حسابات فرعية في قاعدة البيانات
-            
-            // 🔍 جمع جميع الحسابات التي لها parentId (لتحديد الحسابات التي لها أبناء)
-            const parentIds = new Set();
-            snapshot.forEach(doc => {
-                const account = doc.data();
-                if (account.parentId) {
-                    parentIds.add(account.parentId);
-                }
-            });
-            
-            for (const doc of snapshot.docs) {
-                const account = doc.data();
-                const accountId = doc.id;
-                
-                // ✅ الشرط 1: حساب محدد كنهائي صراحة
-                const isLeaf = account.isLeafAccount === true;
-                const isFinal = account.isFinalAccount === true;
-                const cannotHaveChildren = account.canHaveChildren === false;
-                
-                // ✅ الشرط 2: حساب فرعي (له parentId) - هذه حسابات نهائية من شجرة الحسابات
-                const hasParent = !!account.parentId;
-                
-                // ✅ الشرط 3: التحقق من عدم وجود حسابات فرعية
-                const hasChildren = parentIds.has(accountId);
-                
-                // ✅ عرض الحساب فقط إذا كان نهائي حقيقياً:
-                // 1. حساب فرعي (له parentId) - دائماً نهائي
-                // 2. حساب محدد كنهائي صراحة (isLeaf/isFinal/cannotHaveChildren) + لا يحتوي على أبناء
-                // هذا يضمن عدم عرض الحسابات الرئيسية حتى لو كانت محددة كنهائية
-                const isFinalAccount = hasParent || ((isLeaf || isFinal || cannotHaveChildren) && !hasChildren);
-                
-                if (isFinalAccount) {
-                    filteredAccounts.push({ id: accountId, ...account });
-                } else {
-                    // 🔍 تسجيل الحسابات المستبعدة للتشخيص
-                    console.log(`⚠️ Account excluded: ${account.code} - ${account.name}`, {
-                        reason: hasParent ? 'none' : hasChildren ? 'has children' : 'not marked as final',
-                        isLeaf, isFinal, cannotHaveChildren, hasParent, hasChildren
-                    });
-                }
-            }
-        
-        console.log(`✅ Total accounts in DB: ${snapshot.size}, Final accounts found: ${filteredAccounts.length}`);
-            
-            // Apply filters on filtered accounts
+
+            // Use ChartOfAccountsModule as the single source of truth
+            await ChartOfAccountsModule.getAccounts();
+            const filteredAccounts = ChartOfAccountsModule.getLeafAccounts();
+
+            console.log(`✅ Leaf accounts found: ${filteredAccounts.length}`);
+
+            // Apply search/type filters
             const results = [];
             filteredAccounts.forEach(account => {
-                // Apply filters
-                const matchesSearch = !searchTerm || 
+                const matchesSearch = !searchTerm ||
                     account.name?.toLowerCase().includes(searchTerm) ||
                     account.code?.toLowerCase().includes(searchTerm) ||
                     (account.name2 && account.name2.toLowerCase().includes(searchTerm));
-                
+
                 const matchesType = !typeFilter || account.type === typeFilter;
-                
+
                 if (matchesSearch && matchesType) {
                     results.push(account);
                 }
@@ -1760,57 +1706,14 @@ const VouchersModule = {
      */
     async populateEntryAccountDropdown(selectElement) {
         if (!selectElement) return;
-        
+
         try {
-            // ✅ إصلاح: جلب جميع الحسابات النهائية من شجرة الحسابات
-            const accountsSnapshot = await db.collection('chartOfAccounts').get();
-            
+            await ChartOfAccountsModule.getAccounts();
+            const leafAccounts = ChartOfAccountsModule.getLeafAccounts()
+                .sort((a, b) => (a.code || '').localeCompare(b.code || ''));
+
             selectElement.innerHTML = '<option value="">اختر الحساب...</option>';
-            
-            // Filter to get only leaf accounts
-            const leafAccounts = [];
-            
-            // ✅ إصلاح: استخدام نفس المنطق للبحث عن الحسابات - الحسابات النهائية فقط
-            
-            // 🔍 جمع جميع الحسابات التي لها parentId
-            const parentIds = new Set();
-            accountsSnapshot.forEach(doc => {
-                const account = doc.data();
-                if (account.parentId) {
-                    parentIds.add(account.parentId);
-                }
-            });
-            
-            for (const doc of accountsSnapshot.docs) {
-                const account = doc.data();
-                const accountId = doc.id;
-                
-                // ✅ الشرط 1: حساب محدد كنهائي صراحة
-                const isLeaf = account.isLeafAccount === true;
-                const isFinal = account.isFinalAccount === true;
-                const cannotHaveChildren = account.canHaveChildren === false;
-                
-                // ✅ الشرط 2: حساب فرعي (له parentId) - حسابات نهائية من شجرة الحسابات
-                const hasParent = !!account.parentId;
-                
-                // ✅ الشرط 3: التحقق من عدم وجود حسابات فرعية
-                const hasChildren = parentIds.has(accountId);
-                
-                // ✅ عرض الحسابات النهائية فقط:
-                // 1. حساب فرعي (له parentId)، أو
-                // 2. حساب محدد كنهائي + لا يحتوي على أبناء
-                const isFinalAccount = hasParent || ((isLeaf || isFinal || cannotHaveChildren) && !hasChildren);
-                
-                if (isFinalAccount) {
-                    leafAccounts.push({ id: accountId, ...account });
-                }
-            }
-            
-            // Sort by code
-            leafAccounts.sort((a, b) => (a.code || '').localeCompare(b.code || ''));
-            
-            console.log(`✅ Found ${leafAccounts.length} leaf accounts for dropdown`);
-            
+
             leafAccounts.forEach(account => {
                 const option = document.createElement('option');
                 option.value = account.id;
@@ -3091,9 +2994,9 @@ const VouchersModule = {
                 console.log(`ًں“‌ Loading default contra account for ${voucherType}:`, defaultAccountId);
                 
                 if (defaultAccountId) {
-                    const accountDoc = await db.collection('chartOfAccounts').doc(defaultAccountId).get();
-                    if (accountDoc.exists) {
-                        const account = accountDoc.data();
+                    await ChartOfAccountsModule.getAccounts();
+                    const account = ChartOfAccountsModule.getAccountById(defaultAccountId);
+                    if (account) {
                         document.getElementById('voucherContraAccount').value = defaultAccountId;
                         document.getElementById('voucherContraAccountDisplay').value = `${account.code} - ${account.name}`;
                         document.getElementById('voucherContraAccount').dataset.accountCode = account.code;
@@ -3128,13 +3031,12 @@ const VouchersModule = {
             }
 
             // Get account details
-            const accountDoc = await db.collection('chartOfAccounts').doc(accountId).get();
-            if (!accountDoc.exists) {
+            await ChartOfAccountsModule.getAccounts();
+            const account = ChartOfAccountsModule.getAccountById(accountId);
+            if (!account) {
                 this.hideContraAccountInfo();
                 return;
             }
-
-            const account = accountDoc.data();
             
             // Calculate account balance from general entries (in account's currency)
             const balanceInAccountCurrency = await this.calculateAccountBalance(accountId);
@@ -3181,10 +3083,10 @@ const VouchersModule = {
             });
 
             // Calculate balance based on account type
-            const accountDoc = await db.collection('chartOfAccounts').doc(accountId).get();
-            if (!accountDoc.exists) return 0;
+            await ChartOfAccountsModule.getAccounts();
+            const account = ChartOfAccountsModule.getAccountById(accountId);
+            if (!account) return 0;
 
-            const account = accountDoc.data();
             const accountType = account.type;
 
             // For assets and expenses: debit - credit (positive = debit balance)
@@ -5727,9 +5629,9 @@ const VouchersModule = {
             let contraAccountCurrency = null;
             if (contraAccountId) {
                 try {
-                    const accountDoc = await db.collection('chartOfAccounts').doc(contraAccountId).get();
-                    if (accountDoc.exists) {
-                        const account = accountDoc.data();
+                    await ChartOfAccountsModule.getAccounts();
+                    const account = ChartOfAccountsModule.getAccountById(contraAccountId);
+                    if (account) {
                         contraAccountCurrency = account.currency || 'IQD';
                         
                         // If account doesn't have currency, get base currency
@@ -5911,6 +5813,7 @@ const VouchersModule = {
 
             // Sync chart of accounts
             SyncManager.onCollectionSync('chartOfAccounts', (data, syncType) => {
+                ChartOfAccountsModule.allAccounts = data;
                 console.log(`🔄 Chart of accounts updated via ${syncType} sync`);
             });
 

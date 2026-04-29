@@ -893,9 +893,10 @@ const PurchasesModule = {
                 Logger.log(`🔄 Sales reps updated via ${syncType} sync`);
             });
 
-            // Sync chart of accounts (not 'accounts' collection)
+            // Sync chart of accounts — update both local cache and ChartOfAccountsModule
             SyncManager.onCollectionSync('chartOfAccounts', (data, syncType) => {
                 this.accounts = data;
+                ChartOfAccountsModule.allAccounts = data;
                 Logger.log(`🔄 Chart of accounts updated via ${syncType} sync`);
             });
         }
@@ -1093,9 +1094,8 @@ const PurchasesModule = {
 
     async loadAccounts() {
         try {
-            const accounts = await Collections.getAccounts();
-            this.accounts = accounts;
-            Logger.log(`✅ Loaded ${accounts.length} accounts`);
+            this.accounts = await ChartOfAccountsModule.getAccounts();
+            Logger.log(`✅ Loaded ${this.accounts.length} accounts`);
         } catch (error) {
             Logger.error('❌ Error loading accounts:', error);
             this.accounts = [];
@@ -10113,17 +10113,9 @@ const PurchasesModule = {
      */
     async getTaxAccount() {
         try {
-            const snapshot = await db.collection('chartOfAccounts')
-                .where('type', '==', 'liability')
-                .where('name', 'in', ['الضرائب المستحقة', 'ضرائب مستحقة', 'Tax Payable'])
-                .limit(1)
-                .get();
-            
-            if (!snapshot.empty) {
-                const doc = snapshot.docs[0];
-                return { id: doc.id, ...doc.data() };
-            }
-            return null;
+            const accounts = await ChartOfAccountsModule.getAccounts();
+            const taxNames = ['الضرائب المستحقة', 'ضرائب مستحقة', 'Tax Payable'];
+            return accounts.find(a => a.type === 'liability' && taxNames.includes(a.name)) || null;
         } catch (error) {
             console.error('Error getting tax account:', error);
             return null;
@@ -10135,17 +10127,9 @@ const PurchasesModule = {
      */
     async getDiscountAccount() {
         try {
-            const snapshot = await db.collection('chartOfAccounts')
-                .where('type', '==', 'expense')
-                .where('name', 'in', ['الخصومات', 'خصومات', 'Discounts'])
-                .limit(1)
-                .get();
-            
-            if (!snapshot.empty) {
-                const doc = snapshot.docs[0];
-                return { id: doc.id, ...doc.data() };
-            }
-            return null;
+            const accounts = await ChartOfAccountsModule.getAccounts();
+            const discountNames = ['الخصومات', 'خصومات', 'Discounts'];
+            return accounts.find(a => a.type === 'expense' && discountNames.includes(a.name)) || null;
         } catch (error) {
             console.error('Error getting discount account:', error);
             return null;
@@ -10492,29 +10476,12 @@ const PurchasesModule = {
         if (!target) return;
         const displayField = displayFieldId ? document.getElementById(displayFieldId) : null;
         const allAccounts = this.accounts || [];
-        
-        // Filter to get only leaf accounts (accounts that don't have children)
-        // A leaf account is one that is not a parent of any other account
-        const leafAccounts = allAccounts.filter(account => {
-            // Check if this account is a parent of any other account
-            const hasChildren = allAccounts.some(otherAccount => {
-                // Check if otherAccount has parentId pointing to this account
-                return (otherAccount.parentId === account.id) || 
-                       (otherAccount.parent === account.id) ||
-                       (otherAccount.parentAccountId === account.id);
-            });
-            // Return only accounts that don't have children (leaf accounts)
-            return !hasChildren;
-        });
-        
-        // If a current account is selected and it's not a leaf account, 
-        // find it and add it to the list (for display purposes only)
-        let currentAccount = null;
+        const leafAccounts = ChartOfAccountsModule.getLeafAccounts();
+
+        // If the currently selected account is not a leaf, include it for display
         if (target.value) {
-            currentAccount = allAccounts.find(a => a.id === target.value);
+            const currentAccount = allAccounts.find(a => a.id === target.value);
             if (currentAccount && !leafAccounts.find(a => a.id === currentAccount.id)) {
-                // Current account is not a leaf, but we'll still show it in the list
-                // with a warning that it's not recommended
                 leafAccounts.push(currentAccount);
             }
         }
@@ -10610,18 +10577,9 @@ const PurchasesModule = {
      */
     openAccountPickerForRow(row, accountSelect, accountNameDisplay) {
         const allAccounts = this.accounts || [];
-        
-        // Filter to get only leaf accounts (accounts that don't have children)
-        const leafAccounts = allAccounts.filter(account => {
-            const hasChildren = allAccounts.some(otherAccount => {
-                return (otherAccount.parentId === account.id) || 
-                       (otherAccount.parent === account.id) ||
-                       (otherAccount.parentAccountId === account.id);
-            });
-            return !hasChildren;
-        });
-        
-        // If a current account is selected and it's not a leaf account, add it to the list
+        const leafAccounts = ChartOfAccountsModule.getLeafAccounts();
+
+        // If the currently selected account is not a leaf, include it for display
         if (accountSelect.value) {
             const currentAccount = allAccounts.find(a => a.id === accountSelect.value);
             if (currentAccount && !leafAccounts.find(a => a.id === currentAccount.id)) {

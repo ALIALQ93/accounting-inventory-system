@@ -34,6 +34,47 @@ const ChartOfAccountsModule = {
         return ['1', '2', '3', '4', '5', '6', '7'].includes(String(code));
     },
 
+    // ─── Public Data API (used by other modules) ──────────────────────────────
+
+    /**
+     * Get all accounts — returns cached allAccounts or loads from Firestore.
+     * Other modules should call this instead of querying chartOfAccounts directly.
+     * @param {boolean} forceReload - Force fresh Firestore read
+     * @returns {Promise<Array>} All accounts array
+     */
+    async getAccounts(forceReload = false) {
+        if (!forceReload && this.allAccounts && this.allAccounts.length > 0) {
+            return this.allAccounts;
+        }
+        await this.loadAccounts();
+        return this.allAccounts;
+    },
+
+    /**
+     * Get only leaf (final) accounts — accounts with no children.
+     * These are the only accounts valid for use in transactions.
+     * @returns {Array} Leaf accounts array
+     */
+    getLeafAccounts() {
+        const all = this.allAccounts || [];
+        const parentIdSet = new Set(
+            all.filter(a => a.parentId).map(a => a.parentId)
+        );
+        return all.filter(acc => !parentIdSet.has(acc.id));
+    },
+
+    /**
+     * Find a single account by its Firestore document ID.
+     * Returns null if not found or accounts not yet loaded.
+     * @param {string} id - Account document ID
+     * @returns {Object|null}
+     */
+    getAccountById(id) {
+        return (this.allAccounts || []).find(acc => acc.id === id) || null;
+    },
+
+    // ─────────────────────────────────────────────────────────────────────────
+
     /**
      * Get HTML for chart of accounts module
      */

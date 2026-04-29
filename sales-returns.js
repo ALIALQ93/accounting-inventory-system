@@ -505,14 +505,8 @@ const SalesReturnsModule = {
 
     async loadAccounts() {
         try {
-            const snapshot = await db.collection('chartOfAccounts')
-                .orderBy('code', 'asc')
-                .get();
-            this.accounts = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-            console.log(`✅ Loaded ${this.accounts.length} accounts from chartOfAccounts`);
+            this.accounts = await ChartOfAccountsModule.getAccounts();
+            console.log(`✅ Loaded ${this.accounts.length} accounts`);
         } catch (error) {
             console.error('❌ Error loading accounts:', error);
             this.accounts = [];
@@ -3286,26 +3280,16 @@ const SalesReturnsModule = {
         if (!target) return;
         const displayField = displayFieldId ? document.getElementById(displayFieldId) : null;
         const allAccounts = this.accounts || [];
-        
-        // Filter to get only leaf accounts (accounts that don't have children)
-        const leafAccounts = allAccounts.filter(account => {
-            const hasChildren = allAccounts.some(otherAccount => {
-                return (otherAccount.parentId === account.id) || 
-                       (otherAccount.parent === account.id) ||
-                       (otherAccount.parentAccountId === account.id);
-            });
-            return !hasChildren;
-        });
-        
-        // If a current account is selected and it's not a leaf account, add it to the list
-        let currentAccount = null;
+        const leafAccounts = ChartOfAccountsModule.getLeafAccounts();
+
+        // If the currently selected account is not a leaf, include it for display
         if (target.value) {
-            currentAccount = allAccounts.find(a => a.id === target.value);
+            const currentAccount = allAccounts.find(a => a.id === target.value);
             if (currentAccount && !leafAccounts.find(a => a.id === currentAccount.id)) {
                 leafAccounts.push(currentAccount);
             }
         }
-        
+
         const content = `
             <div style="text-align: start;">
                 <div class="mb-2">
@@ -4444,18 +4428,9 @@ const SalesReturnsModule = {
      */
     openAccountPickerForSaleReturnRow(row, accountSelect, accountNameDisplay) {
         const allAccounts = this.accounts || [];
-        
-        // Filter to get only leaf accounts
-        const leafAccounts = allAccounts.filter(account => {
-            const hasChildren = allAccounts.some(otherAccount => {
-                return (otherAccount.parentId === account.id) || 
-                       (otherAccount.parent === account.id) ||
-                       (otherAccount.parentAccountId === account.id);
-            });
-            return !hasChildren;
-        });
-        
-        // If a current account is selected and it's not a leaf account, add it to the list
+        const leafAccounts = ChartOfAccountsModule.getLeafAccounts();
+
+        // If the currently selected account is not a leaf, include it for display
         if (accountSelect.value) {
             const currentAccount = allAccounts.find(a => a.id === accountSelect.value);
             if (currentAccount && !leafAccounts.find(a => a.id === currentAccount.id)) {
