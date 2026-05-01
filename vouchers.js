@@ -2073,7 +2073,18 @@ const VouchersModule = {
      * Show column settings modal
      */
     showColumnSettings() {
-        const modal = new bootstrap.Modal(document.getElementById('columnSettingsModal'));
+        const colModalEl = document.getElementById('columnSettingsModal');
+        // Use getOrCreateInstance to avoid duplicate Bootstrap Modal instances
+        const modal = bootstrap.Modal.getOrCreateInstance(colModalEl);
+        // Raise z-index so it appears above the already-open voucherModal
+        colModalEl.style.zIndex = '1070';
+        colModalEl.addEventListener('shown.bs.modal', () => {
+            // Bring the last backdrop above voucherModal's backdrop
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            if (backdrops.length > 1) {
+                backdrops[backdrops.length - 1].style.zIndex = '1065';
+            }
+        }, { once: true });
         modal.show();
     },
 
@@ -2857,27 +2868,27 @@ const VouchersModule = {
         document.getElementById('voucherContraAccountDisplay').value = '';
         this.hideContraAccountInfo();
         
-        // Load settings for this voucher type
-        await this.loadVoucherSettings(type);
-        
-        // Load dropdowns
-        await this.loadDefaultContraAccount(type);
-        await this.loadCostCenters();
-        await this.populateVoucherMainCurrencyDropdown();
-        
+        // Load all data in parallel (all calls are independent)
+        const [nextNumber] = await Promise.all([
+            this.generateNextVoucherNumber(type),
+            this.loadVoucherSettings(type),
+            this.loadDefaultContraAccount(type),
+            this.loadCostCenters(),
+            this.populateVoucherMainCurrencyDropdown(),
+        ]);
+
         // Set type and update form
         document.getElementById('voucherType').value = type;
         this.updateVoucherFormByType(type);
-        
+
         // Set date
         document.getElementById('voucherDate').value = new Date().toISOString().split('T')[0];
-        
+
         // Set default status from settings
         const defaultStatus = this.voucherSettings.defaultVoucherStatus || 'draft';
         document.getElementById('voucherStatus').value = defaultStatus;
-        
-        // Generate voucher number
-        const nextNumber = await this.generateNextVoucherNumber(type);
+
+        // Set voucher number
         document.getElementById('voucherNumber').value = nextNumber;
         
         // ✅ تصفير الإجماليات قبل إضافة السطر الأول
@@ -5056,13 +5067,12 @@ const VouchersModule = {
         if (tbody) tbody.innerHTML = '';
         
         try {
-        // Load settings for this voucher type
-        await this.loadVoucherSettings(voucher.type);
-        
-        // Load dropdowns
-        await this.loadDefaultContraAccount(voucher.type);
-        await this.loadCostCenters();
-            await this.populateVoucherMainCurrencyDropdown();
+            await Promise.all([
+                this.loadVoucherSettings(voucher.type),
+                this.loadDefaultContraAccount(voucher.type),
+                this.loadCostCenters(),
+                this.populateVoucherMainCurrencyDropdown(),
+            ]);
         } catch (error) {
             console.error('Error loading voucher settings and dropdowns:', error);
         }
