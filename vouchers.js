@@ -806,7 +806,7 @@ const VouchersModule = {
         
         // Then show modal
         const modalEl = document.getElementById('voucherModal');
-        const modal = new bootstrap.Modal(modalEl);
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.show();
         
         // ✅ إصلاح: بعد فتح المودال، تأكد من تحديث العناوين
@@ -1422,7 +1422,7 @@ const VouchersModule = {
         // Load initial results
         this.searchAccounts();
         
-        const modal = new bootstrap.Modal(document.getElementById('accountSearchModal'));
+        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('accountSearchModal'));
         modal.show();
         
         // ✅ Focus على حقل البحث بعد فتح النافذة
@@ -1448,7 +1448,7 @@ const VouchersModule = {
         // Load initial results
         this.searchAccounts();
         
-        const modal = new bootstrap.Modal(document.getElementById('accountSearchModal'));
+        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('accountSearchModal'));
         modal.show();
         
         // ✅ Focus على حقل البحث بعد فتح النافذة
@@ -2073,7 +2073,18 @@ const VouchersModule = {
      * Show column settings modal
      */
     showColumnSettings() {
-        const modal = new bootstrap.Modal(document.getElementById('columnSettingsModal'));
+        const colModalEl = document.getElementById('columnSettingsModal');
+        // Use getOrCreateInstance to avoid duplicate Bootstrap Modal instances
+        const modal = bootstrap.Modal.getOrCreateInstance(colModalEl);
+        // Raise z-index so it appears above the already-open voucherModal
+        colModalEl.style.zIndex = '1070';
+        colModalEl.addEventListener('shown.bs.modal', () => {
+            // Bring the last backdrop above voucherModal's backdrop
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            if (backdrops.length > 1) {
+                backdrops[backdrops.length - 1].style.zIndex = '1065';
+            }
+        }, { once: true });
         modal.show();
     },
 
@@ -2383,114 +2394,6 @@ const VouchersModule = {
                     mainCurrency
                 );
                 generalEntries.push(...journalEntries);
-                
-            } else if (false && voucherData.type === '_JOURNAL_OLD_') {
-                // Journal: Convert all amounts to main currency and add contra account entries (replaced by processJournalEntries)
-                // âڑ ï¸ڈ IMPORTANT: Group contra entries by cost center for proper balance
-                const contraEntriesByCostCenter = {}; // Group by cost center
-                
-                for (const entry of voucherData.entries) {
-                    const entryDebit = parseFloat(entry.debit || 0);
-                    const entryCredit = parseFloat(entry.credit || 0);
-                    const entryCurrency = entry.currency || mainCurrency;
-                    
-                    // Convert both debit and credit to main currency
-                    const debitInMainCurrency = entryDebit > 0 ? 
-                        await this.convertCurrency(entryDebit, entryCurrency, mainCurrency) : 0;
-                    const creditInMainCurrency = entryCredit > 0 ? 
-                        await this.convertCurrency(entryCredit, entryCurrency, mainCurrency) : 0;
-                    
-                    // Determine cost center for this entry (entry-level has priority)
-                    const finalCostCenterId = entry.costCenterId || voucherData.costCenterId || null;
-                    const finalCostCenterName = entry.costCenterName || 
-                        (entry.costCenterId ? null : voucherData.costCenterName) || null;
-                    
-                    generalEntries.push({
-                        accountId: entry.accountId,
-                        accountCode: entry.accountCode,
-                        accountName: entry.accountName,
-                        debit: debitInMainCurrency,
-                        credit: creditInMainCurrency,
-                        description: entry.description || '',
-                        costCenterId: finalCostCenterId,
-                        costCenterName: finalCostCenterName,
-                        currency: mainCurrency,
-                        originalCurrency: entryCurrency,
-                        exchangeRate: await this.getExchangeRate(entryCurrency, mainCurrency),
-                        originalDebit: entryDebit,
-                        originalCredit: entryCredit
-                    });
-                    
-                    // âڑ ï¸ڈ Group contra account entries by cost center
-                    // The contra account must follow the SAME cost center as the detail entry
-                    const costCenterKey = finalCostCenterId || 'no_cost_center';
-                    
-                    if (!contraEntriesByCostCenter[costCenterKey]) {
-                        contraEntriesByCostCenter[costCenterKey] = {
-                            costCenterId: finalCostCenterId,
-                            costCenterName: finalCostCenterName,
-                            debit: 0,
-                            credit: 0
-                        };
-                    }
-                    
-                    // Calculate contra account totals (opposite of detail entries)
-                    // If detail is credit, contra is debit (and vice versa)
-                    contraEntriesByCostCenter[costCenterKey].debit += creditInMainCurrency;
-                    contraEntriesByCostCenter[costCenterKey].credit += debitInMainCurrency;
-                }
-                
-                // Add contra account entries (separate lines for debit and credit)
-                // âڑ ï¸ڈ CRITICAL: Cannot have same account with both debit AND credit in same line!
-                // Must create SEPARATE lines - one for debit, one for credit
-                if (voucherData.contraAccountId) {
-                    console.log('ًں“Œ Creating contra account entries grouped by cost center...');
-                    
-                    for (const costCenterKey in contraEntriesByCostCenter) {
-                        const contraData = contraEntriesByCostCenter[costCenterKey];
-                        
-                        // âœ… Add DEBIT line if there's a debit amount
-                        if (contraData.debit > 0.01) {
-                    generalEntries.push({
-                        accountId: voucherData.contraAccountId,
-                        accountCode: voucherData.contraAccountCode,
-                        accountName: voucherData.contraAccountName,
-                                debit: contraData.debit,
-                        credit: 0,
-                                description: `حساب مقابل - سند يومية${contraData.costCenterName ? ' - ' + contraData.costCenterName : ''}`,
-                                costCenterId: contraData.costCenterId,
-                                costCenterName: contraData.costCenterName,
-                                currency: mainCurrency
-                            });
-                            
-                            console.log('   âœ… Contra DEBIT entry:', {
-                                costCenter: contraData.costCenterName || 'بدون مركز كلفة',
-                                debit: contraData.debit
-                            });
-                        }
-                        
-                        // âœ… Add CREDIT line if there's a credit amount (SEPARATE line!)
-                        if (contraData.credit > 0.01) {
-                            generalEntries.push({
-                                accountId: voucherData.contraAccountId,
-                                accountCode: voucherData.contraAccountCode,
-                                accountName: voucherData.contraAccountName,
-                                debit: 0,
-                                credit: contraData.credit,
-                                description: `حساب مقابل - سند يومية${contraData.costCenterName ? ' - ' + contraData.costCenterName : ''}`,
-                                costCenterId: contraData.costCenterId,
-                                costCenterName: contraData.costCenterName,
-                                currency: mainCurrency
-                            });
-                            
-                            console.log('   âœ… Contra CREDIT entry:', {
-                                costCenter: contraData.costCenterName || 'بدون مركز كلفة',
-                                credit: contraData.credit
-                            });
-                        }
-                    }
-                }
-                
             } else if (voucherData.type === 'entry') {
                 // Entry: Convert all amounts to main currency (no contra account needed)
                 for (const entry of voucherData.entries) {
@@ -2653,94 +2556,6 @@ const VouchersModule = {
             } else if (voucherData.type === 'journal') {
                 const journalEntries = await this.processJournalEntries(voucherData.entries, voucherData, mainCurrency);
                 generalEntries.push(...journalEntries);
-            } else if (voucherData.type === '__DEAD_JOURNAL__') {
-                // Use same logic as createGeneralEntry for journal vouchers with contra account
-                // âڑ ï¸ڈ IMPORTANT: Group contra entries by cost center and create SEPARATE lines
-                const contraEntriesByCostCenter = {};
-                
-                for (const entry of voucherData.entries) {
-                    const entryDebit = parseFloat(entry.debit || 0);
-                    const entryCredit = parseFloat(entry.credit || 0);
-                    const entryCurrency = entry.currency || mainCurrency;
-                    
-                    const debitInMainCurrency = entryDebit > 0 ? 
-                        await this.convertCurrency(entryDebit, entryCurrency, mainCurrency) : 0;
-                    const creditInMainCurrency = entryCredit > 0 ? 
-                        await this.convertCurrency(entryCredit, entryCurrency, mainCurrency) : 0;
-                    
-                    const finalCostCenterId = entry.costCenterId || voucherData.costCenterId || null;
-                    const finalCostCenterName = entry.costCenterName || 
-                        (entry.costCenterId ? null : voucherData.costCenterName) || null;
-                    
-                    generalEntries.push({
-                        accountId: entry.accountId,
-                        accountCode: entry.accountCode,
-                        accountName: entry.accountName,
-                        debit: debitInMainCurrency,
-                        credit: creditInMainCurrency,
-                        description: entry.description || '',
-                        costCenterId: finalCostCenterId,
-                        costCenterName: finalCostCenterName,
-                        currency: mainCurrency,
-                        originalCurrency: entryCurrency,
-                        exchangeRate: await this.getExchangeRate(entryCurrency, mainCurrency),
-                        originalDebit: entryDebit,
-                        originalCredit: entryCredit
-                    });
-                    
-                    // âڑ ï¸ڈ Group contra account entries by cost center
-                    const costCenterKey = finalCostCenterId || 'no_cost_center';
-                    
-                    if (!contraEntriesByCostCenter[costCenterKey]) {
-                        contraEntriesByCostCenter[costCenterKey] = {
-                            costCenterId: finalCostCenterId,
-                            costCenterName: finalCostCenterName,
-                            debit: 0,
-                            credit: 0
-                        };
-                    }
-                    
-                    // Calculate contra account totals (opposite of detail entries)
-                    contraEntriesByCostCenter[costCenterKey].debit += creditInMainCurrency;
-                    contraEntriesByCostCenter[costCenterKey].credit += debitInMainCurrency;
-                }
-                
-                // Add contra account entries (SEPARATE lines for debit and credit)
-                if (voucherData.contraAccountId) {
-                    for (const costCenterKey in contraEntriesByCostCenter) {
-                        const contraData = contraEntriesByCostCenter[costCenterKey];
-                        
-                        // âœ… Add DEBIT line if there's a debit amount
-                        if (contraData.debit > 0.01) {
-                            generalEntries.push({
-                                accountId: voucherData.contraAccountId,
-                                accountCode: voucherData.contraAccountCode,
-                                accountName: voucherData.contraAccountName,
-                                debit: contraData.debit,
-                                credit: 0,
-                                description: `حساب مقابل - سند يومية${contraData.costCenterName ? ' - ' + contraData.costCenterName : ''}`,
-                                costCenterId: contraData.costCenterId,
-                                costCenterName: contraData.costCenterName,
-                                currency: mainCurrency
-                            });
-                        }
-                        
-                        // âœ… Add CREDIT line if there's a credit amount (SEPARATE line!)
-                        if (contraData.credit > 0.01) {
-                            generalEntries.push({
-                                accountId: voucherData.contraAccountId,
-                                accountCode: voucherData.contraAccountCode,
-                                accountName: voucherData.contraAccountName,
-                                debit: 0,
-                                credit: contraData.credit,
-                                description: `حساب مقابل - سند يومية${contraData.costCenterName ? ' - ' + contraData.costCenterName : ''}`,
-                                costCenterId: contraData.costCenterId,
-                                costCenterName: contraData.costCenterName,
-                                currency: mainCurrency
-                            });
-                        }
-                    }
-                }
             } else if (voucherData.type === 'entry') {
                 // Use same logic as createGeneralEntry for entry vouchers (no contra account)
                 for (const entry of voucherData.entries) {
@@ -2807,35 +2622,29 @@ const VouchersModule = {
      */
     showSuccess(message) {
         Swal.fire({
-            title: 'ظ†ط¬ط­!',
+            title: 'نجح!',
             text: message,
             icon: 'success',
-            confirmButtonText: 'ط­ط³ظ†ط§ظ‹',
+            confirmButtonText: 'حسناً',
             timer: 2000
         });
     },
 
-    /**
-     * Show error message
-     */
     showError(message) {
         Swal.fire({
-            title: 'ط®ط·ط£!',
+            title: 'خطأ!',
             text: message,
             icon: 'error',
-            confirmButtonText: 'ط­ط³ظ†ط§ظ‹'
+            confirmButtonText: 'حسناً'
         });
     },
-    
-    /**
-     * Show info message
-     */
+
     showInfo(message) {
         Swal.fire({
-            title: 'ظ…ط¹ظ„ظˆظ…ط©',
+            title: 'معلومة',
             text: message,
             icon: 'info',
-            confirmButtonText: 'ط­ط³ظ†ط§ظ‹',
+            confirmButtonText: 'حسناً',
             timer: 3000
         });
     },
@@ -2857,27 +2666,27 @@ const VouchersModule = {
         document.getElementById('voucherContraAccountDisplay').value = '';
         this.hideContraAccountInfo();
         
-        // Load settings for this voucher type
-        await this.loadVoucherSettings(type);
-        
-        // Load dropdowns
-        await this.loadDefaultContraAccount(type);
-        await this.loadCostCenters();
-        await this.populateVoucherMainCurrencyDropdown();
-        
+        // Load all data in parallel (all calls are independent)
+        const [nextNumber] = await Promise.all([
+            this.generateNextVoucherNumber(type),
+            this.loadVoucherSettings(type),
+            this.loadDefaultContraAccount(type),
+            this.loadCostCenters(),
+            this.populateVoucherMainCurrencyDropdown(),
+        ]);
+
         // Set type and update form
         document.getElementById('voucherType').value = type;
         this.updateVoucherFormByType(type);
-        
+
         // Set date
         document.getElementById('voucherDate').value = new Date().toISOString().split('T')[0];
-        
+
         // Set default status from settings
         const defaultStatus = this.voucherSettings.defaultVoucherStatus || 'draft';
         document.getElementById('voucherStatus').value = defaultStatus;
-        
-        // Generate voucher number
-        const nextNumber = await this.generateNextVoucherNumber(type);
+
+        // Set voucher number
         document.getElementById('voucherNumber').value = nextNumber;
         
         // ✅ تصفير الإجماليات قبل إضافة السطر الأول
@@ -5056,13 +4865,12 @@ const VouchersModule = {
         if (tbody) tbody.innerHTML = '';
         
         try {
-        // Load settings for this voucher type
-        await this.loadVoucherSettings(voucher.type);
-        
-        // Load dropdowns
-        await this.loadDefaultContraAccount(voucher.type);
-        await this.loadCostCenters();
-            await this.populateVoucherMainCurrencyDropdown();
+            await Promise.all([
+                this.loadVoucherSettings(voucher.type),
+                this.loadDefaultContraAccount(voucher.type),
+                this.loadCostCenters(),
+                this.populateVoucherMainCurrencyDropdown(),
+            ]);
         } catch (error) {
             console.error('Error loading voucher settings and dropdowns:', error);
         }
@@ -5284,7 +5092,7 @@ const VouchersModule = {
         }
         
         // Show modal immediately for better user experience
-        const modal = new bootstrap.Modal(document.getElementById('voucherModal'));
+        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('voucherModal'));
         modal.show();
         
         // Update totals and setup listeners after modal is visible (non-blocking)
@@ -5558,7 +5366,7 @@ const VouchersModule = {
                         }
                     } catch (error) {
                         console.warn('Could not calculate local amount for entry:', error);
-                        localAmount = localAmount; // fallback to original amount
+                        localAmount = debit || credit; // fallback to original amount
                     }
                 }
                 
@@ -5578,21 +5386,14 @@ const VouchersModule = {
                 });
             }
             
-            // Calculate total in main currency with exchange rate conversion
-            let totalAmountInMainCurrency = 0;
-            if (type === 'journal' || type === 'entry') {
-                // For journal/entry vouchers, calculate total from debits or credits (use debit as reference)
-                for (const entry of entries) {
-                    const debitInMainCurrency = await this.convertCurrency(entry.debit, entry.currency, mainCurrency);
-                    totalAmountInMainCurrency += debitInMainCurrency;
-                }
-            } else {
-                // Receipt/Payment voucher - calculate total credit in main currency
-                for (const entry of entries) {
-                    const creditInMainCurrency = await this.convertCurrency(entry.credit, entry.currency, mainCurrency);
-                    totalAmountInMainCurrency += creditInMainCurrency;
-                }
-            }
+            // Calculate total in main currency — convert all entries in parallel
+            const convertedAmounts = await Promise.all(
+                entries.map(entry => {
+                    const amount = (type === 'journal' || type === 'entry') ? entry.debit : entry.credit;
+                    return this.convertCurrency(amount, entry.currency, mainCurrency);
+                })
+            );
+            const totalAmountInMainCurrency = convertedAmounts.reduce((sum, v) => sum + v, 0);
 
             // âڑ ï¸ڈ IMPORTANT: Only ENTRY vouchers need balance validation
             // Journal vouchers DON'T need balance because contra account will be the inverse
@@ -5802,7 +5603,7 @@ const VouchersModule = {
             // Sync vouchers
             SyncManager.onCollectionSync('vouchers', (data, syncType) => {
                 this.allVouchers = data;
-                this.renderVouchersTable();
+                this.renderTable();
                 console.log(`🔄 Vouchers updated via ${syncType} sync`);
             });
 
@@ -5834,7 +5635,7 @@ const VouchersModule = {
             const { collection, data } = event.detail;
             if (collection === 'vouchers') {
                 this.allVouchers = data;
-                this.renderVouchersTable();
+                this.renderTable();
             }
         });
     }

@@ -1094,154 +1094,153 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="accountModalTitle">
-                        <i class="fas fa-file-invoice-dollar me-2"></i>
+                        <i class="fas fa-sitemap"></i>
                         إضافة حساب جديد
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body">
                     <form id="accountForm">
-                        <!-- Parent Account Section -->
-                        <div class="form-section mb-4">
+
+                        <!-- Parent Account -->
+                        <div class="form-section mb-3">
                             <div class="section-header">
-                                <i class="fas fa-sitemap text-success"></i>
+                                <i class="fas fa-sitemap"></i>
                                 <span class="section-title">الحساب الأب</span>
                             </div>
-                            <div class="row g-3">
+                            <div class="row g-2">
                                 <div class="col-12">
+                                    <label class="form-label">
+                                        <i class="fas fa-level-up-alt"></i> اختر الحساب الأب
+                                    </label>
                                     <select class="form-select form-select-lg" id="parentAccount" required>
-                                        <option value="">لا يوجد (حساب أساسي - فقط 7 حسابات مسموحة)</option>
+                                        <option value="">— حساب جذري (لا يوجد أب — فقط 7 حسابات)</option>
                                     </select>
                                     <div class="form-text">
                                         <i class="fas fa-lightbulb"></i>
-                                        اختر الحساب الذي سينتمي إليه هذا الحساب الجديد
+                                        الحساب الذي سينتمي إليه هذا الحساب الجديد
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Basic Info Section -->
-                        <div class="form-section mb-4">
+                        <!-- Basic Info -->
+                        <div class="form-section mb-3">
                             <div class="section-header">
-                                <i class="fas fa-info-circle text-primary"></i>
+                                <i class="fas fa-info-circle"></i>
                                 <span class="section-title">المعلومات الأساسية</span>
                             </div>
-                            <div class="row g-3">
+                            <div class="row g-2">
                                 <div class="col-md-3">
-                                    <label class="form-label fw-bold">
-                                        <i class="fas fa-hashtag text-muted"></i> كود الحساب
+                                    <label class="form-label">
+                                        <i class="fas fa-hashtag"></i> الكود
                                     </label>
-                                    <input type="text" class="form-control" id="accountCode" 
-                                           placeholder="1.1.1" required readonly 
-                                           style="background: #f8f9fa; font-family: 'Courier New';">
-                                    <div class="form-text">تلقائي</div>
+                                    <input type="text" class="form-control" id="accountCode"
+                                           placeholder="1.1.1" required readonly
+                                           style="font-family:'Courier New',monospace; font-weight:700; background:#f8fafc;">
+                                    <div class="form-text"><i class="fas fa-magic"></i> يُولَّد تلقائياً</div>
                                 </div>
-                                
                                 <div class="col-md-9">
-                                    <label class="form-label fw-bold">
-                                        <i class="fas fa-signature text-muted"></i> اسم الحساب *
+                                    <label class="form-label">
+                                        <i class="fas fa-signature"></i> اسم الحساب <span class="text-danger">*</span>
                                     </label>
-                                    <input type="text" class="form-control" id="accountName" 
+                                    <input type="text" class="form-control" id="accountName"
                                            placeholder="مثال: النقدية بالصندوق" required autofocus>
                                 </div>
-                                
                                 <div class="col-12">
-                                    <label class="form-label fw-bold">
-                                        <i class="fas fa-globe text-muted"></i> الاسم الثاني (English)
+                                    <label class="form-label">
+                                        <i class="fas fa-globe"></i> الاسم الإنجليزي
+                                        <span class="text-muted fw-normal" style="font-size:.78rem;">(اختياري)</span>
                                     </label>
-                                    <input type="text" class="form-control" id="accountName2" 
-                                           placeholder="Example: Cash in Hand" 
-                                           style="direction: ltr; text-align: left;">
-                                    <div class="form-text">اختياري - للتقارير باللغة الإنجليزية</div>
+                                    <input type="text" class="form-control" id="accountName2"
+                                           placeholder="Example: Cash in Hand"
+                                           style="direction:ltr; text-align:left;">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Account Properties Section -->
-                        <div class="form-section mb-4">
-                            <div class="section-header">
-                                <i class="fas fa-sliders-h text-info"></i>
-                                <span class="section-title">خصائص الحساب</span>
-                            </div>
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <label class="form-label fw-bold">
-                                        <i class="fas fa-balance-scale text-muted"></i> الطبيعة *
-                                    </label>
-                                    <select class="form-select" id="accountNature" required>
-                                        <option value="">اختر...</option>
-                                        <option value="debit">🔵 مدين (Debit)</option>
-                                        <option value="credit">🟢 دائن (Credit)</option>
-                                        <option value="both">🟣 مدين ودائن</option>
-                                    </select>
-                                    <div class="form-text">
-                                        الأصول: مدين | الخصوم: دائن
+                        <!-- Properties + Type in one row -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-8">
+                                <div class="form-section h-100">
+                                    <div class="section-header">
+                                        <i class="fas fa-sliders-h"></i>
+                                        <span class="section-title">خصائص الحساب</span>
+                                    </div>
+                                    <div class="row g-2">
+                                        <div class="col-sm-4">
+                                            <label class="form-label">
+                                                <i class="fas fa-balance-scale"></i> الطبيعة <span class="text-danger">*</span>
+                                            </label>
+                                            <select class="form-select" id="accountNature" required>
+                                                <option value="">اختر...</option>
+                                                <option value="debit">مدين (Debit)</option>
+                                                <option value="credit">دائن (Credit)</option>
+                                                <option value="both">مدين ودائن</option>
+                                            </select>
+                                            <div class="form-text">الأصول: مدين | الخصوم: دائن</div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label class="form-label">
+                                                <i class="fas fa-coins"></i> العملة <span class="text-danger">*</span>
+                                            </label>
+                                            <select class="form-select" id="accountCurrency" required>
+                                                <option value="">اختر...</option>
+                                            </select>
+                                            <div class="form-text">من إدارة العملات</div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label class="form-label">
+                                                <i class="fas fa-toggle-on"></i> الحالة
+                                            </label>
+                                            <select class="form-select" id="accountStatus">
+                                                <option value="active">نشط</option>
+                                                <option value="inactive">غير نشط</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                                
-                                <div class="col-md-4">
-                                    <label class="form-label fw-bold">
-                                        <i class="fas fa-coins text-muted"></i> العملة *
-                                    </label>
-                                    <select class="form-select" id="accountCurrency" required>
-                                        <option value="">اختر...</option>
-                                    </select>
-                                    <div class="form-text">من إدارة العملات</div>
-                                </div>
-                                
-                                <div class="col-md-4">
-                                    <label class="form-label fw-bold">
-                                        <i class="fas fa-toggle-on text-muted"></i> الحالة
-                                    </label>
-                                    <select class="form-select" id="accountStatus">
-                                        <option value="active">✅ نشط</option>
-                                        <option value="inactive">⏸️ غير نشط</option>
-                                    </select>
-                                </div>
                             </div>
-                        </div>
-
-                        <!-- Account Type Section -->
-                        <div class="form-section mb-4">
-                            <div class="section-header">
-                                <i class="fas fa-project-diagram text-warning"></i>
-                                <span class="section-title">تصنيف الحساب</span>
-                            </div>
-                            <div class="account-type-selector">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="isParentAccount" 
-                                           style="width: 3.5rem; height: 1.75rem; cursor: pointer;">
-                                    <label class="form-check-label ms-3" for="isParentAccount" style="cursor: pointer;">
-                                        <div class="switch-label-content">
-                                            <div class="switch-icon">
-                                                <i class="fas fa-folder-tree"></i>
-                                            </div>
-                                            <div class="switch-text">
-                                                <h6 class="mb-1">حساب رئيسي (Parent Account)</h6>
-                                                <p class="mb-0" id="isParentHelpText">
-                                                    <strong class="text-primary">غير مفعّل:</strong> 
-                                                    حساب نهائي - يُستخدم مباشرة في المعاملات المالية
-                                                </p>
-                                            </div>
+                            <div class="col-md-4">
+                                <div class="form-section h-100">
+                                    <div class="section-header">
+                                        <i class="fas fa-project-diagram"></i>
+                                        <span class="section-title">التصنيف</span>
+                                    </div>
+                                    <div class="account-type-selector">
+                                        <div class="form-check form-switch mb-0">
+                                            <input class="form-check-input" type="checkbox" id="isParentAccount">
+                                            <label class="form-check-label" for="isParentAccount">
+                                                <div class="switch-label-content">
+                                                    <div class="switch-icon">
+                                                        <i class="fas fa-folder-tree"></i>
+                                                    </div>
+                                                    <div class="switch-text">
+                                                        <h6>حساب رئيسي</h6>
+                                                        <p id="isParentHelpText">حساب نهائي — للمعاملات</p>
+                                                    </div>
+                                                </div>
+                                            </label>
                                         </div>
-                                    </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Description Section -->
+                        <!-- Notes -->
                         <div class="form-section">
                             <div class="section-header">
-                                <i class="fas fa-comment-alt text-secondary"></i>
-                                <span class="section-title">ملاحظات إضافية</span>
+                                <i class="fas fa-comment-alt"></i>
+                                <span class="section-title">ملاحظات</span>
                             </div>
-                            <textarea class="form-control" id="accountDescription" rows="3" 
-                                      placeholder="أي ملاحظات أو تفاصيل إضافية عن الحساب..."></textarea>
+                            <textarea class="form-control" id="accountDescription" rows="2"
+                                      placeholder="ملاحظات أو تفاصيل إضافية..."></textarea>
                         </div>
+
                     </form>
                 </div>
-                <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-success btn-lg" id="saveAccountBtn">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="saveAccountBtn">
                         <i class="fas fa-save me-1"></i> حفظ الحساب
                     </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -1729,7 +1728,7 @@
     <div class="modal fade" id="costCenterModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-gradient">
+                <div class="modal-header bg-gradient text-white">
                     <h5 class="modal-title" id="costCenterModalTitle">
                         <i class="fas fa-cubes me-2"></i>
                         إضافة مركز كلفة جديد

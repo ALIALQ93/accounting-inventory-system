@@ -122,14 +122,12 @@ const NavbarStats = {
             
             try {
                 // Try to get cash accounts from chartOfAccounts
-                const accountsSnapshot = await db.collection('chartOfAccounts')
-                    .where('type', 'in', ['cash', 'bank'])
-                    .limit(10)
-                    .get();
-                
-                if (!accountsSnapshot.empty) {
+                const allAccounts = await ChartOfAccountsModule.getAccounts();
+                const cashAccounts = allAccounts.filter(a => a.type === 'cash' || a.type === 'bank');
+
+                if (cashAccounts.length > 0) {
                     // Get account IDs
-                    const accountIds = accountsSnapshot.docs.map(doc => doc.id);
+                    const accountIds = cashAccounts.map(a => a.id);
                     
                     // Get balance from general entries for cash accounts
                     const entriesSnapshot = await db.collection('generalEntries')
