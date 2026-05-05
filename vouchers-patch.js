@@ -150,18 +150,15 @@
         if (contraAccountId) ids.push(contraAccountId);
         if (ids.length === 0) return;
 
-        const docs = await Promise.all(
-            ids.map(id => db.collection('chartOfAccounts').doc(id).get())
-        );
-
-        const missing = docs.filter(d => !d.exists);
+        await ChartOfAccountsModule.getAccounts();
+        const missing = ids.filter(id => !ChartOfAccountsModule.getAccountById(id));
         if (missing.length > 0) {
             throw new Error('بعض الحسابات المختارة غير موجودة في دليل الحسابات. يرجى تحديث الصفحة والمحاولة مجدداً.');
         }
 
         if (contraAccountId) {
-            const contraDoc = docs.find(d => d.id === contraAccountId);
-            if (contraDoc && contraDoc.data().isParentAccount) {
+            const contraAccount = ChartOfAccountsModule.getAccountById(contraAccountId);
+            if (contraAccount && contraAccount.isParentAccount) {
                 throw new Error('الحساب المقابل يجب أن يكون حساباً نهائياً - لا يمكن استخدام الحسابات الرئيسية في السندات.');
             }
         }
@@ -327,10 +324,11 @@
             let contraAccountCurrency = null;
             if (contraAccountId) {
                 try {
-                    const adoc = await db.collection('chartOfAccounts').doc(contraAccountId).get();
-                    if (adoc.exists) {
-                        contraAccountCurrency = adoc.data().currency || 'IQD';
-                        if (!adoc.data().currency) {
+                    await ChartOfAccountsModule.getAccounts();
+                    const contraAcc = ChartOfAccountsModule.getAccountById(contraAccountId);
+                    if (contraAcc) {
+                        contraAccountCurrency = contraAcc.currency || 'IQD';
+                        if (!contraAcc.currency) {
                             const cs = await db.collection('currencies')
                                 .where('isBaseCurrency', '==', true).limit(1).get();
                             if (!cs.empty) contraAccountCurrency = cs.docs[0].data().code || 'IQD';

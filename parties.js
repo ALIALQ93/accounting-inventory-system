@@ -1725,12 +1725,10 @@ const PartiesModule = {
             // First, ensure we have basic chart of accounts
             await this.ensureBasicChartOfAccounts();
             
-            const snapshot = await db.collection('chartOfAccounts').get();
+            const allAccts = await ChartOfAccountsModule.getAccounts();
             const accounts = [];
-            
-            snapshot.forEach(doc => {
-                const account = { id: doc.id, ...doc.data() };
-                
+
+            allAccts.forEach(account => {
                 // Only show main accounts (not sub-accounts)
                 // Main accounts are those that can have sub-accounts
                 if (account.isParentAccount) {
@@ -1779,19 +1777,12 @@ const PartiesModule = {
      */
     async ensureBasicChartOfAccounts() {
         try {
-            console.log('🔍 Checking for basic chart of accounts...');
-            
-            const snapshot = await db.collection('chartOfAccounts').get();
-            
-            if (snapshot.empty) {
-                console.log('📊 No accounts found in chart of accounts. Please create accounts using the Chart of Accounts module first.');
+            const accounts = await ChartOfAccountsModule.getAccounts();
+            if (!accounts || accounts.length === 0) {
                 showError('لم يتم العثور على حسابات في شجرة الحسابات. يرجى إنشاء الحسابات من وحدة شجرة الحسابات أولاً.');
                 return false;
-            } else {
-                console.log(`✅ Found ${snapshot.size} existing accounts in chart of accounts`);
-                return true;
             }
-            
+            return true;
         } catch (error) {
             console.error('Error checking chart of accounts:', error);
             showError('خطأ في التحقق من شجرة الحسابات');
@@ -1811,23 +1802,20 @@ const PartiesModule = {
             if (!accountId) return '-';
             
             // First check if it's a sub-account
-            const subAccountDoc = await db.collection('chartOfAccounts').doc(accountId).get();
-            if (subAccountDoc.exists) {
-                const account = subAccountDoc.data();
-                
+            await ChartOfAccountsModule.getAccounts();
+            const account = ChartOfAccountsModule.getAccountById(accountId);
+            if (account) {
                 // If it's a sub-account, show both main and sub account info
                 if (account.parentId) {
-                    const mainAccountDoc = await db.collection('chartOfAccounts').doc(account.parentId).get();
-                    if (mainAccountDoc.exists) {
-                        const mainAccount = mainAccountDoc.data();
+                    const mainAccount = ChartOfAccountsModule.getAccountById(account.parentId);
+                    if (mainAccount) {
                         return `${mainAccount.code} - ${mainAccount.name} → ${account.code} - ${account.name}`;
                     }
                 }
-                
                 // Regular account
                 return `${account.code || ''} - ${account.name || ''}`;
             }
-            
+
             return '-';
         } catch (error) {
             console.error('Error getting account name:', error);
@@ -3958,13 +3946,12 @@ const PartiesModule = {
             console.log(`💰 Party Currency: ${partyCurrency || 'not specified'}`);
             console.log(`📊 Party Nature: ${partyNature || 'not specified'}`);
             
-            // Get parent account details from chartOfAccounts collection
-            const parentDoc = await db.collection('chartOfAccounts').doc(parentAccountId).get();
-            if (!parentDoc.exists) {
+            // Get parent account details
+            await ChartOfAccountsModule.getAccounts();
+            const parentAccount = ChartOfAccountsModule.getAccountById(parentAccountId);
+            if (!parentAccount) {
                 throw new Error('الحساب الرئيسي غير موجود');
             }
-            
-            const parentAccount = parentDoc.data();
             console.log(`📊 Parent Account Found: ${parentAccount.code} - ${parentAccount.name}`);
             
             // ✅ تحديد العملة: أولوية لبطاقة العميل/المورد، ثم الحساب الرئيسي، ثم الافتراضي

@@ -1434,9 +1434,9 @@ const SettingsModule = {
                 
                 // Load default contra account
                 if (settings.defaultContraAccount) {
-                    const accountDoc = await db.collection('chartOfAccounts').doc(settings.defaultContraAccount).get();
-                    if (accountDoc.exists) {
-                        const account = accountDoc.data();
+                    await ChartOfAccountsModule.getAccounts();
+                    const account = ChartOfAccountsModule.getAccountById(settings.defaultContraAccount);
+                    if (account) {
                         const hiddenInput = document.getElementById('defaultContraAccount');
                         const displayInput = document.getElementById('defaultContraAccountDisplay');
                         if (hiddenInput) hiddenInput.value = settings.defaultContraAccount;
@@ -1458,9 +1458,9 @@ const SettingsModule = {
                 
                 // Load default contra account
                 if (settings.defaultContraAccount) {
-                    const accountDoc = await db.collection('chartOfAccounts').doc(settings.defaultContraAccount).get();
-                    if (accountDoc.exists) {
-                        const account = accountDoc.data();
+                    await ChartOfAccountsModule.getAccounts();
+                    const account = ChartOfAccountsModule.getAccountById(settings.defaultContraAccount);
+                    if (account) {
                         const hiddenInput = document.getElementById('paymentContraAccount');
                         const displayInput = document.getElementById('paymentContraAccountDisplay');
                         if (hiddenInput) hiddenInput.value = settings.defaultContraAccount;
@@ -1605,17 +1605,11 @@ const SettingsModule = {
         
         try {
             // Load all accounts
-            const accountsSnapshot = await db.collection('chartOfAccounts')
-                .orderBy('code')
-                .get();
-            
-            const accounts = [];
-            accountsSnapshot.forEach(doc => {
-                const account = { id: doc.id, ...doc.data() };
-                accounts.push(account);
-            });
-            
-            console.log(`ًں“ٹ Loaded ${accounts.length} accounts from database`);
+            const accounts = await ChartOfAccountsModule.getAccounts();
+            // Sort by code (getAccounts() cache may not be sorted)
+            accounts.sort((a, b) => (a.code || '').localeCompare(b.code || ''));
+
+            console.log(`Loaded ${accounts.length} accounts`);
             
             // ✅ فلترة: فقط الحسابات النهائية (isFinal === true OR !isParentAccount)
             const finalAccounts = accounts.filter(acc => {

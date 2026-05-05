@@ -1295,11 +1295,7 @@ const ReportsModule = {
 
     async loadAccountsData() {
         try {
-            const snapshot = await db.collection('chartOfAccounts').get();
-            return snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
+            return await ChartOfAccountsModule.getAccounts();
         } catch (error) {
             console.error('Error loading accounts:', error);
             return [];
