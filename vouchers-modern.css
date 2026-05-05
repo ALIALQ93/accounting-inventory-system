@@ -258,10 +258,6 @@
 }
 
 /* ==================== Modal ==================== */
-#voucherModal .modal-dialog {
-    max-width: 700px;
-}
-
 #voucherModal .modal-content {
     border: none;
     border-radius: 16px;

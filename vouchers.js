@@ -806,7 +806,7 @@ const VouchersModule = {
         
         // Then show modal
         const modalEl = document.getElementById('voucherModal');
-        const modal = new bootstrap.Modal(modalEl);
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.show();
         
         // ✅ إصلاح: بعد فتح المودال، تأكد من تحديث العناوين
@@ -1422,7 +1422,7 @@ const VouchersModule = {
         // Load initial results
         this.searchAccounts();
         
-        const modal = new bootstrap.Modal(document.getElementById('accountSearchModal'));
+        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('accountSearchModal'));
         modal.show();
         
         // ✅ Focus على حقل البحث بعد فتح النافذة
@@ -1448,7 +1448,7 @@ const VouchersModule = {
         // Load initial results
         this.searchAccounts();
         
-        const modal = new bootstrap.Modal(document.getElementById('accountSearchModal'));
+        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('accountSearchModal'));
         modal.show();
         
         // ✅ Focus على حقل البحث بعد فتح النافذة
@@ -5294,7 +5294,7 @@ const VouchersModule = {
         }
         
         // Show modal immediately for better user experience
-        const modal = new bootstrap.Modal(document.getElementById('voucherModal'));
+        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('voucherModal'));
         modal.show();
         
         // Update totals and setup listeners after modal is visible (non-blocking)
@@ -5812,7 +5812,7 @@ const VouchersModule = {
             // Sync vouchers
             SyncManager.onCollectionSync('vouchers', (data, syncType) => {
                 this.allVouchers = data;
-                this.renderVouchersTable();
+                this.renderTable();
                 console.log(`🔄 Vouchers updated via ${syncType} sync`);
             });
 
@@ -5844,7 +5844,7 @@ const VouchersModule = {
             const { collection, data } = event.detail;
             if (collection === 'vouchers') {
                 this.allVouchers = data;
-                this.renderVouchersTable();
+                this.renderTable();
             }
         });
     }
