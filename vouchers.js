@@ -896,7 +896,12 @@ const VouchersModule = {
             newSelect.value = selectedValue;
             
             newSelect.addEventListener('change', (e) => {
+                // Clear existing entries when switching type — old rows have wrong structure
+                const tbody = document.getElementById('voucherEntriesBody');
+                if (tbody) tbody.innerHTML = '';
+                this.clearTotals();
                 this.updateVoucherFormByType(e.target.value);
+                this.addVoucherEntry();
             });
         }
         
@@ -2661,8 +2666,11 @@ const VouchersModule = {
         const tbody = document.getElementById('voucherEntriesBody');
         if (tbody) tbody.innerHTML = '';
         
-        // Clear contra account display
-        document.getElementById('voucherContraAccount').value = '';
+        // Clear contra account display and stale dataset attributes
+        const contraInput = document.getElementById('voucherContraAccount');
+        contraInput.value = '';
+        contraInput.dataset.accountCode = '';
+        contraInput.dataset.accountName = '';
         document.getElementById('voucherContraAccountDisplay').value = '';
         this.hideContraAccountInfo();
         
@@ -3179,19 +3187,7 @@ const VouchersModule = {
             }
         };
         
-        // تنفيذ فوري ثم بعد تأخير بسيط للتأكد
         forceUpdateHeaders();
-        setTimeout(forceUpdateHeaders, 50);
-        setTimeout(forceUpdateHeaders, 200);
-        // ✅ إضافة استماع لحدث show في المودال للتأكد من التطبيق
-        const modal = document.getElementById('voucherModal');
-        if (modal) {
-            const handleModalShow = () => {
-                setTimeout(forceUpdateHeaders, 100);
-            };
-            modal.removeEventListener('shown.bs.modal', handleModalShow);
-            modal.addEventListener('shown.bs.modal', handleModalShow);
-        }
         
         // Add appropriate class and update title
         switch(type) {

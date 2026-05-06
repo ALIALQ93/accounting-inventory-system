@@ -285,6 +285,10 @@
     background: linear-gradient(135deg, #3498db, #2c3e50);
 }
 
+#voucherModal .modal-header.bg-gradient-entry {
+    background: linear-gradient(135deg, #8e44ad, #6c3483);
+}
+
 #voucherModal .modal-header::before {
     content: '';
     position: absolute;

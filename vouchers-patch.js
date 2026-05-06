@@ -311,12 +311,14 @@
                     throw new Error(`سند القيد غير متوازن! المدين (${td.toFixed(2)}) ≠ الدائن (${tc.toFixed(2)})`);
             }
 
-            // --- حساب المجموع ---
-            let totalAmount = 0;
-            for (const e of entries) {
-                const amt = (type === 'journal' || type === 'entry') ? e.debit : e.credit;
-                totalAmount += await this.convertCurrency(amt, e.currency, mainCurrency);
-            }
+            // --- حساب المجموع (متوازٍ) ---
+            const convertedTotals = await Promise.all(
+                entries.map(e => {
+                    const amt = (type === 'journal' || type === 'entry') ? e.debit : e.credit;
+                    return this.convertCurrency(amt, e.currency, mainCurrency);
+                })
+            );
+            const totalAmount = convertedTotals.reduce((s, v) => s + v, 0);
 
             showLoading();
 
