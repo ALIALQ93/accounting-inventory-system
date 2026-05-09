@@ -896,7 +896,12 @@ const VouchersModule = {
             newSelect.value = selectedValue;
             
             newSelect.addEventListener('change', (e) => {
+                // Clear existing entries when switching type — old rows have wrong structure
+                const tbody = document.getElementById('voucherEntriesBody');
+                if (tbody) tbody.innerHTML = '';
+                this.clearTotals();
                 this.updateVoucherFormByType(e.target.value);
+                this.addVoucherEntry();
             });
         }
         
@@ -1077,10 +1082,10 @@ const VouchersModule = {
         if (voucherType === 'journal' || voucherType === 'entry') {
             row.innerHTML = `
                 <td class="text-center">${rowCount}</td>
-                <td>
+                <td class="column-account">
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control form-control-sm entry-account-display" 
-                               placeholder="اضغط للبحث..." readonly 
+                        <input type="text" class="form-control form-control-sm entry-account-display"
+                               placeholder="اضغط للبحث..." readonly
                                style="cursor: pointer; background: white;">
                         <input type="hidden" class="entry-account-id">
                         <button class="btn btn-outline-primary btn-sm entry-search-btn" type="button">
@@ -1088,35 +1093,35 @@ const VouchersModule = {
                         </button>
                     </div>
                 </td>
-                <td>
+                <td class="column-accountCode">
                     <input type="text" class="form-control form-control-sm entry-code" readonly>
                 </td>
-                <td>
-                    <input type="number" class="form-control form-control-sm entry-debit" 
+                <td class="column-debit">
+                    <input type="number" class="form-control form-control-sm entry-debit"
                            placeholder="0.00" step="0.01" min="0">
                 </td>
-                <td>
-                    <input type="number" class="form-control form-control-sm entry-credit" 
+                <td class="column-credit">
+                    <input type="number" class="form-control form-control-sm entry-credit"
                            placeholder="0.00" step="0.01" min="0">
                 </td>
-                <td>
+                <td class="column-currency">
                     <select class="form-select form-select-sm entry-currency">
                         <option value="IQD" selected>IQD</option>
                     </select>
                 </td>
-                <td>
-                    <input type="number" class="form-control form-control-sm entry-exchange-rate" 
+                <td class="column-exchangeRate">
+                    <input type="number" class="form-control form-control-sm entry-exchange-rate"
                            placeholder="1" value="1" step="0.0001" min="0.0001">
                 </td>
-                <td>
-                    <input type="number" class="form-control form-control-sm entry-local-amount" 
+                <td class="column-localAmount">
+                    <input type="number" class="form-control form-control-sm entry-local-amount"
                            placeholder="0.00" readonly style="background: #f8f9fa;">
                 </td>
-                <td>
-                    <input type="text" class="form-control form-control-sm entry-description" 
+                <td class="column-description">
+                    <input type="text" class="form-control form-control-sm entry-description"
                            placeholder="البيان...">
                 </td>
-                <td>
+                <td class="column-costCenter">
                     <select class="form-select form-select-sm entry-costCenter">
                         <option value="">-</option>
                     </select>
@@ -1415,15 +1420,9 @@ const VouchersModule = {
     showAccountSearch(row) {
         this.currentSearchRow = row;
         this.currentSearchTarget = 'entry';
-        
-        // ✅ إصلاح: إعادة تعيين event listeners عند فتح النافذة
         this.setupAccountSearchListeners();
-        
-        // Load initial results
         this.searchAccounts();
-        
-        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('accountSearchModal'));
-        modal.show();
+        this._showStackedModal('accountSearchModal');
         
         // ✅ Focus على حقل البحث بعد فتح النافذة
         setTimeout(() => {
@@ -1441,15 +1440,9 @@ const VouchersModule = {
     showContraAccountSearch() {
         this.currentSearchRow = null;
         this.currentSearchTarget = 'contra';
-        
-        // ✅ إصلاح: إعادة تعيين event listeners عند فتح النافذة
         this.setupAccountSearchListeners();
-        
-        // Load initial results
         this.searchAccounts();
-        
-        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('accountSearchModal'));
-        modal.show();
+        this._showStackedModal('accountSearchModal');
         
         // ✅ Focus على حقل البحث بعد فتح النافذة
         setTimeout(() => {
@@ -2072,20 +2065,26 @@ const VouchersModule = {
     /**
      * Show column settings modal
      */
-    showColumnSettings() {
-        const colModalEl = document.getElementById('columnSettingsModal');
-        // Use getOrCreateInstance to avoid duplicate Bootstrap Modal instances
-        const modal = bootstrap.Modal.getOrCreateInstance(colModalEl);
-        // Raise z-index so it appears above the already-open voucherModal
-        colModalEl.style.zIndex = '1070';
-        colModalEl.addEventListener('shown.bs.modal', () => {
-            // Bring the last backdrop above voucherModal's backdrop
+    /**
+     * Show a modal on top of an already-open modal (stacked modal).
+     * Adjusts z-index so the new modal and its backdrop appear above the existing one.
+     */
+    _showStackedModal(modalId) {
+        const el = document.getElementById(modalId);
+        if (!el) return;
+        el.style.zIndex = '1070';
+        const modal = bootstrap.Modal.getOrCreateInstance(el);
+        el.addEventListener('shown.bs.modal', () => {
             const backdrops = document.querySelectorAll('.modal-backdrop');
             if (backdrops.length > 1) {
                 backdrops[backdrops.length - 1].style.zIndex = '1065';
             }
         }, { once: true });
         modal.show();
+    },
+
+    showColumnSettings() {
+        this._showStackedModal('columnSettingsModal');
     },
 
     /**
@@ -2661,8 +2660,11 @@ const VouchersModule = {
         const tbody = document.getElementById('voucherEntriesBody');
         if (tbody) tbody.innerHTML = '';
         
-        // Clear contra account display
-        document.getElementById('voucherContraAccount').value = '';
+        // Clear contra account display and stale dataset attributes
+        const contraInput = document.getElementById('voucherContraAccount');
+        contraInput.value = '';
+        contraInput.dataset.accountCode = '';
+        contraInput.dataset.accountName = '';
         document.getElementById('voucherContraAccountDisplay').value = '';
         this.hideContraAccountInfo();
         
@@ -3179,19 +3181,7 @@ const VouchersModule = {
             }
         };
         
-        // تنفيذ فوري ثم بعد تأخير بسيط للتأكد
         forceUpdateHeaders();
-        setTimeout(forceUpdateHeaders, 50);
-        setTimeout(forceUpdateHeaders, 200);
-        // ✅ إضافة استماع لحدث show في المودال للتأكد من التطبيق
-        const modal = document.getElementById('voucherModal');
-        if (modal) {
-            const handleModalShow = () => {
-                setTimeout(forceUpdateHeaders, 100);
-            };
-            modal.removeEventListener('shown.bs.modal', handleModalShow);
-            modal.addEventListener('shown.bs.modal', handleModalShow);
-        }
         
         // Add appropriate class and update title
         switch(type) {

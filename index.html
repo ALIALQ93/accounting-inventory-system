@@ -1551,15 +1551,15 @@
                                         </tr>
                                         <tr id="journalHeader" style="display: none;">
                                             <th width="3%" class="text-center">#</th>
-                                            <th width="18%">الحساب *</th>
-                                            <th width="8%">كود</th>
-                                            <th width="9%">المدين *</th>
-                                            <th width="9%">الدائن *</th>
-                                            <th width="6%">العملة</th>
-                                            <th width="7%">سعر الصرف</th>
-                                            <th width="9%">المبلغ المحلي</th>
-                                            <th width="13%">البيان</th>
-                                            <th width="11%">مركز الكلفة</th>
+                                            <th width="18%" class="column-account">الحساب *</th>
+                                            <th width="8%" class="column-accountCode">كود</th>
+                                            <th width="9%" class="column-debit">المدين *</th>
+                                            <th width="9%" class="column-credit">الدائن *</th>
+                                            <th width="6%" class="column-currency">العملة</th>
+                                            <th width="7%" class="column-exchangeRate">سعر الصرف</th>
+                                            <th width="9%" class="column-localAmount">المبلغ المحلي</th>
+                                            <th width="13%" class="column-description">البيان</th>
+                                            <th width="11%" class="column-costCenter">مركز الكلفة</th>
                                             <th width="7%" class="text-center">×</th>
                                         </tr>
                                     </thead>
@@ -1573,7 +1573,7 @@
                                                 <strong id="totalCredit" class="text-success">0.00</strong>
                                                 <small id="totalCreditCurrency" class="text-muted d-block"></small>
                                             </td>
-                                            <td colspan="5"></td>
+                                            <td colspan="7"></td>
                                         </tr>
                                         <tr id="journalFooter" style="display: none;">
                                             <td colspan="3" class="text-end fw-bold">الإجمالي:</td>
@@ -1585,7 +1585,7 @@
                                                 <strong id="totalCredit2" class="text-success">0.00</strong>
                                                 <small id="totalCredit2Currency" class="text-muted d-block"></small>
                                             </td>
-                                            <td colspan="4">
+                                            <td colspan="6">
                                                 <span id="balanceStatus" class="fw-bold"></span>
                                             </td>
                                         </tr>
@@ -1608,7 +1608,7 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             <i class="fas fa-times me-1"></i> إلغاء
                         </button>
-                        <button type="button" class="btn btn-primary btn-lg" id="saveVoucherBtn">
+                        <button type="button" class="btn btn-primary" id="saveVoucherBtn">
                             <i class="fas fa-save me-1"></i> حفظ السند
                         </button>
                     </div>
@@ -1668,9 +1668,8 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-2 text-muted small text-center" id="accountSearchCount">
-                        <!-- سيتم عرض عدد النتائج هنا -->
-                    </div>
+                    <div class="mt-2 text-muted small text-center" id="accountSearchCount"></div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times"></i> إلغاء
