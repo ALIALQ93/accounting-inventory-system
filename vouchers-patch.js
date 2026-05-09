@@ -264,7 +264,7 @@
 
                 let debit = 0, credit = 0, receipt = '', localAmount = 0, exchangeRate = 1;
 
-                if (type === 'journal') {
+                if (type === 'journal' || type === 'entry') {
                     debit  = parseFloat(row.querySelector('.entry-debit')?.value)  || 0;
                     credit = parseFloat(row.querySelector('.entry-credit')?.value) || 0;
                     if (!accountId || (debit === 0 && credit === 0))
@@ -411,7 +411,7 @@
             }
 
             hideLoading();
-            bootstrap.Modal.getInstance(document.getElementById('voucherModal')).hide();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('voucherModal')).hide();
             await this.loadVouchers();
 
         } catch (error) {

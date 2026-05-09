@@ -808,14 +808,7 @@ const VouchersModule = {
         const modalEl = document.getElementById('voucherModal');
         const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.show();
-        
-        // ✅ إصلاح: بعد فتح المودال، تأكد من تحديث العناوين
-        modalEl.addEventListener('shown.bs.modal', () => {
-            setTimeout(() => {
-                this.updateVoucherFormByType(voucherType);
-            }, 100);
-        }, { once: true });
-        
+
         // Re-setup event listeners for modal elements
         this.setupModalEventListeners();
     },
@@ -2690,13 +2683,8 @@ const VouchersModule = {
 
         // Set voucher number
         document.getElementById('voucherNumber').value = nextNumber;
-        
-        // ✅ تصفير الإجماليات قبل إضافة السطر الأول
-        this.clearTotals();
-        
-        // Add first entry row
-        this.addVoucherEntry();
-        
+
+        // updateVoucherFormByType above already calls clearTotals + addVoucherEntry
         console.log('Voucher modal initialized for type:', type);
     },
     
@@ -5301,21 +5289,21 @@ const VouchersModule = {
                 let exchangeRate = 1;
                 let localAmount = 0;
                 
-                if (type === 'journal') {
-                    // Journal voucher has both debit and credit
+                if (type === 'journal' || type === 'entry') {
+                    // Journal/Entry voucher has both debit and credit per row
                     const debitInput = row.querySelector('.entry-debit');
                     const creditInput = row.querySelector('.entry-credit');
                     debit = parseFloat(debitInput?.value) || 0;
                     credit = parseFloat(creditInput?.value) || 0;
-                    
+
                     if (!accountId || (debit === 0 && credit === 0)) {
                         throw new Error(`السطر ${index + 1}: يرجى اختيار الحساب وإدخال مبلغ في المدين أو الدائن`);
                     }
-                    
+
                     if (debit > 0 && credit > 0) {
                         throw new Error(`السطر ${index + 1}: لا يمكن إدخال مبلغ في المدين والدائن معاً`);
                     }
-                    
+
                     localAmount = debit || credit;
                 } else {
                     // Receipt/Payment voucher
@@ -5323,7 +5311,7 @@ const VouchersModule = {
                     const receiptInput = row.querySelector('.entry-receipt');
                     receipt = receiptInput ? receiptInput.value.trim() : '';
                     localAmount = credit;
-                    
+
                     if (!accountId || credit <= 0) {
                         throw new Error(`السطر ${index + 1}: يرجى اختيار الحساب وإدخال مبلغ صحيح`);
                     }
@@ -5527,7 +5515,7 @@ const VouchersModule = {
             }
 
             hideLoading();
-            bootstrap.Modal.getInstance(document.getElementById('voucherModal')).hide();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('voucherModal')).hide();
             await this.loadVouchers();
         } catch (error) {
             hideLoading();
